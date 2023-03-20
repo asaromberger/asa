@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<%= form_for :session, url: sessions_path do |form| %>
+
+	<div class="field">
+		<%= form.label :email, "Email Address", class: 'col-md-2' %>
+		<%= form.text_field :email, class: 'col-md-4' %>
+	</div>
+
+	<div class='clearfix'></div>
+
+	<div class="field">
+		<%= form.label :password, class: 'col-md-2' %>
+		<%= form.password_field :password, class: 'col-md-4' %>
+	</div>
+
+	<div class='clearfix'></div>
+
+	<div class="actions">
+		<%= form.submit "Sign in", class: 'btn btn-primary col-xs-4 col-sm-2' %>
+	</div>
+
+<% end %>
