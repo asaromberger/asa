@@ -23,7 +23,10 @@ default: &default
 
 development:
   <<: *default
-  database: asa_development
+  database: asa
+  host: localhost
+  username: postgres
+  password: P@ssw0rd
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
