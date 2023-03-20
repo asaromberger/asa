@@ -1,0 +1,647 @@
+@import "bootstrap";
+
+
+/* mixins, variables, etc. */
+
+
+$grayMediumLight: #eaeaea;
+$grayLight: #999;
+$grayLighter: #eee;
+$grayDarker: #222;
+$blue: 049cdb;
+
+
+
+@mixin box_sizing {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+/* universal */
+
+
+html {
+  overflow-y: scroll;
+}
+
+
+section {
+  overflow: auto;
+}
+
+
+textarea {
+  resize: vertical;
+}
+
+
+.center {
+  text-align: center;
+  h1 {
+    margin-bottom: 10px;
+  }
+}
+
+
+/* typography */
+
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+
+h2 {
+  font-size: 1.7em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
+  color: $grayLight;
+}
+
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+
+
+
+/* header */
+
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: black;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+  line-height: 1;
+  &:hover {
+    color: black;
+    text-decoration: none;
+  }
+}
+
+
+/* footer */
+
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid $grayMediumLight;
+  color: $grayLight;
+  a {
+    color: $gray;
+    &:hover {
+      color: $grayDarker;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 10px;
+    }
+  }
+}
+
+
+/* miscellaneous */
+
+
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  @include box_sizing;
+}
+
+
+/* sidebar */
+
+
+aside {
+  section {
+    padding: 10px 0;
+    border-top: 1px solid $grayLighter;
+    &:first-child {
+      border: 0;
+      padding-top: 0;
+    }
+    span {
+      display: block;
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+    h1 {
+      font-size: 1.4em;
+      text-align: left;
+      letter-spacing: -1px;
+      margin-bottom: 3px;
+      margin-top: 0px;
+    }
+  }
+}
+
+
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+
+.stats {
+  overflow: auto;
+  a {
+    float: left;
+    padding: 0 10px;
+    border-left: 1px solid $grayLighter;
+    color: gray;
+    &:first-child {
+      padding-left: 0;
+      border: 0;
+    }
+    &:hover {
+      text-decoration: none;
+      color: $blue;
+    }
+  }
+  strong {
+    display: block;
+  }
+}
+
+
+.user_avatars {
+  overflow: auto;
+  margin-top: 10px;
+  .gravatar {
+    margin: 1px 1px;
+  }
+}
+
+
+/* forms */
+
+
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  @include box_sizing;
+}
+
+
+input {
+  height: auto !important;
+}
+
+
+#error_explanation {
+  color:#f00;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
+}
+
+
+.field_with_errors {
+  @extend .control-group !optional;
+  @extend .error !optional;
+ }
+
+
+ /* users index */
+
+
+.users {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-top: 1px solid $grayLighter;
+    &:last-child {
+      border-bottom: 1px solid $grayLighter;
+    }
+  }
+}
+
+
+/* microposts */
+
+
+.microposts {
+  list-style: none;
+  margin: 10px 0 0 0;
+
+
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+}
+
+
+.content {
+  display: block;
+}
+
+
+.timestamp {
+  color: $grayLight;
+}
+
+
+aside {
+  textarea {
+    height: 100px;
+    margin-bottom: 5px;
+  }
+}
+
+
+/* HAL changes */
+
+/* borders that stay fixed rather than growing/shrinking with window size */
+.container {
+	margin-left: 0;
+	margin-right: 0;
+	width: 100%;
+}
+
+/* general overall tuning on bootstrap */
+
+/* darker horizontal line */
+hr {
+  border-top: 1px solid #888888;
+}
+
+.bkgray {
+  background-color: #D0D0D0;
+}
+
+.rightborder {
+  border-right: 2px solid #888888;
+}
+
+.boldrightborder {
+  border-right: 2px solid #888888 !important;
+}
+
+.leftborder {
+  border-left: 2px solid #888888;
+}
+
+.topborder {
+  border-top: 2px solid #888888;
+}
+
+.bottomborder {
+  border-bottom: 2px solid #888888;
+}
+
+.tableheader {
+	background-color: #D0D0D0;
+}
+
+.tablestripe {
+	background-color: #e0e0e0;
+}
+
+/* Enhance the shading on striped tables (twitter is very faint) */
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #e0e0e0;
+}
+
+/* put padding around content of all table cells for readability (default is 0) */
+td, th {
+	padding: 5px;
+}
+
+/* ensure row as well as column borders on tables (twitter only gives me vertical) */
+.table-bordered th, .table-bordered td {
+	border: 1px solid #dddddd;
+}
+select {
+        padding: 4px 0px;
+        margin-bottom: 0px;
+}
+
+/* Enhance the Notice messages to make it more likely to be spotted */
+.alert-success {
+	/* IN BOOTSTRAP AS
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #3c763d;
+	*/
+	background-color: #bfffb8;
+	border-color: #b6efb6;
+	color: #007600;
+	font-size: 16px;
+}
+
+/* Enhance the Alert messages to make it more likely to be spotted */
+.alert-danger {
+	/* IN BOOTSTRAP AS
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	color: #a94442;
+	font-size: 13px; 
+	*/
+	background-color: #ffd0d0;
+	border-color: #ebccd1;
+	color: #a94442;
+	font-size: 16px;
+}
+
+input[type=checkbox] {
+	width: 20px;
+}
+
+input[type=radio] {
+	width: 20px;
+}
+
+/* indented */
+.indented {
+	padding-left: 40px;
+}
+
+/* general hilites */
+.hilite-success {
+	color: #008800 !important;
+}
+
+.hilite-alert {
+	color: red !important;
+}
+
+.hilite-alert-md {
+	color: red !important;
+	font-size: 125%;
+}
+
+.hilite-alert-lg {
+	color: red !important;
+	font-size: 150%;
+}
+
+.hilite-background-warning {
+	background-color: yellow !important;
+}
+
+.hilite-required-field {
+	color: red;
+}
+.hilite-secondary-required-field {
+	color: orange;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+/* for scrollable tables */
+.table-fixed-header tbody {
+	display: block;
+	width: 100%;
+	overflow: auto;
+	height: 80vh;
+}
+.table-fixed-header thead tr {
+	display: block;
+}
+
+/* devel home hilites */
+.devel-hilite-attendance .btn-primary {
+	background-color: red;
+	border-color: red;
+}
+.devel-hilite-current-wchf .btn-primary {
+	background-color: green;
+	border-color: green;
+}
+.devel-hilite-past-wchf .btn-primary {
+	background-color: mediumseagreen;
+	border-color: mediumseagreen;
+}
+.devel-hilite-registration .btn-primary {
+	background-color: orange;
+	border-color: orange;
+}
+/* devel report hilites */
+.devel-teamleader {
+	background-color: #ffff00 !important;
+}
+.devel-coursepartner {
+	background-color: #00ffff !important;
+}
+.hilite-home .btn-primary {
+	background-color: darkturquoise;
+	border-color: darkcyan;
+}
+/* devel printable wchf */
+.wchf-head {
+	font-weight: 700;
+}
+.wchf-boxed {
+	border: 1px solid black;
+	min-height: 0.95in;
+	overflow: auto;
+}
+
+/* devel guest page */
+.csg-return {
+	color: inherit;
+}
+.csg-date {
+	color: inherit;
+	margin-bottom: 15px;
+}
+
+/* pert report indent */
+.pert-report-indent {
+	padding-left: 20px;
+	padding-bottom: 4px;
+}
+
+/* Comments/Requests */
+.contact {
+	font-size: 125%;
+	color: red;
+	margin-right: 10px;
+}
+
+/* printable pages */
+.pagebreak {
+	page-break-after: always;
+}
+
+/* graphing box (for devel charts) */
+.graph {
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 600px;
+}
+
+/* auto save box format */
+.autosavebox {
+	position: fixed;
+	top: 5px;
+	left: 0px;
+	z-index: auto;
+}
+
+/* border box */
+.border-box {
+	border: 1px solid black;
+	padding: 0.5em;
+}
+
+/* for Apprentices */
+.apprentice-title {
+	background-color: Aquamarine !important;
+}
+.apprentice-hilite {
+	background-color: Khaki !important;
+}
+.apprentice-vsep {
+	height: 5px;
+}
+
+/* Help: question mark in a circle */
+.help-icon {
+	position: fixed;
+	bottom: 10px;
+	right: 0px;
+	z-index: +1000;
+	border: 1px solid #337AB7;
+	border-radius: 15px;
+	width: 30px;
+	height: 30px;
+	font-size: large;
+	font-weight: bold;
+	text-align: center;
+	line-height: 25px;
+	border-width: medium;
+}
+.help-box {
+	position: fixed;
+	bottom: 40px;
+	right: 10px;
+	z-index: +1000;
+	opacity: 1;
+	border: 1px solid #337AB7;
+	padding: 0.5em;
+	background-color: white !important;
+}
+
+/* Return to top */
+.return-to-top-icon {
+	display: none;
+	position: fixed;
+	bottom: 40px;
+	right: 0px;
+	z-index: +1000;
+	border: 1px solid #337AB7;
+	border-radius: 15px;
+	width: 30px;
+	height: 30px;
+	font-size: large;
+	font-weight: bold;
+	text-align: center;
+	line-height: 25px;
+	border-width: medium;
+}
+
+/* Floating Submit button */
+.floating-submit {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	z-index: +1000;
+	opacity: 1;
+}
+
+/* Fixed Table Header (at top of window) */
+.fixed-header thead th, .fixed-header thead {
+	position: sticky;
+	position: -webkit-sticky;
+	top: 0;
+	z-index: 2;
+	background-color: #D0D0D0;
+	padding: 3px;
+}
+
+/* Fixed Table Column (at left of window) */
+.fixed-column {
+	background-color: #CCC !important;
+	left: 0;
+	position: sticky !important;
+	z-index: 9999 !important;
+}
+
+/* colors for table columns */
+.col1a {
+	background-color: rgb(86,180,233);
+}
+.col1b {
+	background-color: rgb(120,195,238);
+}
+.col1c {
+	background-color: rgb(147,207,242);
+}
+.col2a {
+	background-color: rgb(51,178,143);
+}
+.col2b {
+	background-color: rgb(92,194,166);
+}
+.col2c {
+	background-color: rgb(125,206,184);
+}
+.col3a {
+	background-color: rgb(230,159,0);
+}
+.col3b {
+	background-color: rgb(235,178,51);
+}
+.col3c {
+	background-color: rgb(239,194,92);
+}
+
+/* numeric */
+th.numeric {
+	text-align: center;
+}
+td.numeric {
+	text-align: right;
+}
