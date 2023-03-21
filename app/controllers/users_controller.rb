@@ -5,6 +5,21 @@ class UsersController < ApplicationController
 	# landing page
 	def index
 		@title = 'Home page'
+		@user = current_user
+		if params[:app_select]
+			@user.application = params[:app_select]
+			@user.save
+		end
+		if ! @user.application.blank?
+			redirect_to "/#{@user.application}/home"
+			return
+		end
+		@applications = []
+		valid_applications().each do |app|
+			if Permission.where("user_id = ? AND pkey = ?", @user.id, app).count > 0
+				@applications.push(app)
+			end
+		end
 	end
 
 	# create a new user
@@ -39,6 +54,10 @@ class UsersController < ApplicationController
 
 	def user_password
 		params.require(:user).permit(:password, :password_confirmation)
+	end
+
+	def valid_applications
+		return(['health'])
 	end
 
 end

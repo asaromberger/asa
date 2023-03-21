@@ -20,6 +20,10 @@
 				<%= render 'layouts/menu_siteadmin' %>
 			<% end %>
 
+			<% if current_user.application == 'health' %>
+				<%= render 'layouts/menu_health' %>
+			<% end %>
+
 			<% if signed_in? %>
 				<%= render 'layouts/menu_user' %>
 			<% else %>
