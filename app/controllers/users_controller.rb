@@ -10,15 +10,18 @@ class UsersController < ApplicationController
 			@user.application = params[:app_select]
 			@user.save
 		end
-		if ! @user.application.blank?
-			redirect_to "/#{@user.application}/home"
-			return
-		end
 		@applications = []
 		valid_applications().each do |app|
 			if Permission.where("user_id = ? AND pkey = ?", @user.id, app).count > 0
 				@applications.push(app)
 			end
+		end
+		if params[:select] == 'home'
+			return
+		end
+		if ! @user.application.blank?
+			redirect_to "/#{@user.application}/home"
+			return
 		end
 	end
 
