@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   root 'sessions#new'
+
   resources :sessions
   resources :users
+  resources :roles
 
 end

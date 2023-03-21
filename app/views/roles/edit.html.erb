@@ -1,0 +1,22 @@
+<h1><%= @title %></h1>
+
+<h3>Roles for <%= "#{@user.email}" %></h3>
+
+<%= form_tag role_path(@user.id), method: :put do %>
+
+	<% @roles.each do |role| %>
+		<p>
+		<% if (Permission.where("user_id = ? AND pkey = ?", @user.id, role).count > 0) %>
+			<%= check_box_tag role, nil, checked = true, class: 'col-xs-2' %>
+		<% else %>
+			<%= check_box_tag role, nil, checked = false, class: 'col-xs-2' %>
+		<% end %>
+		<%= role %>
+		</p>
+	<% end %>
+
+	<div class='clearfix'></div>
+
+	<%= submit_tag 'Submit', class: 'btn btn-primary col-xs-2' %>
+
+<% end %>

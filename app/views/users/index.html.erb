@@ -1,3 +1,8 @@
 <h1><%= @title %></h1>
 
-THIS IS THE LANDING PAGE THAT SELECTS THE APP
+<p>THIS IS THE LANDING PAGE THAT SELECTS THE APP</p>
+
+
+<% if current_user_role('siteadmin') %>
+	<%= link_to 'site admin', roles_path, class: 'tn btn-primary btn-xs' %>
+<% end %>
