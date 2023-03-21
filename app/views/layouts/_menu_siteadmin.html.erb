@@ -1,7 +1,7 @@
 <li id="fat-menu" class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Admin <b class="caret"></b></a>
   <ul class="dropdown-menu">
-    <li>ADD USER<%#= link_to "Add User", new_user_path %></li>
+    <li><%= link_to "Add User", new_user_path %></li>
     <li><%= link_to "Roles", roles_path %></li>
 	<li class='divider'></li>
     <li><%= link_to "Schema", schema_index_path %></li>
