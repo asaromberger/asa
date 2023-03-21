@@ -3,7 +3,7 @@
   <ul class="dropdown-menu">
     <li><%= link_to "Home", users_path(select: 'home') %></li>
     <li class="divider"></li>
-    <li>PASSWORD<%#= link_to "Update My Password", edit_password_reset_path(id: current_user.id) %></li>
+    <li><%= link_to "Reset Password", edit_password_reset_path(id: current_user.id) %></li>
     <li class="divider"></li>
     <li><%= link_to "Sign out", session_path(current_user.id), method: "delete" %></li>
   </ul>

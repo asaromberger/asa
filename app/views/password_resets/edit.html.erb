@@ -1,0 +1,22 @@
+<h1><%= @title %></h1>
+
+<div class="row">
+	<div class="col-md-12 offset3">
+	<%= form_for(@user, url: "/password_resets/#{@user.id}") do |form| %>
+		<%= render 'shared/error_messages' %>
+
+		<%= form.label :password, "Password", class: 'col-xs-2' %>
+		<%= form.password_field :password, required: true, class: 'col-xs-10' %>
+		<br/>
+
+		<%= form.label :password_confirmation, "Confirm password", class: 'col-xs-2' %>
+		<%= form.password_field :password_confirmation, required: true, class: 'col-xs-10' %>
+
+		<div class='clearfix'></div>
+
+		<%= form.submit "Update Password", class: "btn btn-large btn-primary col-xs-5 col-sm-2" %>
+	<% end %>
+
+	</div>
+</div>
+

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 	resources :roles
 	resources :schema
 	resources :data_checker
+	resources :password_resets
 
 	namespace :health do
 		# resources :health
