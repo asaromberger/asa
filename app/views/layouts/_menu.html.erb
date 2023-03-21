@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<div class="container">
+
+		<p id='logo'>User</p>
+
+		<div class='navbar-header'>
+			<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#menu-toggle-nav' aria-expanded='false'>
+				<span class='sr-only'>Toggle navigation</span>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+			</button>
+		</div>
+
+		<div class='collapse navbar-collapse' id='menu-toggle-nav'>
+			<ul class="nav navbar-nav pull-right">
+
+			<% if signed_in? && current_user_role('siteadmin') %>
+				<%= render 'layouts/menu_siteadmin' %>
+			<% end %>
+
+			<% if signed_in? %>
+				<%= render 'layouts/menu_user' %>
+			<% else %>
+				<li><%= link_to "Sign in", new_session_path %></li>
+			<% end %>
+
+			</ul>
+		</div>
+	</div>
+</nav>

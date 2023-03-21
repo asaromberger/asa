@@ -43,8 +43,6 @@ module ApplicationHelper
 	end
 
 	def current_user_role(role)
-puts("current_user_role(#{role} RETURNING TRUE UNTIL ROLES EXIST")
-return true
 		return Permission.where("user_id = ? AND pkey = ?", current_user.id, role).count > 0
 	end
 
