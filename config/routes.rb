@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 	resources :sessions
 	resources :users
 	resources :roles
+	resources :schema
+	resources :data_checker
 
 	namespace :health do
 		# resources :health

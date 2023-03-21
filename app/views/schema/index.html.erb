@@ -1,0 +1,22 @@
+<h1><%= @title %></h1>
+
+<% @tables.each do |name, table| %>
+
+	<a name="<%= name %>"></a>
+
+	<div class='dropdown'>
+	<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Table<b class='caret'></b></a>
+	<ul class='dropdown-menu'>
+	<% @tables.each do |tname, ttable| %>
+		<li><a href="#<%=tname%>"><%= tname %></a></li>
+	<% end %>
+	</ul>
+	</div>
+
+	<h4><b><%= name %></b></h4>
+	<ul>
+		<% table.each do |column| %>
+				<li><b><%= column.name %></b>: <%= column.type %></li>
+		<% end %>
+	</ul>
+<% end %>
