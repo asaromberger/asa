@@ -1,5 +1,5 @@
 <h1><%= @title %></h1>
 
 <% @applications.each do |app| %>
-	<p class='border-box, col-xs-3'><%= link_to app, users_path(app_select: app) %></p>
+	<p class='border-box center col-xs-3'><%= link_to app, users_path(app_select: app) %></p>
 <% end %>

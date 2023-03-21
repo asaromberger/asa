@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 	resources :roles
 
 	namespace :health do
-		resources :home
+		# resources :health
 	end
 
 end
