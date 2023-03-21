@@ -37,7 +37,7 @@ class RolesController < ApplicationController
 	private
 
 	def all_roles
-		return(['siteadmin'])
+		return(['siteadmin', 'health'])
 	end
 
 	def require_siteadmin

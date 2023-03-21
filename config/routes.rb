@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+	# Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+	# Defines the root path route ("/")
+	# root "articles#index"
 
-  root 'sessions#new'
+	root 'sessions#new'
 
-  resources :sessions
-  resources :users
-  resources :roles
+	resources :sessions
+	resources :users
+	resources :roles
+
+	namespace :health do
+		resources :home
+	end
 
 end

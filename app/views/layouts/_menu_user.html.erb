@@ -1,6 +1,8 @@
 <li id="fat-menu" class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
   <ul class="dropdown-menu">
+    <li><%= link_to "Home", users_path %></li>
+    <li class="divider"></li>
     <li>PASSWORD<%#= link_to "Update My Password", edit_password_reset_path(id: current_user.id) %></li>
     <li class="divider"></li>
     <li><%= link_to "Sign out", session_path(current_user.id), method: "delete" %></li>
