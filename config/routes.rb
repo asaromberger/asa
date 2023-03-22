@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
 	namespace :health do
 		resources :data
+		resources :import
 	end
 
 end
