@@ -7,7 +7,7 @@ class Health::DataController < ApplicationController
 		@title = "Data"
 		@data = HealthDatum.where("user_id = ?", current_user.id).order('date DESC')
 		if params[:export]
-			content = "Date,Resistance,Calories,Weight,Steps,Flights,Miles\n"
+			content = "Date,Resistance,Calories (x 10),Weight (x 10),Steps,Flights,Miles (x100)\n"
 			@data = @data.sort_by { |data| data.date}
 			@data.each do |data|
 				content = "#{content}#{data.date},#{data.resistance},#{data.calories},#{data.weight},#{data.steps},#{data.flights},#{data.miles}\n"
