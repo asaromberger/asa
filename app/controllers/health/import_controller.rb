@@ -64,7 +64,7 @@ class Health::ImportController < ApplicationController
 				else
 					steps = nil
 				end
-				if @headers['Flights']
+				if @headers['Flights'] && line[@headers['Flights']]
 					flights = (line[@headers['Flights']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
 				else
 					flights = nil
@@ -80,14 +80,26 @@ class Health::ImportController < ApplicationController
 						data = HealthDatum.new
 						data.user_id = current_user.id
 						data.date = date
-						data.resistance = resistance
-						data.calories = calories
-						data.weight = weight
-						data.steps = steps
-						data.flights = flights
-						data.miles = miles
-						data.save
 					end
+					if resistance
+						data.resistance = resistance
+					end
+					if resistance
+						data.calories = calories
+					end
+					if weight
+						data.weight = weight
+					end
+					if steps
+						data.steps = steps
+					end
+					if flights
+						data.flights = flights
+					end
+					if miles
+						data.miles = miles
+					end
+					data.save
 					count += 1
 				end
 			end
