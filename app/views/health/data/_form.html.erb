@@ -1,0 +1,43 @@
+<%= form_for @data do |data| %>
+
+	<%= data.label :date, "Date", class: 'col-xs-2' %>
+	<%= data.date_select :date, {}, {class: 'date-select col-xs-2'} %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= data.label :resistance, "Resistance", class: 'col-xs-2' %>
+	<%= data.number_field :resistance, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :calories, "Calories times 10", class: 'col-xs-2' %>
+	<%= data.number_field :calories, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :weight, "Weight times 10", class: 'col-xs-2' %>
+	<%= data.number_field :weight, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :steps, "Steps", class: 'col-xs-2' %>
+	<%= data.number_field :steps, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :flights, "Flights", class: 'col-xs-2' %>
+	<%= data.number_field :flights, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :miles, "Miles times 100", class: 'col-xs-2' %>
+	<%= data.number_field :miles, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.submit 'Update Data', class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<%= link_to 'Back to Data', health_data_path, class: 'btn btn-primary btn-xs' %>
