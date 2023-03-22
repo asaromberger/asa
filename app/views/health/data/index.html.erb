@@ -27,32 +27,32 @@
 	<% if data.resistance %>
 		<td><%= data.resistance %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<% if data.calories %>
 		<td><%= data.calories / 10.0 %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<% if data.weight %>
 		<td><%= data.weight / 10.0 %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<% if data.steps %>
 		<td><%= data.steps %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<% if data.flights %>
 		<td><%= data.flights %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<% if data.miles %>
 		<td><%= data.miles / 100.0 %></td>
 	<% else %>
-		<td>HELP</td>
+		<td></td>
 	<% end %>
 	<td><%= link_to 'Edit', edit_health_datum_path(id: data.id) %></td>
 	<td><%= link_to 'Delete', health_datum_path(id: data.id), method: :delete, data: {confirm: "Delete #{data.date}?"} %></td>

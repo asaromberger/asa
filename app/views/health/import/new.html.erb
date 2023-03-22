@@ -1,0 +1,21 @@
+<h1><%= @title %></h1>
+
+<p>First line is headers. Date is required, others are optional.<p>
+<ul>
+<li>Date</li>
+<li>Resistance</li>
+<li>Calories</li>
+<li>Weight</li>
+<li>Steps</li>
+<li>Flights</li>
+<li>Miles</li>
+</ul>
+
+<%= form_tag({action: :create}, multipart: true) do %>
+
+	<h3>Import file (csv)</h3>
+	<%= file_field_tag 'sheet' %>
+
+	<%= submit_tag "Import", class: 'btn btn-primary col-md-1' %>
+	<div class:'clearfix'><p>&nbsp;</p></div>
+<% end %>
