@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 	resources :password_resets
 
 	namespace :health do
-		# resources :health
+		resources :data
 	end
 
 end

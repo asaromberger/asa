@@ -1,0 +1,63 @@
+<h1><%= @title %></h1>
+
+<p><%= link_to 'Export Data as spreadsheet', health_data_path(id: current_user.id, export: true), target: "_blank", class: 'btn btn-primary btn-xs' %></p>
+
+<%= link_to "New Data", new_health_datum_path, class: 'btn btn-xs btn-primary' %>
+
+<table>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Resistance</th>
+<th>Calories</th>
+<th>Weight</th>
+<th>Steps</th>
+<th>Flights</th>
+<th>Miles</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @data.each do |data| %>
+	<tr>
+	<td><%= data.date %></td>
+	<% if data.resistance %>
+		<td><%= data.resistance %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<% if data.calories %>
+		<td><%= data.calories / 10.0 %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<% if data.weight %>
+		<td><%= data.weight / 10.0 %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<% if data.steps %>
+		<td><%= data.steps %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<% if data.flights %>
+		<td><%= data.flights %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<% if data.miles %>
+		<td><%= data.miles / 100.0 %></td>
+	<% else %>
+		<td>HELP</td>
+	<% end %>
+	<td><%= link_to 'Edit', edit_health_datum_path(id: data.id) %></td>
+	<td><%= link_to 'Delete', health_datum_path(id: data.id), method: :delete, data: {confirm: "Delete #{data.date}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
