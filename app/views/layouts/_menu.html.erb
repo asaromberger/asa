@@ -2,7 +2,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<div class="container">
 
-		<p id='logo'>User</p>
+		<% if signed_in? %>
+			<p id='logo'><%= current_user.application.upcase %></p>
+		<% else %>
+			<p id='logo'>User</p>
+		<% end %>
 
 		<div class='navbar-header'>
 			<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#menu-toggle-nav' aria-expanded='false'>

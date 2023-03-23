@@ -50,4 +50,13 @@ module ApplicationHelper
 		return(((value * 10).to_i.to_f / 10).to_s + '%')
 	end
 
+	def monday(date)
+		wday = date.to_date.wday
+		if wday == 0
+			return(date - 6.day)
+		else
+			return(date - (wday - 1).days)
+		end
+	end
+
 end
