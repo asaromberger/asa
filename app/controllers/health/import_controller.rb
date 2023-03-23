@@ -50,27 +50,27 @@ class Health::ImportController < ApplicationController
 					resistance = nil
 				end
 				if @headers['Calories']
-					calories = (line[@headers['Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
+					calories = line[@headers['Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					calories = nil
 				end
 				if @headers['Weight']
-					weight = (line[@headers['Weight']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
+					weight = line[@headers['Weight']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					weight = nil
 				end
 				if @headers['Steps']
-					steps = (line[@headers['Steps']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
+					steps = line[@headers['Steps']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					steps = nil
 				end
 				if @headers['Flights'] && line[@headers['Flights']]
-					flights = (line[@headers['Flights']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
+					flights = line[@headers['Flights']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					flights = nil
 				end
 				if @headers['Miles']
-					miles = (line[@headers['Miles']].gsub(/^\s*/,'').gsub(/\s*/,'').to_f * 10).to_i
+					miles = line[@headers['Miles']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					miles = nil
 				end

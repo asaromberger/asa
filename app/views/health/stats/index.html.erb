@@ -1,0 +1,33 @@
+<h1><%= @title %></h1>
+
+<% @stats.each do |name, entries| %>
+
+	<h3><%= name %></h3>
+
+	<table class='table-bordered table-striped fixed-header'>
+
+	<thead>
+	<tr>
+	<th>What</th>
+	<th>Calories<br/>Average</th>
+	<th>Calories<br/>Std</th>
+	<th>Weight<br/>Average</th>
+	<th>Weight<br/>Std</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<% entries.each do |id, values| %>
+		<tr>
+		<td><%= id %></td>
+		<td class='numeric col1b'><%= number_with_precision(values[0], precision: 2) %></td>
+		<td class='numeric col1c'><%= number_with_precision(values[1], precision: 2) %></td>
+		<td class='numeric col2b'><%= number_with_precision(values[2], precision: 2) %></td>
+		<td class='numeric col2c'><%= number_with_precision(values[3], precision: 2) %></td>
+		</tr>
+	<% end %>
+	</tbody>
+
+	</table>
+
+<% end %>
