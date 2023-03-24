@@ -20,4 +20,8 @@ Rails.application.routes.draw do
 		resources :plots
 	end
 
+	namespace :bridge do
+		resources :players
+	end
+
 end

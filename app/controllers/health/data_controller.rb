@@ -81,7 +81,7 @@ class Health::DataController < ApplicationController
 
 	def require_health
 		unless current_user_role('health')
-			redirect_to root_url, alert: "Inadequate permissions: HEALTHDATA"
+			redirect_to users_path, alert: "Inadequate permissions: HEALTHDATA"
 		end
 	end
 

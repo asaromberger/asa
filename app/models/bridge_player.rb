@@ -1,0 +1,2 @@
+class BridgePlayer < ApplicationRecord
+end

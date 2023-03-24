@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<%= link_to "New Player", new_bridge_player_path, class: 'btn btn-xs btn-primary' %>
+
+<table>
+
+<thead>
+<tr>
+<th>Player</th>
+<th>Edit</th>
+</tr>
+</thead>
+
+<tbody>
+<% @players.each do |player| %>
+	<tr>
+	<td><%= player.name %></td>
+	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

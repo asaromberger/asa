@@ -3,9 +3,9 @@
 	<div class="container">
 
 		<% if signed_in? %>
-			<p id='logo'><%= current_user.application.upcase %></p>
+			<p id='logo'><img src="/assets/Asa.jpg" alt="Asa" class='logo' style="height:1.7em"/>&nbsp;&nbsp;&nbsp;<%= current_user.application.upcase %></p>
 		<% else %>
-			<p id='logo'>User</p>
+			<p id='logo'><img src="/assets/Asa.jpg" alt="Asa" class='logo' style="height:1.7em"/>&nbsp;&nbsp;&nbsp;User</p>
 		<% end %>
 
 		<div class='navbar-header'>
@@ -26,6 +26,10 @@
 
 			<% if signed_in? && current_user.application == 'health' %>
 				<%= render 'layouts/menu_health' %>
+			<% end %>
+
+			<% if signed_in? && current_user.application == 'bridge' %>
+				<%= render 'layouts/menu_bridge' %>
 			<% end %>
 
 			<% if signed_in? %>
