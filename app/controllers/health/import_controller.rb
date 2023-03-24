@@ -111,7 +111,7 @@ class Health::ImportController < ApplicationController
 
 	def require_health
 		unless current_user_role('health')
-			redirect_to root_url, alert: "Inadequate permissions: HEALTHIMPORT"
+			redirect_to users_path, alert: "Inadequate permissions: HEALTHIMPORT"
 		end
 	end
 

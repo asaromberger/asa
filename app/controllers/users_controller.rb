@@ -57,7 +57,7 @@ class UsersController < ApplicationController
 	end
 
 	def valid_applications
-		return(['health'])
+		return(['health', 'bridge'])
 	end
 
 end

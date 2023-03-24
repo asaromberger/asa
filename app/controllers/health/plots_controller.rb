@@ -1,6 +1,7 @@
 class Health::PlotsController < ApplicationController
 
 	before_action :require_signed_in
+	before_action :require_health
 
 	def index
 		@title = "Plots"
@@ -295,6 +296,12 @@ class Health::PlotsController < ApplicationController
 	end
 
 	private
+
+	def require_health
+		unless current_user_role('health')
+			redirect_to users_path, alert: "Inadequate permissions: HEALTHIMPORT"
+		end
+	end
 
 	def dow(date)
 		wday = date.wday

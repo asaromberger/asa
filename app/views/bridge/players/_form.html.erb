@@ -1,0 +1,14 @@
+<%= form_for @player do |player| %>
+
+	<%= hidden_field_tag :date, @date %>
+
+	<%= player.label :name, "Name", class: 'col-xs-2' %>
+	<%= player.text_field :name, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= player.submit 'Update Player', class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
