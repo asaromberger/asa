@@ -1,0 +1,50 @@
+<h1><%= @title %></h1>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<% @charts.each do |chartname, measures| %>
+
+	<% measures.each do |measure, values| %>
+		<p><%= chartname %> <%= measure %></p>
+		<script type="text/javascript">
+			google.charts.load('current', {'packages':['corechart']});
+			google.charts.setOnLoadCallback(drawChart);
+
+			function drawChart() {
+				var data, options, chart;
+				
+				data = google.visualization.arrayToDataTable([
+					['Date',
+					<% values['lines'].each do |linetitle| %>
+						'<%= linetitle %>',
+					<% end %>
+					],
+					<% values['dates'].each do |date, data| %>
+						[new Date('<%= date.strftime("%Y-%m-%d") %>'),
+						<% data.each do |value| %>
+							<% if value > 0 %>
+								<%= value %>,
+							<% else %>
+								,
+							<% end %>
+						<% end %>
+						],
+					<% end %>
+				]);
+
+				options = {
+					title: '<%= chartname %> <%= measure %>',
+					curveType: 'function',
+					legend: {position: 'right' }
+				};
+
+				chart = new google.visualization.LineChart(document.getElementById('<%= "#{chartname} #{measure}".gsub(/\s/, '') %>'));
+
+				chart.draw(data, options);
+
+			}
+		</script>
+		<div id='<%= "#{chartname} #{measure}".gsub(/\s/, '') %>' style="width: 1100px; height: 600px"></div>
+	<% end %>
+
+<% end %>
