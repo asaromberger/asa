@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 		resources :data
 		resources :import
 		resources :stats
+		resources :plots
 	end
 
 end
