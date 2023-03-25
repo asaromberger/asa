@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 	namespace :bridge do
 		resources :players
 		resources :scores
+		resources :import
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'

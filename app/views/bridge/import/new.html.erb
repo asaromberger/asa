@@ -1,0 +1,8 @@
+<h1><%= @title %></h1>
+
+<%= form_tag({action: :create}, multipart: true) do %>
+	<h3>Spreadsheet (csv format, comma separations)</h3>
+	<%= file_field_tag 'document' %>
+	<%= submit_tag "Import", class: 'btn btn-primary col-md-1' %>
+	<div class:'clearfix'><p>&nbsp;</p></div>
+<% end %>

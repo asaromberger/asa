@@ -45,7 +45,7 @@ class DataCheckerController < ApplicationController
 
 	def require_siteadmin
 		if ! current_user_role('siteadmin')
-			redirect_to new_session_path, alert: "Insufficient permission: DATA CHECKER"
+			redirect_to users_path, alert: "Insufficient permission: DATA CHECKER"
 		end
 	end
 
