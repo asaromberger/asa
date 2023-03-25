@@ -1,0 +1,39 @@
+<h1><%= @title %></h1>
+
+<p><%= link_to "Edit Scores", new_bridge_score_path(date: @date), class: 'btn btn-primary btn-xs' %></p>
+
+
+<table class='table-bordered table-striped'>
+
+<thead>
+<tr>
+<th>Player</th>
+<th>Score</th>
+<th>Percent</th>
+</tr>
+</thead>
+
+<tbody>
+<% @scores.each do |pid, values| %>
+	<tr>
+	<td><%= values['name'] %></td>
+	<td><%= values['score'] %></td>
+	<td><%= percent_fmt(values['percent']) %></td>
+	</tr>
+<% end %>
+
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>Players</td>
+<td><%= @bottom['players'] %></td>
+</tr>
+<tr>
+<td>Score</td>
+<td><%= @bottom['score'] %></td>
+</tr>
+
+</tbody>
+
+</table>

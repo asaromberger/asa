@@ -19,12 +19,12 @@ class Bridge::PlayersController < ApplicationController
 		name = params[:bridge_player][:name]
 		@player = BridgePlayer.where("name = ?", name)
 		if @player.count > 0
-			redirect_to scores_path, alert: "Player #{name} Already Exists"
+			redirect_to bridge_scores_path, alert: "Player #{name} Already Exists"
 		else
 			@player = BridgePlayer.new
 			@player.name = name
 			@player.save
-				redirect_to new_score_path(date: params[:date], back: 'back'), notice: "Player #{name} Added"
+				redirect_to new_bridge_score_path(date: params[:date], back: 'back'), notice: "Player #{name} Added"
 		end
 	end
 
@@ -38,7 +38,7 @@ class Bridge::PlayersController < ApplicationController
 		@player = BridgePlayer.find(params[:id])
 		@player.name = name
 		@player.save
-		redirect_to scores_path, notice: "Player #{name} Updated"
+		redirect_to bridge_scores_path, notice: "Player #{name} Updated"
 	end
 
 private

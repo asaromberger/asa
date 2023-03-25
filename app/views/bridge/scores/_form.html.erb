@@ -1,0 +1,32 @@
+<%= link_to "Add a Player", new_bridge_player_path(date: @date), class: 'btn btn-xs btn-primary' %>
+
+<p>&nbsp;</p>
+
+<%= form_tag bridge_scores_path(id: 0), method: :post do %>
+
+	<%= select_date(@date, {prefix: :date}, {:class => 'date_select col-sm-2 col-xs-3'}) %>
+	<p>&nbsp;</p>
+
+	<table>
+
+	<thead>
+	<tr>
+	<th>Player</th>
+	<th>Score</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<% @players.each do |player| %>
+		<tr>
+		<td><%= player.name %></td>
+		<td><%= number_field_tag "score[#{player.id}]", @scores[player.id], step: 0.1 %></td>
+		</tr>
+	<% end %>
+	</tbody>
+
+	</table>
+
+	<%= submit_tag "Submit", class: 'btn btn-primary btn-xs, col-xs-2' %>
+
+<% end %>
