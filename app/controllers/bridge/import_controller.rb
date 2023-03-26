@@ -14,10 +14,21 @@ class Bridge::ImportController < ApplicationController
 		@title = "Import Report"
 		document = params[:document]
 		if document.blank? || document.original_filename.blank?
-			redirect_to new_import_path, alert: "No spreadsheet specified"
+			redirect_to new_bridge_import_path, alert: "No spreadsheet specified"
 			return
 		end
-		@errors = []
+		# preload players & scores
+		@players = Hash.new
+		@names = Hash.new
+		BridgePlayer.all.each do |player|
+			@players[player.id] = player
+			@names[player.name] = player
+		end
+		@scores = Hash.new
+		BridgeScore.all.each do |score|
+			@scores["#{score.date}:#{@players[score.bridge_player_id].name}"] = score
+		end
+		@messages = []
 		@dates = [0]
 		new_player_count = 0
 		new_score_count = 0
@@ -43,29 +54,31 @@ class Bridge::ImportController < ApplicationController
 				next
 			end
 			date = trim(line[0]).to_date
-			player = BridgePlayer.find_by(name: trim(line[1]))
+			player = @names[trim(line[1])]
 			if ! player
 				player = BridgePlayer.new
 				player.name = trim(line[1])
 				player.save
+				@players[player.id] = player
+				@names[player.name] = player
 				new_player_count += 1
 			end
-			score = BridgeScore.where("bridge_player_id = ? AND date = ?", player.id, date)
-			if score.count > 0
-				score = score.first
-				new_score_count += 1
-			else
+			score = @scores["#{date}:#{player.name}"]
+			if ! score
 				score = BridgeScore.new
 				score.date = date
 				score.bridge_player_id = player.id
+				@scores["#{date}:#{player.name}"] = score
 				update_score_count += 1
+			else
+				new_score_count += 1
 			end
 			score.score = trim(line[2]).to_f
 			score.save
 		end
-		@errors.push("#{new_player_count} New Players")
-		@errors.push("#{new_score_count} New Scores")
-		@errors.push("#{update_score_count} Updated Scores")
+		@messages.push("#{new_player_count} New Players")
+		@messages.push("#{new_score_count} New Scores")
+		@messages.push("#{update_score_count} Updated Scores")
 	end
 
 private
