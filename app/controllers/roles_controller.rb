@@ -42,7 +42,7 @@ class RolesController < ApplicationController
 
 	def require_siteadmin
 		unless current_user_role('siteadmin')
-			redirect_to root_url, alert: "Inadequate permissions: ROLES"
+			redirect_to users_path, alert: "Inadequate permissions: ROLES"
 		end
 	end
 
