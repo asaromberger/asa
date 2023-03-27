@@ -32,6 +32,10 @@
 				<%= render 'layouts/menu_bridge' %>
 			<% end %>
 
+			<% if signed_in? && current_user.application == 'music' %>
+				<%= render 'layouts/menu_music' %>
+			<% end %>
+
 			<% if signed_in? %>
 				<%= render 'layouts/menu_user' %>
 			<% else %>

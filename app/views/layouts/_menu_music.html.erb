@@ -1,0 +1,16 @@
+<li id="fat-menu" class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Music <b class="caret"></b></a>
+  <ul class="dropdown-menu">
+    <li><%= link_to "Home",  users_path %></li>
+    <li class="divider"></li>
+    <li>Search<%#= link_to "Search",  new_music_searth_path %></li>
+    <li>Albums<%#= link_to "Albums",  music_albums_path %></li>
+    <li>Artists<%#= link_to "Artists",  music_artists_path %></li>
+    <li>Genres<%#= link_to "Genres",  music_genres_path %></li>
+    <li class="divider"></li>
+    <li>Queue<%#= link_to "Queue",  music_playlists_path %></li>
+    <li>Play<%#= link_to "Play",  music_play_path %></li>
+    <li class="divider"></li>
+    <li><%= link_to "Sync", music_sync_index_path %></li>
+  </ul>
+</li>
