@@ -28,6 +28,9 @@ Rails.application.routes.draw do
 
 	namespace :music do
 		resources :sync
+		resources :albums
+		resources :artists
+		resources :genre
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
