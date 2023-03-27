@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_25_001708) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_27_213347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -38,6 +38,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_25_001708) do
     t.integer "steps"
     t.integer "flights"
     t.integer "miles"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "music_tracks", force: :cascade do |t|
+    t.string "title"
+    t.string "genre"
+    t.string "artist"
+    t.string "album"
+    t.integer "track_number"
+    t.integer "track_total"
+    t.integer "duration"
+    t.integer "file_size"
+    t.string "location"
+    t.integer "play_count"
+    t.string "media_type"
+    t.string "composer"
+    t.integer "disc_number"
+    t.integer "disc_total"
+    t.string "comment"
+    t.integer "weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
