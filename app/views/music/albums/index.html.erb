@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<h4><%= @music.count %> Albums</h4>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th></th>
+<th>Album</th>
+</tr>
+</thead>
+
+<tbody>
+<% @music.each do |album, t| %>
+	<tr>
+	<td><%= link_to "Queue", music_album_path(id: 0, album: album), method: :put %></td>
+	<td><%= link_to album.html_safe, music_album_path(id: 0, album: album) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
