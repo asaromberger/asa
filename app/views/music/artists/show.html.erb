@@ -1,0 +1,50 @@
+<h1><%= @title %></h1>
+
+<h4><%= @music.count %> Tracks</h4>
+
+<p><%= link_to 'Back', music_artists_path, class: 'btn btn-xs btn-primary' %></p>
+
+<p><%= link_to 'Add All to Queue', music_artist_path(id: 0, artist: @artist), method: :put, class: 'btn btn-xs btn-primary' %></p>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th colspan=9 class='center'><%= @artist.html_safe %></th>
+</tr>
+<tr>
+<th></th>
+<th>Album</th>
+<th>Title</th>
+<th>Genre</th>
+<th>Track</th>
+<th>Duration</th>
+<th>Played</th>
+<th>Comment</th>
+<th>Weight</th>
+</tr>
+</thead>
+
+<tbody>
+<% @music.each do |track, song| %>
+	<tr>
+	<td><%= link_to "Queue", music_artists_path(id: song.id), method: :post %></td>
+	<td><%= link_to song.album.html_safe, music_album_path(id: 0, album: song.album) %></td>
+	<td><%= song.title.html_safe %></td>
+	<td>
+		<% song.genre.downcase.split(/\s+/).each do |g| %>
+			<%= link_to g.html_safe, music_genre_path(id: 0, genre: g) %>
+		<% end %>
+	</td>
+	<td><%= song.track_number %></td>
+	<td><%= song.duration %></td>
+	<td><%= song.play_count %></td>
+	<td><%= song.comment %></td>
+	<td><%= song.weight %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
