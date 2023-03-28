@@ -12,7 +12,11 @@ class UsersController < ApplicationController
 		if params[:select] == 'home'
 			@title = "Home page"
 		else
-			@title = "#{@user.application.capitalize} Home page"
+			if ! @user.application.blank?
+				@title = "#{@user.application.capitalize} Home page"
+			else
+				@title = "Home page"
+			end
 		end
 		@applications = []
 		valid_applications().each do |app|

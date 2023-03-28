@@ -58,7 +58,7 @@ class Music::AlbumsController < ApplicationController
       
 	def require_music
 		if ! current_user_role('music')
-			redirect_to new_session_path, alert: "Insufficient permission: MUSICSYNC"
+			redirect_to new_session_path, alert: "Insufficient permission: MUSICALBUM"
 		end
 	end
 
