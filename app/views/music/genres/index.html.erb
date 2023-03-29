@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<h4><%= @music.count %> Genres</h4>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th></th>
+<th>Genre</th>
+</tr>
+</thead>
+
+<tbody>
+<% @music.each do |genre, t| %>
+	<tr>
+	<td><%= link_to "Queue", music_genre_path(id: 0, genre: genre), method: :put %></td>
+	<td><%= link_to genre.html_safe, music_genre_path(id: 0, genre: genre) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
