@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 		resources :sync
 		resources :albums
 		resources :artists
-		resources :genre
+		resources :genres
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
