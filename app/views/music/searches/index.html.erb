@@ -1,0 +1,90 @@
+<h1><%= @title %></h1>
+
+<table style='width:100%'>
+
+<tr>
+<td style='vertical-align: top'>
+	<table class='table-bordered table-striped fixed-header'>
+
+		<thead>
+		<tr>
+		<th>Artists</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<% @artists.each do |artist, value| %>
+			<tr>
+			<td><%= link_to artist.html_safe, music_artist_path(id: 0, artist: artist) %></td>
+			</tr>
+		<% end %>
+		</tbody>
+
+	</table>
+</td>
+<td style='vertical-align: top'>
+	<table class='table-bordered table-striped fixed-header'>
+
+		<thead>
+		<tr>
+		<th>Albums</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<% @albums.each do |album, value| %>
+			<tr>
+			<td><%= link_to album.html_safe, music_album_path(id: 0, album: album) %></td>
+			</tr>
+		<% end %>
+		</tbody>
+
+	</table>
+</td>
+</tr>
+
+<tr>
+<td colspan=2>
+	<table class='table-bordered table-striped fixed-header'>
+
+		<thead>
+		<tr>
+		<th></th>
+		<th>Artist</th>
+		<th>Album</th>
+		<th>Title</th>
+		<th>Genre</th>
+		<th>Track</th>
+		<th>Duration</th>
+		<th>Played</th>
+		<th>Comment</th>
+		<th>Weight</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<% @songs.each do |location, song| %>
+			<tr>
+			<td><%= link_to "Queue", music_searches_path(id: song.id), method: :post %></td>
+			<td><%= link_to song.artist.html_safe, music_artist_path(id: 0, artist: song.artist) %></td>
+			<td><%= link_to song.album.html_safe, music_album_path(id: 0, album: song.album) %></td>
+			<td><%= song.title.html_safe %></td>
+			<td>
+				<% song.genre.downcase.split(/\s+/).each do |g| %>
+				<%= link_to g.html_safe, music_genre_path(id: 0, genre: g) %>
+				<% end %>
+			</td>
+			<td><%= song.track_number %></td>
+			<td><%= song.duration %></td>
+			<td><%= song.play_count %></td>
+			<td><%= song.comment %></td>
+			<td><%= song.weight %></td>
+			</tr>
+		<% end %>
+		</tbody>
+
+	</table>
+</td>
+</tr>
+
+</table>

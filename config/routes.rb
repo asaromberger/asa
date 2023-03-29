@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 		resources :albums
 		resources :artists
 		resources :genres
+		resources :searches
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
