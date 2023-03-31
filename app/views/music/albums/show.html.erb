@@ -40,7 +40,7 @@
 		<% end %>
 	</td>
 	<td><%= song.track_number %></td>
-	<td><%= song.duration %></td>
+	<td><%= seconds_to_time(song.duration) %></td>
 	<td><%= song.play_count %></td>
 	<td><%= song.comment %></td>
 	<td><%= song.weight %></td>

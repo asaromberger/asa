@@ -35,7 +35,7 @@
 	<td><%= song.title.html_safe %></td>
 	<td><%= link_to song.album.html_safe, music_album_path(id: 0, album: song.album) %></td>
 	<td><%= song.track_number %></td>
-	<td><%= song.duration %></td>
+	<td><%= seconds_to_time(song.duration) %></td>
 	<td><%= song.play_count %></td>
 	<td><%= song.comment %></td>
 	<td><%= song.weight %></td>
