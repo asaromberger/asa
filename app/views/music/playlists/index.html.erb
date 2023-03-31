@@ -2,6 +2,8 @@
 
 <h4><%= @music.count %> Tracks</h4>
 
+<p><%= link_to 'Remove All', music_playlist_path(0), method: :delete, data: {confirm: "Remove All?" }, class: 'btn btn-primary btn-xs' %></td>
+
 <table class='table-bordered table-striped fixed-header'>
 
 <thead>

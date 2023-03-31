@@ -11,7 +11,11 @@ class Music::PlaylistsController < ApplicationController
 	end
 
 	def destroy
-		pl = MusicPlaylist.where("user_id = ? AND name = 'QUEUE' AND position = ?", current_user.id, params[:id].to_i).first
+		if params[:id].to_i == 0
+			MusicPlaylist.where("user_id = ? AND name = 'QUEUE'", current_user.id).delete_all
+		else
+			pl = MusicPlaylist.where("user_id = ? AND name = 'QUEUE' AND position = ?", current_user.id, params[:id].to_i).first
+		end
 		if pl
 			pl.delete
 		end
