@@ -75,7 +75,7 @@
 				<% end %>
 			</td>
 			<td><%= track.track_number %></td>
-			<td><%= track.duration %></td>
+			<td><%= seconds_to_time(track.duration) %></td>
 			<td><%= track.play_count %></td>
 			<td><%= track.comment %></td>
 			<td><%= track.weight %></td>
