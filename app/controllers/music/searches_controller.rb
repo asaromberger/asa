@@ -15,22 +15,22 @@ class Music::SearchesController < ApplicationController
 		search = "%#{params[:search]}%"
 		@artists = Hash.new
 		@albums = Hash.new
-		@songs = Hash.new
-		MusicTrack.where("LOWER(title) LIKE ? OR LOWER(album) LIKE ? OR LOWER(artist) LIKE ?", search, search, search).each do |song|
-			@artists[song.artist] = song.artist
-			@albums[song.album] = song.album
-			@songs[song.location] = song
+		@tracks = Hash.new
+		MusicTrack.where("LOWER(title) LIKE ? OR LOWER(album) LIKE ? OR LOWER(artist) LIKE ?", search, search, search).each do |track|
+			@artists[track.artist] = track.artist
+			@albums[track.album] = track.album
+			@tracks[track.location] = track
 		end
 		@artists = @artists.sort_by { |index, value| index.downcase }
 		@albums = @albums.sort_by { |index, value| index.downcase }
-		@songs = @songs.sort_by { |index, song| song.title.gsub(/^[0-9]* */, '').downcase }
+		@tracks = @tracks.sort_by { |index, track| track.title.gsub(/^[0-9]* */, '').downcase }
 	end
 
-	# add song to play queue
+	# add track to play queue
 	def create
 		# find  current last
 		position = find_position('QUEUE')
-		pl = Playlist.new
+		pl = MusicPlaylist.new
 		pl.user_id = current_user.id
 		pl.name = 'QUEUE'
 		pl.music_track_id = params[:id].to_i
@@ -44,7 +44,7 @@ class Music::SearchesController < ApplicationController
       
 	def require_music
 		if ! current_user_role('music')
-			redirect_to new_session_path, alert: "Insufficient permission: MUSICARTIST"
+			redirect_to users_path, alert: "Insufficient permission: MUSICARTIST"
 		end
 	end
 
