@@ -1,0 +1,2 @@
+class GenealogyChild < ApplicationRecord
+end
