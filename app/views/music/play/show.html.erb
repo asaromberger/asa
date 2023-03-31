@@ -1,0 +1,54 @@
+<h1><%= @title %></h1>
+
+<script>
+	function play_sound()
+	{
+		document.getElementById("src").play();
+	}
+	function pause_sound()
+	{
+		document.getElementById("src").pause();
+	}
+	function next_song()
+	{
+		var data = "playlist='QUEUE'";
+		$.ajax({
+			beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			type:"PUT",
+			url: "<%= music_play_path(id: 0) %>",
+			data: data,
+			dataType: "json",
+			success: function(reply) {
+				$('#album').text("Album: " + reply["album"]);
+				$('#name').text("Name: " + reply["name"]);
+				$('#artist').text("Artist: " + reply["artist"]);
+				$('#source').text("Source: " + reply["src"]);
+				$('#src').attr("src", reply["src"]);
+				play_sound();
+			},
+			error: function(jqxdr, reply, status) {
+				$('#album').text("");
+				$('#name').text("QUEUE EMPTY");
+				$('#artist').text("");
+				$('#source').text("");
+				$('#src').attr("src", "");
+			}
+		});
+	}
+</script>
+
+<% if @name != 'QUEUE EMPTY' %>
+
+	<h3 id='album'>Album: <%= @album %></h3>
+	<h3 id='name'>Name: <%= @name %></h3>
+	<h3 id='artist'>Artist: <%= @artist %></h3>
+<h5 id='source'>Source: <%= @src %></h5>
+	<p><audio controls id="src" src="<%= @src %>" type="audio/mp3" onended="next_song();"></audio></p>
+
+	<button onclick="next_song();">Skip to next song</button>
+
+<% else %>
+
+	<p>Empty Playlist</p>
+
+<% end %>
