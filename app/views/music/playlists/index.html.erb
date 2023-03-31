@@ -1,0 +1,38 @@
+<h1><%= @title %></h1>
+
+<h4><%= @music.count %> Tracks</h4>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Artist</th>
+<th>Title</th>
+<th>Genre</th>
+<th>Track</th>
+<th>Duration</th>
+<th>Played</th>
+<th>Comment</th>
+<th>Weight</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<% @music.each do |position, song| %>
+	<tr>
+	<td><%= song.artist.html_safe %></td>
+	<td><%= song.title.html_safe %></td>
+	<td><%= song.genre.html_safe %></td>
+	<td><%= song.track_number %></td>
+	<td><%= song.duration %></td>
+	<td><%= song.play_count %></td>
+	<td><%= song.comment %></td>
+	<td><%= song.weight %></td>
+	<td><%= link_to 'Remove', music_playlist_path(position), method: :delete, data: {confirm: "Remove #{song.artist}, #{song.title}?" }, class: 'btn btn-primary btn-xs' %></td>
+
+	</tr>
+<% end %>
+</tbody>
+
+</table>

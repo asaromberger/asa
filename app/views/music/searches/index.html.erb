@@ -63,22 +63,22 @@
 		</thead>
 
 		<tbody>
-		<% @songs.each do |location, song| %>
+		<% @tracks.each do |location, track| %>
 			<tr>
-			<td><%= link_to "Queue", music_searches_path(id: song.id), method: :post %></td>
-			<td><%= link_to song.artist.html_safe, music_artist_path(id: 0, artist: song.artist) %></td>
-			<td><%= link_to song.album.html_safe, music_album_path(id: 0, album: song.album) %></td>
-			<td><%= song.title.html_safe %></td>
+			<td><%= link_to "Queue", music_searches_path(id: track.id), method: :post %></td>
+			<td><%= link_to track.artist.html_safe, music_artist_path(id: 0, artist: track.artist) %></td>
+			<td><%= link_to track.album.html_safe, music_album_path(id: 0, album: track.album) %></td>
+			<td><%= track.title.html_safe %></td>
 			<td>
-				<% song.genre.downcase.split(/\s+/).each do |g| %>
+				<% track.genre.downcase.split(/\s+/).each do |g| %>
 				<%= link_to g.html_safe, music_genre_path(id: 0, genre: g) %>
 				<% end %>
 			</td>
-			<td><%= song.track_number %></td>
-			<td><%= song.duration %></td>
-			<td><%= song.play_count %></td>
-			<td><%= song.comment %></td>
-			<td><%= song.weight %></td>
+			<td><%= track.track_number %></td>
+			<td><%= track.duration %></td>
+			<td><%= track.play_count %></td>
+			<td><%= track.comment %></td>
+			<td><%= track.weight %></td>
 			</tr>
 		<% end %>
 		</tbody>

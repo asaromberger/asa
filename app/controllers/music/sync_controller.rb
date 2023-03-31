@@ -8,13 +8,13 @@ class Music::SyncController < ApplicationController
 		@title = "Sync Report"
 		@output = []
 		db = Hash.new
-		MusicTrack.all.each do |song|
+		MusicTrack.all.each do |track|
 
-			db[song.location] = song
+			db[track.location] = track
 		end
 		datafile = "app/assets/templates/rhythmdb.xml"
 		data = File.read(datafile).split(/\n/)
-		song = false
+		track = false
 ignore = false
 		title = ''
 		weight = 0
@@ -38,7 +38,7 @@ ignore = false
 			field = line.sub(/^\s*</, '').sub(/>.*/, '')
 			content = line.sub(/^\s*<[^>]*>/, '').sub(/<.*/, '')
 			if field == 'entry type="song"'
-				song = true
+				track = true
 			elsif field == 'entry type="iradio"'
 				ignore = true
 			elsif field == 'entry type="ignore"'
@@ -89,7 +89,7 @@ ignore = false
 			elsif field == 'album-artist'
 			elsif field == 'album-sortname'
 			elsif field == '/entry'
-				if song
+				if track
 					if db[location]
 						update += 1
 						table = db[location]
@@ -115,7 +115,7 @@ ignore = false
 					table.disc_total = disc_total
 					table.comment = comment
 					table.save
-					song = false
+					track = false
 					title = ''
 					weight = 0
 					genre = ''
@@ -144,8 +144,8 @@ ignore = false
 		@output.push("NEW: #{new}")
 		@output.push("UPDATE: #{update}")
 		@output.push("OUT OF DATE: #{db.count}")
-		db.each do |location, song|
-			song.delete
+		db.each do |location, track|
+			track.delete
 		end
 	end
 
@@ -153,7 +153,7 @@ ignore = false
       
 	def require_music
 		if ! current_user_role('music')
-			redirect_to new_session_path, alert: "Insufficient permission: MUSICSYNC"
+			redirect_to users_path, alert: "Insufficient permission: MUSICSYNC"
 		end
 	end
 
