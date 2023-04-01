@@ -1,0 +1,37 @@
+<h1><%= @title %></h1>
+
+<%= form_for(@individual) do |form| %>
+	<div class='field'>
+		<%= form.label :uid, 'UID', class: 'col-md-1' %>
+		<%= form.text_field :uid, class: 'col-md-11' %>
+	</div>
+
+	<div class='field'>
+		<%= form.label :refn, 'REFN', class: 'col-md-1' %>
+		<%= form.text_field :refn, class: 'col-md-11' %>
+	</div>
+
+	<div class='field'>
+		<%= form.label :sex, 'Sex', class: 'col-md-1' %>
+		<%= form.select :sex, options_for_select(@sex), {}, class: 'col-md-11' %>
+	</div>
+
+	<div class='field'>
+		<%= label_tag :given, 'Given Name', class: 'col-md-1' %>
+		<%= text_field_tag :given, nil, class: 'col-md-11' %>
+	</div>
+
+	<div class='field'>
+		<%= label_tag :surname, 'Surname', class: 'col-md-1' %>
+		<%= text_field_tag :surname, nil, class: 'col-md-11' %>
+	</div>
+
+	<div class='field'>
+		<%= label_tag :suffix, 'Suffix', class: 'col-md-1' %>
+		<%= text_field_tag :suffix, nil, class: 'col-md-11' %>
+	</div>
+
+	<div class='actions'>
+		<%= form.submit "Create", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>

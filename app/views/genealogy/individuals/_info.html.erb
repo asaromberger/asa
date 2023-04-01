@@ -1,0 +1,41 @@
+<h4><%= itype.capitalize.pluralize %></h4>
+<div><%= link_to 'Add', new_genealogy_info_path(individual_id: @individual.id, type: itype), class: 'btn btn-primary btn-xs' %></div>
+<div class='clearfix'></div>
+<div>
+<table>
+<% grid.each do |id, values| %>
+	<tr>
+	<% if itype == 'name' %>
+		<td><%= values %></td>
+	<% else %>
+		<td>Date: <%= values['date'] %></td>
+		<td>Place: <%= values['place'] %></td>
+	<% end %>
+	<% if values['note'] %>
+		<td>Note: <%= values['note'] %></td>
+	<% end %>
+	<% if itype == 'event' %>
+		<td>Type: <%= values['type'] %></td>
+		<td>Note: <%= values['note'] %></td>
+	<% end %>
+	<td>
+		<% if values['sources'] %>
+			<ul>
+			<% values['sources'].each do |sid, svalues| %>
+				<li>Page: <%= svalues['page'] %></li>
+				<li>Source: <%= svalues['source'] %></li>
+				<li>Note: <%= svalues['note'] %></li>
+			<% end %>
+			</ul>
+		<% end %>
+	</td>
+	<td><%= link_to 'Edit', edit_genealogy_info_path(id: id), class: 'btn btn-primary btn-xs' %></td>
+	<% if itype == 'name' %>
+		<td><%= link_to 'Remove', genealogy_info_path(id: id), method: :delete, data: { confirm: "Remove #{values}?" }, class: 'btn btn-primary btn-xs' %></td>
+	<% else %>
+		<td><%= link_to 'Remove', genealogy_info_path(id: id), method: :delete, data: { confirm: "Remove #{values['date']}?" }, class: 'btn btn-primary btn-xs' %></td>
+	<% end %>
+	</tr>
+<% end %>
+</table>
+</div>
