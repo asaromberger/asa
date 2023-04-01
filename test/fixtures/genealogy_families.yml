@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  husband_id: 1
+  wife_id: 1
+  updated: 2023-03-31
+
+two:
+  husband_id: 1
+  wife_id: 1
+  updated: 2023-03-31
