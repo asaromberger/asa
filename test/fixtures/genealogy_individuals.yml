@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  uid: 1
+  refn: 1
+  sex: MyString
+  updated: 2023-03-31
+
+two:
+  uid: 1
+  refn: 1
+  sex: MyString
+  updated: 2023-03-31

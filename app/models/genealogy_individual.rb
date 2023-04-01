@@ -1,0 +1,2 @@
+class GenealogyIndividual < ApplicationRecord
+end
