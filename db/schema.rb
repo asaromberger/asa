@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_01_000423) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_01_000807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -49,6 +49,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_01_000423) do
     t.integer "refn"
     t.string "sex"
     t.date "updated"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "genealogy_info_sources", force: :cascade do |t|
+    t.integer "info_id"
+    t.integer "source_id"
+    t.string "page"
+    t.integer "quay"
+    t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

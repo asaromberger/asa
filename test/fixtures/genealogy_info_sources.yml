@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  info_id: 1
+  source_id: 1
+  page: MyString
+  quay: 1
+  note: MyString
+
+two:
+  info_id: 1
+  source_id: 1
+  page: MyString
+  quay: 1
+  note: MyString
