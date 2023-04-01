@@ -1,0 +1,17 @@
+<h1><%= @title %></h1>
+
+<%= form_tag genealogy_parents_path, method: :post do %>
+
+	<%= hidden_field_tag :genealogy_individual_id, @individual.id %>
+
+	<div class="field">
+		<%= label_tag :genealogy_family_id, 'Parents', class: 'col-md-1' %>
+		<%= select_tag :genealogy_family_id, options_for_select(@families), class: 'col-md-6' %>
+	</div>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<div class="actions">
+		<%= submit_tag "Save", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>

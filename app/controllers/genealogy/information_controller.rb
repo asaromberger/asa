@@ -8,7 +8,7 @@ class Genealogy::InformationController < ApplicationController
 		@title = "Information"
 		@individual = GenealogyIndividual.find(params[:id])
 
-		@names = GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", @individual.id).order("data -> 'given', data -> 'surname'")
+		@names = GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", @individual.id).order(Arel.sql("data -> 'given', data -> 'surname'"))
 
 		@parents = Hash.new
 		GenealogyChild.where("genealogy_individual_id = ?", @individual.id).each do |child|

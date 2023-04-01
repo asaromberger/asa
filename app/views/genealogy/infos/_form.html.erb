@@ -11,10 +11,10 @@
 	<% else %>
 		<div class="field">
 			<%= form.label :date, class: 'col-md-1' %>
-			<%= form.date_select :date, {:discard_hours => true}, {:class => 'date-select col-md-3'} %>
+			<%= form.date_select :date, {:discard_hours => true, start_year: 1700, end_year: Date.today.year}, {:class => 'date-select col-md-3'} %>
 		</div>
 
-		<div class='clearfix'></div>
+		<div class='clearfix'><p>&nbsp;</p></div>
 
 		<div class="field">
 			<%= form.label :place, class: 'col-md-1' %>

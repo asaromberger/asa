@@ -11,7 +11,7 @@ div {
 <%= render 'info', itype: 'name', grid: @names %>
 
 <h4>Parents</h4>
-<div>ADDP<%#= link_to 'Add name', new_genealogy_parent_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div><%= link_to 'Add name', new_genealogy_parent_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @parents.each do |id, name| %>
