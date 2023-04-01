@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 	namespace :genealogy do
 		resources :individuals
 		resources :information
+		resources :infos
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'

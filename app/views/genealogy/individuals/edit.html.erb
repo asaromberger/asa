@@ -11,7 +11,7 @@ div {
 <%= render 'info', itype: 'name', grid: @names %>
 
 <h4>Parents</h4>
-<div><%= link_to 'Add', new_genealogy_parent_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>ADDP<%#= link_to 'Add name', new_genealogy_parent_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @parents.each do |id, name| %>
@@ -25,7 +25,7 @@ div {
 </div>
 
 <h4>Married</h4>
-<div><%= link_to 'Add', new_genealogy_married_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>ADDM<%#= link_to 'Add spouse', new_genealogy_married_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @marrieds.each do |id, name| %>
@@ -39,7 +39,7 @@ div {
 </div>
 
 <h4>Children</h4>
-<div><%= link_to 'Add', new_genealogy_child_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>ADDC<%#= link_to 'Add child', new_genealogy_child_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @children.each do |id, name| %>

@@ -1,0 +1,109 @@
+<%= link_to 'Back', edit_genealogy_individual_path(id: @info.genealogy_individual_id), class: 'btn btn-primary btn-xs' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= form_for(@info) do |form| %>
+
+	<%= form.hidden_field :genealogy_individual_id %>
+	<%= form.hidden_field :itype %>
+
+	<% if @info.itype == 'name' %>
+	<% else %>
+		<div class="field">
+			<%= form.label :date, class: 'col-md-1' %>
+			<%= form.date_select :date, {:discard_hours => true}, {:class => 'date-select col-md-3'} %>
+		</div>
+
+		<div class='clearfix'></div>
+
+		<div class="field">
+			<%= form.label :place, class: 'col-md-1' %>
+			<%= form.text_field :place, class: 'col-md-11' %>
+		</div>
+
+		<div class='clearfix'></div>
+
+		<div class="field">
+			<%= form.label :note, class: 'col-md-1' %>
+			<%= form.text_field :note, class: 'col-md-11' %>
+		</div>
+	<% end %>
+
+	<div class='clearfix'></div>
+
+	<%= form.fields_for :data, @info.data do |data| %>
+		<% if @info.itype == 'name' %>
+			<div class="field">
+				<%= data.label :given, class: 'col-md-1' %><br/>
+				<%= data.text_field :given, value: @info.data['given'], class: 'col-md-11' %>
+			</div>
+
+			<div class="field">
+				<%= data.label :surname, class: 'col-md-1' %><br/>
+				<%= data.text_field :surname, value: @info.data['surname'], class: 'col-md-11' %>
+			</div>
+
+			<div class="field">
+				<%= data.label :suffix, class: 'col-md-1' %><br/>
+				<%= data.text_field :suffix, value: @info.data['suffix'], class: 'col-md-11' %>
+			</div>
+		<% end %>
+		<% if @info.itype == 'event' %>
+			<div class="field">
+				<%= data.label :type, class: 'col-md-1' %><br/>
+				<%= data.text_field :type, value: @info.data['type'], class: 'col-md-11' %>
+			</div>
+
+			<div class="field">
+				<%= data.label :note, class: 'col-md-1' %><br/>
+				<%= data.text_field :note, value: @info.data['note'], class: 'col-md-11' %>
+			</div>
+		<% end %>
+	<% end %>
+
+	<div class="actions">
+		<%= form.submit "Save #{@info.itype}", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if @info.persisted? %>
+	<div>SOURCE<%#= link_to 'Add a Source', new_genealogy_info_source_path(info_id: @info.id), class: 'btn btn-primary btn-xs' %></div>
+
+	<% if @sources.count > 0 %>
+		<h4>Sources</h4>
+		<% if @sources.count > 0 %>
+			<table>
+			<thead>
+			<tr>
+			<th>Title</th>
+			<th>Abbrevation</th>
+			<th>Published</th>
+			<th>REFN</th>
+			<th>Repo</th>
+			<th>Edit</th>
+			<th>Remove</th>
+			</tr>
+			</thead>
+			<% @sources.each do |source| %>
+				<% s = Source.find(source.genealogy_source_id) %>
+				<tr>
+				<td><%= s.title %></td>
+				<td><%= s.abbreviation %></td>
+				<td><%= s.published %></td>
+				<td><%= s.refn %></td>
+				<% if s.genealogy_repo_id && s.genealogy_repo_id > 0 %>
+					<td><%= s.repo.name %></td>
+				<% else %>
+					<td></td>
+				<% end %>
+				<td><%= link_to 'Edit', edit_genealogy_info_source_path(source.id, info_id: @info.id) %></td>
+				<td><%= link_to 'Remove', genealogy_info_source_path(source.id, info_id: @info.id), method: :delete, data: { confirm: "Remove #{s.title}?" } %> </td>
+				</tr>
+			<% end %>
+			</table>
+		<% end %>
+	<% end %>
+<% end %>
