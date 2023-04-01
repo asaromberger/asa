@@ -6,7 +6,7 @@ class Genealogy::InfosController < ApplicationController
 		type = params[:type]
 		@title = "Add a #{type}"
 		@info = GenealogyInfo.new
-		@info.genealogy_individual_id = params[:genealogy_individual_id].to_i
+		@info.genealogy_individual_id = params[:individual_id].to_i
 		@info.itype = type
 		@info.date = Time.now.to_date
 		@info.place = ''
