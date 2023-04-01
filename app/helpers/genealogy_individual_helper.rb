@@ -1,4 +1,4 @@
-module IndividualHelper
+module GenealogyIndividualHelper
 
     def info(individual, type)
 		infos = Hash.new

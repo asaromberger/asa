@@ -1,0 +1,59 @@
+<style>
+div {
+	text-indent: 20px;
+}
+</style>
+
+<h1><%= @title %></h1>
+
+<%= link_to 'Switch to Tree View', genealogy_tree_index_path(id: @individual.id), class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= link_to 'Edit', edit_genealogy_individual_path(id: @individual.id), class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if @names.count > 0 %>
+	<h5>Name</h5>
+	<% @names.each do |name| %>
+		<div><%= name.data['given'] %> <%= name.data['surname'] %> <%= name.data['suffix'] %></div>
+	<% end %>
+<% end %>
+
+<% if @parents.count > 0 %>
+	<h5>Parents</h5>
+	<% @parents.each do |id, name| %>
+		<div><%= link_to name, genealogy_information_index_path(id: id) %></div>
+	<% end %>
+<% end %>
+
+<% if @marrieds.count > 0 %>
+	<h5>Married</h5>
+	<% @marrieds.each do |id, name| %>
+		<div><%= link_to name, genealogy_information_index_path(id: id) %></div>
+	<% end %>
+<% end %>
+
+<% if @children.count > 0 %>
+	<h5>Children</h5>
+	<% @children.each do |id, name| %>
+		<div><%= link_to name, genealogy_information_index_path(id: id) %></div>
+	<% end %>
+<% end %>
+
+<%= render 'info', itype: 'birth', grid: @births %>
+
+<%= render 'info', itype: 'death', grid: @deaths %>
+
+<%= render 'info', itype: 'burried', grid: @burrieds %>
+
+<%= render 'info', itype: 'baptism', grid: @baptisms %>
+
+<%= render 'info', itype: 'residence', grid: @residences %>
+
+<%= render 'info', itype: 'occupation', grid: @occupations %>
+
+<%= render 'info', itype: 'event', grid: @events %>
+
+<%= render 'info', itype: 'census', grid: @census %>

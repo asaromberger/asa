@@ -23,8 +23,17 @@ class DataCheckerController < ApplicationController
 			@tables[name]['errors'] = []
 			table['columns'].each do |column|
 				col = column.name
+				puts(col)
 				if col.match('_id$')
 					xrefname = col.gsub(/_id$/, '')
+					## PATCHES FOR ALTERNATE REFERENCES
+					if xrefname == 'genealogy_husband'
+						xrefname = 'genealogy_individual'
+					end
+					if xrefname == 'genealogy_wife'
+						xrefname = 'genealogy_individual'
+					end
+					## END PATCHES
 					xref = xrefname.classify.constantize
 					@tables[name]['errors'].push("References: #{xref.name}")
 					tableref.where("#{col} NOT IN (?)", @tables[xref.name]['ids']).each do |t|

@@ -1,0 +1,28 @@
+<% if grid.count > 0 %>
+	<h5><%= itype.capitalize.pluralize %></h5>
+	<% grid.each do |id, values| %>
+		<% if ! values['date'].blank? %>
+			<div>Date: <%= values['date'] %></div>
+		<% end %>
+		<% if ! values['place'].blank? %>
+			<div>Place: <%= values['place'] %></div>
+		<% end %>
+		<% if ! values['type'].blank? %>
+			<div>Type: <%= values['type'] %></div>
+		<% end %>
+		<% if ! values['note'].blank? %>
+			<div>Note: <%= values['note'] %></div>
+		<% end %>
+		<% values['sources'].each do |sid, svalues| %>
+			<% if ! svalues['page'].blank? %>
+				<div>Page: <%= svalues['page'] %></div>
+			<% end %>
+			<% if ! svalues['source'].blank? %>
+				<div>Source: <%= svalues['source'] %></div>
+			<% end %>
+			<% if ! svalues['note'].blank? %>
+				<div>Source: <%= svalues['note'] %></div>
+			<% end %>
+		<% end %>
+	<% end %>
+<% end %>
