@@ -6,7 +6,7 @@ div {
 
 <h1><%= @title %></h1>
 
-BACK<%#= link_to 'Back', genealogy_information_index_path(id: @individual.id), class: 'btn btn-primary btn-xs' %>
+<%= link_to 'Back', genealogy_information_index_path(id: @individual.id), class: 'btn btn-primary btn-xs' %>
 
 <%= render 'info', itype: 'name', grid: @names %>
 

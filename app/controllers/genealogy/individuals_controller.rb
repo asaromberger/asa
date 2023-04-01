@@ -2,7 +2,7 @@ class Genealogy::IndividualsController < ApplicationController
 	before_action :require_signed_in
 	before_action :require_genealogy
 
-	include IndividualHelper
+	include GenealogyIndividualHelper
 
 	def new
 		puts("===== NEW =====")
