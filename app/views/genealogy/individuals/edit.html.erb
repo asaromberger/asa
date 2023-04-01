@@ -1,0 +1,69 @@
+<style>
+div {
+	margin-left: 20px;
+}
+</style>
+
+<h1><%= @title %></h1>
+
+BACK<%#= link_to 'Back', genealogy_information_index_path(id: @individual.id), class: 'btn btn-primary btn-xs' %>
+
+<%= render 'info', itype: 'name', grid: @names %>
+
+<h4>Parents</h4>
+<div><%= link_to 'Add', new_genealogy_parent_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>
+<table>
+<% @parents.each do |id, name| %>
+	<tr>
+	<td><%= name %></td>
+	<td><%= link_to 'Edit', edit_genealogy_parent_path(id: id, individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></td>
+	<td><%= link_to 'Remove', genealogy_parent_path(id: id, individual_id: @individual.id), method: :delete, data: { confirm: "Remove #{name}?" }, class: 'btn btn-primary btn-xs' %></td>
+	</tr>
+<% end %>
+</table>
+</div>
+
+<h4>Married</h4>
+<div><%= link_to 'Add', new_genealogy_married_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>
+<table>
+<% @marrieds.each do |id, name| %>
+	<tr>
+	<td><%= name %></td>
+	<td><%= link_to 'Edit', edit_genealogy_married_path(id: id), class: 'btn btn-primary btn-xs' %></td>
+	<td><%= link_to 'Remove', genealogy_married_path(id: id), method: :delete, data: { confirm: "Remove #{name}?" }, class: 'btn btn-primary btn-xs' %></td>
+	</tr>
+<% end %>
+</table>
+</div>
+
+<h4>Children</h4>
+<div><%= link_to 'Add', new_genealogy_child_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div>
+<table>
+<% @children.each do |id, name| %>
+	<tr>
+	<td><%= name %></td>
+	<td><%= link_to 'Edit', edit_genealogy_child_path(id: id), class: 'btn btn-primary btn-xs' %></td>
+	<td><%= link_to 'Remove', genealogy_child_path(id: id), method: :delete, data: { confirm: "Remove #{name}?" }, class: 'btn btn-primary btn-xs' %></td>
+	</tr>
+<% end %>
+</table>
+</div>
+
+<%= render 'info', itype: 'birth', grid: @births %>
+
+<%= render 'info', itype: 'death', grid: @deaths %>
+
+<%= render 'info', itype: 'burried', grid: @burrieds %>
+
+<%= render 'info', itype: 'baptism', grid: @baptisms %>
+
+<%= render 'info', itype: 'residence', grid: @residences %>
+
+<%= render 'info', itype: 'occupation', grid: @occupations %>
+
+<%= render 'info', itype: 'event', grid: @events %>
+
+<%= render 'info', itype: 'census', grid: @census %>

@@ -36,6 +36,10 @@ Rails.application.routes.draw do
 		resources :play
 	end
 
+	namespace :genealogy do
+		resources :individuals
+	end
+
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
 	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
 	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
