@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  abbreviation: MyString
+  published: MyString
+  refn: MyString
+  genealogy_repo_id: 1
+
+two:
+  title: MyString
+  abbreviation: MyString
+  published: MyString
+  refn: MyString
+  genealogy_repo_id: 1

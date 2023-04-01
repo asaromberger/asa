@@ -1,0 +1,2 @@
+class GenealogySource < ApplicationRecord
+end
