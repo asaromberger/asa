@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  individual_id: 1
+  itype: MyString
+  date: 2023-03-31
+  place: MyString
+  data: 
+  note: MyString
+
+two:
+  individual_id: 1
+  itype: MyString
+  date: 2023-03-31
+  place: MyString
+  data: 
+  note: MyString

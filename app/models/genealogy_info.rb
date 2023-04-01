@@ -1,0 +1,2 @@
+class GenealogyInfo < ApplicationRecord
+end

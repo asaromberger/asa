@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_01_000807) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_01_021114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -30,15 +30,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_01_000807) do
   end
 
   create_table "genealogy_children", force: :cascade do |t|
-    t.integer "individual_id"
-    t.integer "family_id"
+    t.integer "genealogy_individual_id"
+    t.integer "genealogy_family_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "genealogy_families", force: :cascade do |t|
-    t.integer "husband_id"
-    t.integer "wife_id"
+    t.integer "genealogy_husband_id"
+    t.integer "genealogy_wife_id"
     t.date "updated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -54,10 +54,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_01_000807) do
   end
 
   create_table "genealogy_info_sources", force: :cascade do |t|
-    t.integer "info_id"
-    t.integer "source_id"
+    t.integer "genealogy_info_id"
+    t.integer "genealogy_source_id"
     t.string "page"
     t.integer "quay"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "genealogy_infos", force: :cascade do |t|
+    t.integer "genealogy_individual_id"
+    t.string "itype"
+    t.date "date"
+    t.string "place"
+    t.hstore "data"
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
