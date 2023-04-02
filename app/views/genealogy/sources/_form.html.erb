@@ -1,0 +1,32 @@
+<%= form_for(@source) do |form| %>
+
+	<div class="field">
+		<%= form.label :title, class: 'col-md-1' %>
+		<%= form.text_field :title, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :abbreviation, class: 'col-md-1' %>
+		<%= form.text_field :abbreviation, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :published, class: 'col-md-1' %>
+		<%= form.text_field :published, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :refn, class: 'col-md-1' %>
+		<%= form.text_field :refn, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :genealogy_repo_id, class: 'col-md-1' %>
+		<%= form.select :genealogy_repo_id, options_for_select(@repos), {}, class: 'col-md-11' %>
+	</div>
+
+	<div class="actions">
+		<%= form.submit "Save", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>
+

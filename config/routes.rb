@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 		resources :marrieds
 		resources :parents
 		resources :search
+		resources :sources
 		resources :tree
 
 		namespace :admin do
