@@ -1,0 +1,39 @@
+<h1><%= @title %></h1>
+
+<div><%= link_to 'Add', new_genealogy_source_path, class: 'btn btn-primary btn-sm' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Title</th>
+<th>Abbreviation</th>
+<th>Published</th>
+<th>REFN</th>
+<th>Repo</th>
+<th>Edit</th>
+<th>Remove</th>
+</tr>
+</thead>
+
+<tbody>
+<% @sources.each do |source| %>
+	<tr>
+	<td><%= source.title %></td>
+	<td><%= source.abbreviation %></td>
+	<td><%= source.published %></td>
+	<td><%= source.refn %></td>
+	<% if source.genealogy_repo_id && source.genealogy_repo_id > 0 %>
+		<td>REPO<%#= source.genealogy_repo.name %></td>
+	<% else %>
+		<td></td>
+	<% end %>
+	<td><%= link_to 'Edit', edit_genealogy_source_path(source.id) %>
+	<td><%= link_to 'Remove', genealogy_source_path(id: source.id), method: :delete, data: { confirm: "Remove #{source.title}?" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
