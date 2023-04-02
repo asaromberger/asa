@@ -1,0 +1,22 @@
+<h1><%= @title %></h1>
+
+<%= form_tag genealogy_search_index_path, method: :get do %>
+
+	<%= label_tag 'Name' %>
+	<%= text_field_tag :name %>
+
+	<%= submit_tag "Search", class: 'btn btn-primary col-md-1' %>
+
+<% end %>
+
+<div class='clearfix'></div>
+
+<% if @people && @people.count > 0 %>
+
+	<h4>Select one</h4>
+
+	<% @people.each do |person| %>
+		<%= link_to "#{person.data['given']} #{person.data['surname']} #{person.data['suffix']}", genealogy_information_index_path(id: person.genealogy_individual_id), method: :get %><br/>
+	<% end %>
+
+<% end %>
