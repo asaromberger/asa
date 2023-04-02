@@ -1,0 +1,130 @@
+<h1>FILE</h1>
+
+<% if @traces.count %>
+	<h4>TRACE</h4>
+	<% @traces.each do |trace| %>
+		<%= trace %><br/>
+	<% end %>
+<% end %>
+
+<h4>Lines</h4>
+<% tt = 0 %>
+<% @lines.each do |indent, code, data| %>
+	<% if indent == 0 %>
+		<% tt = tt + 1 %>
+	<% end %>
+	<%= tt %>
+	<% (1..indent.to_i).each do |t| %>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+	<% end %>
+	<%= code %> :: <%= data %><br/>
+<% end %>
+
+<% if true %>
+<hr>
+<h4>Full Structure</h4>
+<%= @struct %>
+<hr>
+<h4>Structure by levels 1 & 2</h4>
+<% @struct.each do |l1| %>
+	<p>L1</p>
+	<%= l1 %>
+	<% l1.each do |l2| %>
+		<p>L2</p>
+		<%= l2 %>
+	<% end %>
+<% end %>
+<% end %>
+
+<hr>
+
+<h4>Individuals</h4>
+<ul>
+<% @individuals.each do |key, values| %>
+	<li><%= key %></li>
+	<ul>
+		<li>NAME: <%= values['GIVN'] %> <%= values['SURN'] %></li>
+		<li>UID: <%= values['UID'] %></li>
+		<li>REFN: <%= values['REFN'] %></li>
+		<li>SEX: <%= values['SEX'] %></li>
+		<li>BIRTH: <%= values['BIRTHDATE'] %> <%= values['BIRTHPLACE'] %></li>
+		<li>DEATH: <%= values['DEATHDATE'] %> <%= values['DEATHPLACE'] %></li>
+		<li>BURRIED: <%= values['BURRIEDDATE'] %> <%= values['BURRIEDPLACE'] %></li>
+		<li>RESIDENCE: <%= values['RESIDENCEDATE'] %> <%= values['RESIDENCEPLACE'] %></li>
+		<li>OCCUPATION: <%= values['OCCUPATIONDATE'] %> <%= values['OCCUPATIONPLACE'] %></li>
+		<li>EVENT: <%= values['EVENTDATE'] %> <%= values['EVENTPLACE'] %> <%= values['EVENTTYPE'] %> <%= values['EVENTNOTE'] %></li>
+		<li>CENSUS: <%= values['CENSUSDATE'] %> <%= values['CENSUSPLACE'] %></li>
+		<li>BAPTISM: <%= values['BAPTISMDATE'] %> <%= values['BAPTISMPLACE'] %></li>
+		<li>FAMS: <%= values['FAMS'] %></li>
+		<li>FAMC: <%= values['FAMC'] %></li>
+		<li>UPDATED: <%= values['LASTUPDATE'] %></li>
+		<% if values['errors'].count > 0 %>
+			<li>ERRORS:</li>
+			<ul>
+				<% values['errors'].each do |error| %>
+					<li><%= error %></li>
+				<% end %>
+			</ul>
+		<% end %>
+	</ul>
+<% end %>
+</ul>
+
+<hr>
+
+<h4>Families</h4>
+<ul>
+<% @families.each do |key, values| %>
+	<li><%= key %></li>
+	<ul>
+		<li>HUSBAND: <%= values['husband'] %></li>
+		<li>WIFE: <%= values['wife'] %></li>
+		<ul>
+		<% values['children'].each do |child| %>
+			<li>CHILD: <%= child %></li>
+		<% end %>
+		</ul>
+		<li>UPDATED: <%= values['LASTUPDATE'] %></li>
+		<% if values['errors'].count > 0 %>
+			<li>ERRORS:</li>
+			<ul>
+				<% values['errors'].each do |error| %>
+					<li><%= error %></li>
+				<% end %>
+			</ul>
+		<% end %>
+	</ul>
+<% end %>
+</ul>
+
+<hr>
+
+<h4>Sources</h4>
+<ul>
+<% @sources.each do |key, values| %>
+	<li><%= key %></li>
+	<ul>
+		<li>TITLE: <%= values['title'] %></li>
+		<li>ABBREVIATION: <%= values['abbreviation'] %></li>
+		<li>PUBLISHED: <%= values['published'] %></li>
+		<li>REFN: <%= values['refn'] %></li>
+		<li>REPO: <%= values['repo'] %></li>
+	</ul>
+<% end %>
+</ul>
+
+<hr>
+
+<h4>Repos</h4>
+<ul>
+<% @repos.each do |key, values| %>
+	<li><%= key %></li>
+	<ul>
+		<li>NAME: <%= values['name'] %></li>
+		<li>ADDRESS: <%= values['addr'] %></li>
+		<li>CITY: <%= values['city'] %></li>
+		<li>STATE: <%= values['state'] %></li>
+		<li>COUNTRY: <%= values['country'] %></li>
+	</ul>
+<% end %>
+</ul>

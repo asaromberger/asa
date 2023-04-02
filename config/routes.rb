@@ -47,6 +47,7 @@ Rails.application.routes.draw do
 		resources :tree
 
 		namespace :admin do
+			resources :bulk_input
 			resources :clear_db
 			resources :display
 		end
