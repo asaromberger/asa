@@ -1,0 +1,11 @@
+<h1><%= @title %></h1>
+
+<h3>Select Document</h3>
+
+<%= form_tag({action: :create}, multipart: true) do %>
+
+	<%= file_field_tag 'document' %>
+
+	<%= submit_tag "Submit", class: 'btn btn-primary col-md-1' %>
+
+<% end %>
