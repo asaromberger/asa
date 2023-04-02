@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 		resources :infos
 		resources :marrieds
 		resources :parents
+		resources :search
 
 		namespace :admin do
 			resources :clear_db
