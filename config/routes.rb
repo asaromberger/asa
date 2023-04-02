@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
 		namespace :admin do
 			resources :clear_db
+			resources :display
 		end
 	end
 
