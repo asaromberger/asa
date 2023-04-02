@@ -57,7 +57,7 @@ class Genealogy::SourcesController < ApplicationController
 	end
 
 	def source_params
-		params.require(:source).permit(:title, :abbreviation, :published, :refn, :genealogy_repo_id)
+		params.require(:genealogy_source).permit(:title, :abbreviation, :published, :refn, :genealogy_repo_id)
 	end
 
 end

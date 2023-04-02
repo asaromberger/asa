@@ -1,0 +1,35 @@
+<h1><%= @title %></h1>
+
+<div><%= link_to 'Add', new_genealogy_repo_path, class: 'btn btn-primary btn-sm' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Addr</th>
+<th>City</th>
+<th>State</th>
+<th>Country</th>
+<th>Edit</th>
+<th>Remove</th>
+</tr>
+</thead>
+
+<tbody>
+<% @repos.each do |repo| %>
+	<tr>
+	<td><%= repo.name %></td>
+	<td><%= repo.addr %></td>
+	<td><%= repo.city %></td>
+	<td><%= repo.state %></td>
+	<td><%= repo.country %></td>
+	<td><%= link_to 'Edit', edit_genealogy_repo_path(repo.id) %>
+	<td><%= link_to 'Remove', genealogy_repo_path(id: repo.id), method: :delete, data: { confirm: "Remove #{repo.name}?" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
