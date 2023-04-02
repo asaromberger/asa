@@ -1,0 +1,46 @@
+<style>
+.indent {
+	margin-left: 20px;
+}
+</style>
+
+<h1><%= @title %></h1>
+
+<%= link_to 'Switch to Information View', genealogy_information_index_path(id: @individual.id), class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<div class='clearfix'></div>
+
+<% if @names.count > 0 %>
+	<h5>Name</h5>
+	<% @names.each do |name| %>
+		<div><%= name.data['given'] %> <%= name.data['surname'] %> <%= name.data['suffix'] %></div>
+	<% end %>
+<% end %>
+
+<% if @parents.count > 0 %>
+	<h5>Parents</h5>
+	<% @parents.each do |id, name| %>
+		<div><%= link_to name, genealogy_tree_index_path(id: id) %></div>
+	<% end %>
+
+<% end %>
+
+<% if @marrieds.count > 0 %>
+	<h5>Married</h5>
+	<% @marrieds.each do |id, name| %>
+		<div><%= link_to name, genealogy_tree_index_path(id: id) %></div>
+	<% end %>
+<% end %>
+
+<%	def draw_tree(node) %>
+		<div class='indent'>
+		<% node.each do |id, values| %>
+			<%= link_to values['name'], genealogy_tree_index_path(id: id) %></br>
+			<% if values['tree'].count > 0 %>
+				<% draw_tree(values['tree']) %>
+			<% end %>
+		<% end %>
+		</div>
+<% end %>
+
+<% draw_tree(@tree) %>
