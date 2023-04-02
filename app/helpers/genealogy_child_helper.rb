@@ -6,17 +6,17 @@ module GenealogyChildHelper
 			hname = ''
 			GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", family.genealogy_husband_id).each do |name|
 				if hname == ''
-					hname = name.data['given'] + ' ' + name.data['surname'] + ' ' + name.data['surname']
+					hname = name.data['given'] + ' ' + name.data['surname']
 				else
-					hname = hname + ' OR ' + name.data['given'] + ' ' + name.data['surname'] + ' ' + name.data['surname']
+					hname = hname + ' OR ' + name.data['given'] + ' ' + name.data['surname']
 				end
 			end
 			wname = ''
 			GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", family.genealogy_wife_id).each do |name|
 				if wname == ''
-					wname = name.data['given'] + ' ' + name.data['surname'] + ' ' + name.data['surname']
+					wname = name.data['given'] + ' ' + name.data['surname']
 				else
-					wname = wname + ' OR ' + name.data['given'] + ' ' + name.data['surname'] + ' ' + name.data['surname']
+					wname = wname + ' OR ' + name.data['given'] + ' ' + name.data['surname']
 				end
 			end
 			if hname == ''

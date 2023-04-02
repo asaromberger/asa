@@ -13,7 +13,7 @@
 
 	<div class="field">
 		<%= label_tag :child_id, 'Child', class: 'col-md-1' %>
-		<%= select_tag :child_id, options_for_select(@individuals), class: 'col-md-6' %>
+		<%= select_tag :child_id, options_for_select(@individuals, @individual.id), class: 'col-md-6' %>
 	</div>
 
 	<div class='clearfix'><p>&nbsp;</p></div>
