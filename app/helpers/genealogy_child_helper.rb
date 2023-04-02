@@ -1,4 +1,4 @@
-module ChildHelper
+module GenealogyChildHelper
 
     def families(individual)
 		families = []

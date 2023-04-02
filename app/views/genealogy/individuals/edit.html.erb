@@ -25,7 +25,7 @@ div {
 </div>
 
 <h4>Married</h4>
-<div>ADDM<%#= link_to 'Add spouse', new_genealogy_married_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div><%= link_to 'Add spouse', new_genealogy_married_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @marrieds.each do |id, name| %>
