@@ -39,7 +39,7 @@ div {
 </div>
 
 <h4>Children</h4>
-<div>ADDC<%#= link_to 'Add child', new_genealogy_child_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
+<div><%= link_to 'Add child', new_genealogy_child_path(individual_id: @individual.id), class: 'btn btn-primary btn-xs' %></div>
 <div>
 <table>
 <% @children.each do |id, name| %>

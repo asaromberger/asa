@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 	end
 
 	namespace :genealogy do
+		resources :children
 		resources :individuals
 		resources :information
 		resources :infos
