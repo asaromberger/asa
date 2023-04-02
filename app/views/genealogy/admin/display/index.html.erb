@@ -1,0 +1,48 @@
+<h1><%= @title %></h1>
+
+<ul>
+<% @individuals.each do |id, values| %>
+	<li>ID: <%= id %></li>
+	<ul>
+		<li>UID: <%= values['uid'] %></li>
+		<li>REF: <%= values['refn'] %></li>
+		<li>SEX: <%= values['sex'] %></li>
+		<% values['name'].each do |name| %>
+			<li>NAME: <%= name %></li>
+		<% end %>
+		<% values['birth'].each do |birth| %>
+			<li>BIRTH: <%= birth %></li>
+		<% end %>
+		<% values['death'].each do |death| %>
+			<li>DEATH: <%= death %></li>
+		<% end %>
+		<% values['burried'].each do |burried| %>
+			<li>BURRIED: <%= burried %></li>
+		<% end %>
+		<% values['residence'].each do |residence| %>
+			<li>RESIDENCE: <%= residence %></li>
+		<% end %>
+		<% values['occupation'].each do |occupation| %>
+			<li>OCCUPATION: <%= occupation %></li>
+		<% end %>
+		<% values['event'].each do |event| %>
+			<li>EVENT: <%= event %></li>
+		<% end %>
+		<% values['baptism'].each do |baptism| %>
+			<li>BAPTISM: <%= baptism %></li>
+		<% end %>
+		<% values['census'].each do |census| %>
+			<li>CENSUS: <%= census %></li>
+		<% end %>
+		<% values['married'].each do |married| %>
+			<li>MARRIED: <%= married %></li>
+		<% end %>
+		<% values['parent'].each do |parent| %>
+			<li>PARENT: <%= parent %></li>
+		<% end %>
+		<% values['children'].each do |child| %>
+			<li>CHILD: <%= child %></li>
+		<% end %>
+	</ul>
+<% end %>
+</ul>
