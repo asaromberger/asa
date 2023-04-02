@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 		resources :infos
 		resources :marrieds
 		resources :parents
+		resources :repos
 		resources :search
 		resources :sources
 		resources :tree

@@ -1,0 +1,32 @@
+<%= form_for(@repo) do |form| %>
+
+	<div class="field">
+		<%= form.label :name, class: 'col-md-1' %>
+		<%= form.text_field :name, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :addr, class: 'col-md-1' %>
+		<%= form.text_field :addr, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :city, class: 'col-md-1' %>
+		<%= form.text_field :city, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :state, class: 'col-md-1' %>
+		<%= form.text_field :state, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :country, class: 'col-md-1' %>
+		<%= form.text_field :country, class: 'col-md-11' %>
+	</div>
+
+	<div class="actions">
+		<%= form.submit "Save", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>
+
