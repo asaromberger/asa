@@ -7,7 +7,7 @@
 
 	<div class="field">
 		<%= label_tag :family_id, 'Parents', class: 'col-md-1' %>
-		<%= select_tag :family_id, options_for_select(@families, @child.family_id), class: 'col-md-6' %>
+		<%= select_tag :family_id, options_for_select(@families, @child.genealogy_family_id), class: 'col-md-6' %>
 	</div>
 
 	<div class='clearfix'></div>

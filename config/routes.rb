@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 		resources :marrieds
 		resources :parents
 		resources :search
+		resources :tree
 
 		namespace :admin do
 			resources :clear_db
