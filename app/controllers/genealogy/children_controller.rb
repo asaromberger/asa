@@ -2,7 +2,7 @@ class Genealogy::ChildrenController < ApplicationController
 	before_action :require_signed_in
 	before_action :require_genealogy
 
-	include ChildHelper
+	include GenealogyChildHelper
 
 	def new
 		@title = "Add a Child"
