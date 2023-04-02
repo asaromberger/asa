@@ -41,6 +41,10 @@ Rails.application.routes.draw do
 		resources :information
 		resources :infos
 		resources :parents
+
+		namespace :admin do
+			resources :clear_db
+		end
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
