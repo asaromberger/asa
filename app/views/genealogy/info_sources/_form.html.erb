@@ -1,0 +1,25 @@
+<%= form_for(@source) do |form| %>
+
+	<%= form.hidden_field :genealogy_info_id %>
+
+	<div class="field">
+		<%= form.label :genealogy_source_id, class: 'col-md-1' %>
+		<%= form.select :genealogy_source_id, options_for_select(@sources, @source.genealogy_source_id), {}, class: 'col-md-11' %>
+	</div>
+
+	<div class="field">
+		<%= form.label :page, class: 'col-md-1' %>
+		<%= form.text_field :page, class: 'col-md-11' %>
+	</div>
+
+	<div class='clearfix'></div>
+
+	<div class="field">
+		<%= form.label :quay, class: 'col-md-1' %>
+		<%= form.text_field :quay, class: 'col-md-11' %>
+	</div>
+
+	<div class="actions">
+		<%= form.submit "Save", class: 'col-md-2 btn btn-primary' %>
+	</div>
+<% end %>

@@ -70,7 +70,7 @@
 <div class='clearfix'><p>&nbsp;</p></div>
 
 <% if @info.persisted? %>
-	<div>SOURCE<%#= link_to 'Add a Source', new_genealogy_info_source_path(info_id: @info.id), class: 'btn btn-primary btn-xs' %></div>
+	<div><%= link_to 'Add a Source', new_genealogy_info_source_path(info_id: @info.id), class: 'btn btn-primary btn-xs' %></div>
 
 	<% if @sources.count > 0 %>
 		<h4>Sources</h4>
@@ -88,14 +88,14 @@
 			</tr>
 			</thead>
 			<% @sources.each do |source| %>
-				<% s = Source.find(source.genealogy_source_id) %>
+				<% s = GenealogySource.find(source.genealogy_source_id) %>
 				<tr>
 				<td><%= s.title %></td>
 				<td><%= s.abbreviation %></td>
 				<td><%= s.published %></td>
 				<td><%= s.refn %></td>
 				<% if s.genealogy_repo_id && s.genealogy_repo_id > 0 %>
-					<td><%= s.repo.name %></td>
+					<td><%= s.genealogy_repo.name %></td>
 				<% else %>
 					<td></td>
 				<% end %>

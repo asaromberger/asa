@@ -1,5 +1,5 @@
 class GenealogyRepo < ApplicationRecord
 
-	has_many :sources
+	has_many :genealogy_sources
 
 end
