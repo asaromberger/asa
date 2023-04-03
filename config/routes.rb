@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 		resources :individuals
 		resources :information
 		resources :infos
+		resources :info_sources
 		resources :marrieds
 		resources :parents
 		resources :repos
