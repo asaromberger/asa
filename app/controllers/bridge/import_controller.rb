@@ -8,6 +8,12 @@ class Bridge::ImportController < ApplicationController
 	# read import file name
 	def new
 		@title = "Import"
+		@messages = []
+		if params[:messages]
+			params[:messages].sub(/\[/, '').sub(/\]$/, '').split(/,/).each do |message|
+				@messages.push(message.gsub(/^"/, '').gsub(/"$/, ''))
+			end
+		end
 	end
 
 	def create
@@ -79,6 +85,7 @@ class Bridge::ImportController < ApplicationController
 		@messages.push("#{new_player_count} New Players")
 		@messages.push("#{new_score_count} New Scores")
 		@messages.push("#{update_score_count} Updated Scores")
+		redirect_to new_health_import_path(messages: @messages.to_json)
 	end
 
 private
