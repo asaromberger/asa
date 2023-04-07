@@ -1,5 +1,13 @@
 <h1><%= @title %></h1>
 
+<% if @messages.count > 0 %>
+	<ul>
+	<% @messages.each do |message| %>
+		<li><%= message %></li>
+	<% end %>
+	</ul>
+<% end %>
+
 <p>First line is headers. Date is required, others are optional.</p>
 <ul>
 <li>Date</li>

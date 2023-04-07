@@ -1,5 +1,13 @@
 <h1><%= @title %></h1>
 
+<% if @messages.count > 0 %>
+	<ul>
+	<% @messages.each do |message| %>
+		<li><%= message %></li>
+	<% end %>
+	</ul>
+<% end %>
+
 <%= form_tag({action: :create}, multipart: true) do %>
 	<h3>Spreadsheet (csv format, comma separations)</h3>
 	<%= file_field_tag 'document' %>

@@ -7,6 +7,12 @@ class Health::ImportController < ApplicationController
 
 	def new
 		@title = "Import Data"
+		@messages = []
+		if params[:messages]
+			params[:messages].sub(/\[/, '').sub(/\]$/, '').split(/,/).each do |message|
+				@messages.push(message.gsub(/^"/, '').gsub(/"$/, ''))
+			end
+		end
 	end
 
 	def create
@@ -18,7 +24,8 @@ class Health::ImportController < ApplicationController
 		data = CSV.open(sheet.tempfile, 'r')
 		@messages = []
 		@headers = Hash.new
-		count = 0
+		count_new = 0
+		count_update = 0
 		data.each do |line|
 			if @headers.count == 0
 				(0..line.count-1).each do |i|
@@ -80,6 +87,9 @@ class Health::ImportController < ApplicationController
 						data = HealthDatum.new
 						data.user_id = current_user.id
 						data.date = date
+						count_new += 1
+					else
+						count_update += 1
 					end
 					if resistance
 						data.resistance = resistance
@@ -100,11 +110,12 @@ class Health::ImportController < ApplicationController
 						data.miles = miles
 					end
 					data.save
-					count += 1
 				end
 			end
 		end
-		@messages.push("#{count} records imported");
+		@messages.push("#{count_new} records created");
+		@messages.push("#{count_update} records updated");
+		redirect_to new_health_import_path(messages: @messages.to_json)
 	end
 
 	private
