@@ -8,16 +8,20 @@ class UsersController < ApplicationController
 		if params[:app_select]
 			@user.application = params[:app_select]
 			@user.save
-		end
-		if params[:select] == 'home'
-			@title = "Home page"
-		else
-			if ! @user.application.blank?
-				@title = "#{@user.application.capitalize} Home page"
-			else
-				@title = "Home page"
+			if @user.application == 'health'
+				redirect_to health_data_path
+			end
+			if @user.application == 'bridge'
+				redirect_to bridge_scores_path
+			end
+			if @user.application == 'music'
+				redirect_to new_music_search_path
+			end
+			if @user.application == 'genealogy'
+				redirect_to genealogy_search_index_path
 			end
 		end
+		@title = "Home page"
 		@applications = []
 		valid_applications().each do |app|
 			if Permission.where("user_id = ? AND pkey = ?", @user.id, app).count > 0
