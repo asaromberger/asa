@@ -1,0 +1,2 @@
+class FinanceRebalanceType < ApplicationRecord
+end
