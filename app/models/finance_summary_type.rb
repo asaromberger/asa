@@ -1,0 +1,2 @@
+class FinanceSummaryType < ApplicationRecord
+end
