@@ -1,0 +1,2 @@
+class FinanceAccountmap < ApplicationRecord
+end
