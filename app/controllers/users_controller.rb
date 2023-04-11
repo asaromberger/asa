@@ -20,13 +20,22 @@ class UsersController < ApplicationController
 			if @user.application == 'genealogy'
 				redirect_to genealogy_search_index_path
 			end
+			if @user.application == 'finance'
+			#	redirect_to FINANCE LANDING
+			end
 		end
 		@title = "Home page"
-		@applications = []
-		valid_applications().each do |app|
-			if Permission.where("user_id = ? AND pkey = ?", @user.id, app).count > 0
-				@applications.push(app)
+		apps = Hash.new
+		valid_applications().each do |key, app|
+		puts("KEY:#{key}")
+		puts("APP:#{app}")
+			if Permission.where("user_id = ? AND pkey = ?", @user.id, key).count > 0
+				apps[app] = key
 			end
+		end
+		@applications = []
+		apps.each do |app, key|
+			@applications.push(app)
 		end
 	end
 
@@ -65,7 +74,16 @@ class UsersController < ApplicationController
 	end
 
 	def valid_applications
-		return(['health', 'bridge', 'music', 'genealogy'])
+		return([
+			['health', 'health'],
+			['bridge', 'bridge'],
+			['music', 'music'],
+			['genealogy', 'genealogy'],
+			['genealogy_admin', 'genealogy'],
+			['finance_expenses', 'finance'],
+			['finance_investments', 'finance'],
+			['finance_admin', 'finance'],
+		])
 	end
 
 end

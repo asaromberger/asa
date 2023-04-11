@@ -1,0 +1,24 @@
+<li class='dropdown'>
+	<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Expenses <b class='caret'></b></a>
+	<ul class='dropdown-menu' role='menu'>
+		<li>YEAR EXPENSES<%#= link_to 'Year Expenses', items_path %></li>
+		<li class='divider'></li>
+		<li>YEAR BUDGET<%#= link_to 'Year Budget', yearbudget_index_path %></li>
+		<li>RUNNING BUDGET<%#= link_to 'Running Budget', runningbudget_index_path %></li>
+		<li>RENT<%#= link_to 'Rent', rent_index_path %></li>
+		<li>RENTAL COSTS<%#= link_to 'Rental Costs', rentalcosts_path %></li>
+		<li>TAXES<%#= link_to 'Taxes', taxes_path %></li>
+		<li>DONATIONS<%#= link_to 'Donations', donations_path %></li>
+		<li class='divider'></li>
+		<li>TRANSFERS<%#= link_to 'Transfers', transfers_path %></li>
+		<li class='divider'></li>
+		<li>MANAGE CATEGORIES<%#= link_to 'Manage Categories', categories_path %></li>
+		<li>MANAGE WHAT<%#= link_to 'Manage What', whats_path %></li>
+		<li>MANAGE ACCOUNT MAPS<%#= link_to 'Manage Account Maps', accountmaps_path %></li>
+		<li>MANAGE WHATMAP MAPS<%#= link_to 'Manage WhatMap Maps', what_maps_path %></li>
+		<li class='divider'></li>
+		<li>BANK INPUT<%#= link_to 'Bulk Input From File', edit_bulkinput_path(id: 0) %></li>
+		<li class='divider'></li>
+		<li>UNUSED<%#= link_to 'Unused', unused_index_path %></li>
+	</ul>
+</li>
