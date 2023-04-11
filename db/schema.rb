@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_11_173845) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_174946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -98,6 +98,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_173845) do
   create_table "finance_summary_types", force: :cascade do |t|
     t.string "stype"
     t.integer "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "finance_whats", force: :cascade do |t|
+    t.string "what"
+    t.integer "finance_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
