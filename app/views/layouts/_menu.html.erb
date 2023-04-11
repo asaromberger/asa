@@ -24,30 +24,49 @@
 		<div class='collapse navbar-collapse' id='menu-toggle-nav'>
 			<ul class="nav navbar-nav pull-right">
 
+			<%# SITE ADMIN %>
 			<% if signed_in? && current_user_role('siteadmin') %>
 				<%= render 'layouts/menu_siteadmin' %>
 			<% end %>
 
+			<%# HEALTH %>
 			<% if signed_in? && current_user.application == 'health' %>
 				<%= render 'layouts/menu_health' %>
 			<% end %>
 
+			<%# BRIDGE %>
 			<% if signed_in? && current_user.application == 'bridge' %>
 				<%= render 'layouts/menu_bridge' %>
 			<% end %>
 
+			<%# MUSIC %>
 			<% if signed_in? && current_user.application == 'music' %>
 				<%= render 'layouts/menu_music' %>
 			<% end %>
 
+			<%# GENEALOGY %>
 			<% if signed_in? && current_user.application == 'genealogy' && current_user_role('genealogy_admin') %>
 				<%= render 'layouts/menu_genealogy_admin' %>
 			<% end %>
 
-			<% if signed_in? && current_user.application == 'genealogy' %>
+			<% if signed_in? && current_user.application == 'genealogy' && current_user_role('genealogy') %>
 				<%= render 'layouts/menu_genealogy' %>
 			<% end %>
 
+			<%# FINANCE %>
+			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_admin') %>
+				<%= render 'layouts/menu_finance_admin' %>
+			<% end %>
+
+			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_investments') %>
+				<%= render 'layouts/menu_finance_investments' %>
+			<% end %>
+
+			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_expenses') %>
+				<%= render 'layouts/menu_finance_expenses' %>
+			<% end %>
+
+			<%# USER %>
 			<% if signed_in? %>
 				<%= render 'layouts/menu_user' %>
 			<% else %>
