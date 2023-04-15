@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 	end
 
 	namespace :finance do
+		resources :items
 		namespace :admin do
 			resources :import
 		end
