@@ -1,0 +1,94 @@
+<h1><%= @title %></h1>
+
+<div class='dropdown'>
+	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>Choose Year <b class='caret'></b></a>
+	<ul class='dropdown-menu'>
+		<% @years.each do |year| %>
+			<li><%= link_to year, finance_items_path(year: year) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= link_to 'Add an item', new_finance_item_path(year: @year), method: :get %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if false %>
+<div>
+Click on a column header to sort by that column<br/>
+<input type="button" value="Show all columns" onclick="javascript:showAllColumns('table_report')"></input>
+<span>(Control-click on header to hide a field)</span>
+<input type="button" value="Create custom report!" onclick="javascript:createURL('table_report', 'table_urlBox')"></input>
+<span id="table_urlBox"></span>
+</div>
+<% else %>
+<p>SORT/FILTER</p>
+<% end %>
+
+<table class='table table-bordered table-striped' id='table_report'>
+
+<thead>
+<tr>
+<th class='table sorttable_alpha' id='DATE'>Date</th>
+<th class='table sorttable_alpha' id='PM'>+/-</th>
+<th class='table sorttable_alpha' id='CHECK'>Check</th>
+<th class='table sorttable_alpha' id='WHAT'>What</th>
+<th class='table sorttable_numeric' id='AMOUNT'>Amount</th>
+<th class='table sorttable_alpha' id='TYPE'>Type</th>
+<th class='table sorttable_alpha' id='CAT'>Category</th>
+<th class='table sorttable_alpha' id='SUBCAT'>Subcat</th>
+<th class='table sorttable_alpha' id='TAX'>Tax</th>
+<th class='table sorttable_alpha' id='EDIT'>Edit</th>
+<th class='table sorttable_alpha' id='DELETE'>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @items.each do |id, item| %>
+	<tr>
+	<td><%= item['date'] %></td>
+	<td><%= item['pm'] %></td>
+	<td><%= item['checkno'] %></td>
+	<td><%= item['what'] %></td>
+	<td align='right'><%= number_with_precision(item['amount'], precision: 2) %></td>
+	<td><%= item['ctype'] %></td>
+	<td><%= item['category'] %></td>
+	<td><%= item['subcategory'] %></td>
+	<td><%= item['tax'] %></td>
+	<td><%= link_to 'Edit', edit_finance_item_path(id: id, year: @year) %></td>
+	<td><%= link_to 'Delete', finance_item_path(id: id, year: @year), method: :delete, data: {confirm: "Delete #{item['date']}, #{item['what']}, #{item['amount']}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<% if false %>
+<script type="text/javascript">
+  var tableFilters = {
+    sort_select: true,
+    btn_reset: true,
+    btn_reset_text: "Clear Filters",
+    btn_text: " > ",
+    alternate_rows: false,
+    flt_row_class: "tableFlt",
+    col_width_0: "5", //DATE
+    col_1: "select", //PM
+    col_width_2: "6", //CHECKNO
+    col_width_3: "20", //WHAT
+    col_width_4: "4", //AMOUNT
+    col_5: "select", //TYPE
+    col_6: "select", //CAT
+    col_width_7: "8", //SUBCAT
+    col_width_8: "8", //TAX
+    col_width_9: "1", //EDIT
+    col_width_10: "1", //DELETE
+    display_all_text: "<*>",
+  }
+  sorttable.makeSortable(document.getElementById('table_report'), 1);
+  setFilterGrid('table_report', 1, tableFilters);
+  setupSearch('table_report');
+</script>
+<% end %>

@@ -663,3 +663,27 @@ th.numeric {
 td.numeric {
 	text-align: right;
 }
+
+/* classes for the budget tables */
+.subtotal {
+	background-color: #DDDDDD !important;
+	font-weight: bold;
+	text-align: right;
+}
+
+.totaltitle {
+	background-color: #BBBBBB !important;
+	font-weight: bold;
+	text-align: center;
+}
+
+.total {
+	background-color: #BBBBBB !important;
+	font-weight: bold;
+	text-align: right;
+}
+
+.number {
+	text-align: right;
+}
+
