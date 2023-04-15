@@ -1,0 +1,74 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Category', new_finance_category_path, class: 'btn btn-primary col-md-1' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if false %>
+<div>
+Click on a column header to sort by that column<br/>
+<input type="button" value="Show all columns" onclick="javascript:showAllColumns('table_report')"></input>
+<span>(Control-click on header to hide a field)</span>
+<input type="button" value="Create custom report!" onclick="javascript:createURL('table_report', 'table_urlBox')"></input>
+<span id="table_urlBox"></span>
+</div>
+<% else %>
+<p>SORT/FILTER</p>
+<% end %>
+
+<table class='table table-bordered table-striped' id='table_report'>
+
+<thead>
+<tr>
+<th class='table sorttable_alpha' id='TYPE'>Type</th>
+<th class='table sorttable_alpha' id='CATEGORY'>Category</th>
+<th class='table sorttable_alpha' id='SUBCATEGORY'>Subcategory</th>
+<th class='table sorttable_alpha' id='TAX'>Tax</th>
+<th class='table sorttable_alpha' id='EDIT'>Edit</th>
+<th class='table sorttable_alpha' id='DELETE'>Delete</th>
+<th class='table sorttable_alpha' id='DETAILS'>Details</th>
+</tr>
+</thead>
+
+<tbody>
+<% @categories.each do |category| %>
+	<tr>
+	<td><%= category.ctype %></td>
+	<td><%= category.category %></td>
+	<td><%= category.subcategory %></td>
+	<td><%= category.tax %></td>
+	<td><%= link_to 'Edit', edit_finance_category_path(category.id) %></td>
+	<td><%= link_to 'Delete', finance_category_path(category.id), method: :delete, data: {confirm: "Delete #{category.ctype}/#{category.category}/#{category.subcategory}/#{category.tax}?"} %></td>
+	<td><%= link_to 'Details', finance_category_path(category.id) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if false %>
+<script type="text/javascript">
+  var tableFilters = {
+    sort_select: true,
+    btn_reset: true,
+    btn_reset_text: "Clear Filters",
+    btn_text: " > ",
+    alternate_rows: false,
+    flt_row_class: "tableFlt",
+    col_width_0: "5", //TYPE
+    col_width_1: "15", //CATEGORY
+    col_width_2: "15", //SUBCATEGORY
+    col_width_3: "15", //TAX
+    col_width_4: "1", //EDIT
+    col_width_5: "1", //DELETE
+    col_width_6: "1", //DELETE
+    display_all_text: "<*>",
+  }
+  sorttable.makeSortable(document.getElementById('table_report'), 1);
+  setFilterGrid('table_report', 1, tableFilters);
+  setupSearch('table_report');
+</script>
+<% end %>
