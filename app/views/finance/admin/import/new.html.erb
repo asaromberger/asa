@@ -1,0 +1,26 @@
+<h1><%= @title %></h1>
+
+<% if @messages.count > 0 %>
+	<ul>
+	<% @messages.each do |message| %>
+		<li><%= message %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<p>File is a csv file from export</p>
+<ul>
+<li>Column 1 is the table</li>
+<li>Columns 2+ are the table values</li>
+</ul>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= form_tag({action: :create}, multipart: true) do %>
+	<h3>Spreadsheet (csv format, comma separations)</h3>
+	<%= file_field_tag 'document' %>
+	<%= submit_tag "Import", class: 'btn btn-primary col-md-1' %>
+	<div class:'clearfix'><p>&nbsp;</p></div>
+<% end %>
