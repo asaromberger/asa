@@ -1,4 +1,4 @@
-class Finance::ItemsController < ApplicationController
+class Finance::Expenses::ItemsController < ApplicationController
 
 	before_action :require_signed_in
 	before_action :require_expenses
@@ -61,9 +61,9 @@ class Finance::ItemsController < ApplicationController
 		@item = FinanceItem.new(item_params)
 		@year = params[:year]
 		if @item.save
-			redirect_to finance_items_path(year: @year), notice: 'Item Added'
+			redirect_to finance_expenses_items_path(year: @year), notice: 'Item Added'
 		else
-			redirect_to finance_items_path(year: @year), alert: 'Failed to add Item'
+			redirect_to finance_expenses_items_path(year: @year), alert: 'Failed to add Item'
 		end
 	end
 
@@ -78,9 +78,9 @@ class Finance::ItemsController < ApplicationController
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
 		if @item.update(item_params)
-			redirect_to finance_items_path(year: @year), notice: 'Item Updated'
+			redirect_to finance_expenses_items_path(year: @year), notice: 'Item Updated'
 		else
-			redirect_to finance_items_path(year: @year), alert: 'Failed to update Item'
+			redirect_to finance_expenses_items_path(year: @year), alert: 'Failed to update Item'
 		end
 	end
 
@@ -88,7 +88,7 @@ class Finance::ItemsController < ApplicationController
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
 		@item.delete
-		redirect_to finance_items_path(year: @year), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
+		redirect_to finance_expenses_items_path(year: @year), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
 	end
 
 private

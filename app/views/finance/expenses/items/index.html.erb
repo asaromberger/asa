@@ -4,14 +4,14 @@
 	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>Choose Year <b class='caret'></b></a>
 	<ul class='dropdown-menu'>
 		<% @years.each do |year| %>
-			<li><%= link_to year, finance_items_path(year: year) %></li>
+			<li><%= link_to year, finance_expenses_items_path(year: year) %></li>
 		<% end %>
 	</ul>
 </div>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
-<%= link_to 'Add an item', new_finance_item_path(year: @year), method: :get %>
+<%= link_to 'Add an item', new_finance_expenses_item_path(year: @year), method: :get %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -57,8 +57,8 @@ Click on a column header to sort by that column<br/>
 	<td><%= item['category'] %></td>
 	<td><%= item['subcategory'] %></td>
 	<td><%= item['tax'] %></td>
-	<td><%= link_to 'Edit', edit_finance_item_path(id: id, year: @year) %></td>
-	<td><%= link_to 'Delete', finance_item_path(id: id, year: @year), method: :delete, data: {confirm: "Delete #{item['date']}, #{item['what']}, #{item['amount']}?"} %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_item_path(id: id, year: @year) %></td>
+	<td><%= link_to 'Delete', finance_expenses_item_path(id: id, year: @year), method: :delete, data: {confirm: "Delete #{item['date']}, #{item['what']}, #{item['amount']}?"} %></td>
 	</tr>
 <% end %>
 </tbody>

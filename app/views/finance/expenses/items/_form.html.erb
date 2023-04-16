@@ -1,4 +1,4 @@
-<%= form_for(@item) do |form| %>
+<%= form_for(@item, url: url, html: {method: method}) do |form| %>
 
 	<%= form.label :date, class: 'col-md-2' %>
 	<%= form.date_select :date, {start_year: 1988, value: @item.date}, {class: 'date-select col-md-1'} %>
