@@ -1,4 +1,4 @@
-class Finance::CategoriesController < ApplicationController
+class Finance::Expenses::CategoriesController < ApplicationController
 
 	before_action :require_signed_in
 	before_action :require_expenses
@@ -16,9 +16,9 @@ class Finance::CategoriesController < ApplicationController
 	def create
 		@category = FinanceCategory.new(category_params)
 		if @category.save
-			redirect_to finance_categories_path, notice: 'Category Added'
+			redirect_to finance_expenses_categories_path, notice: 'Category Added'
 		else
-			redirect_to finance_categories_path, alert: 'Failed to create Category'
+			redirect_to finance_expenses_categories_path, alert: 'Failed to create Category'
 		end
 	end
 
@@ -30,9 +30,9 @@ class Finance::CategoriesController < ApplicationController
 	def update
 		@category = FinanceCategory.find(params[:id])
 		if @category.update(category_params)
-			redirect_to finance_categories_path, notice: 'Category Updated'
+			redirect_to finance_expenses_categories_path, notice: 'Category Updated'
 		else
-			redirect_to finance_categories_path, alert: 'Failed to update Category'
+			redirect_to finance_expenses_categories_path, alert: 'Failed to update Category'
 		end
 	end
 
@@ -45,10 +45,10 @@ class Finance::CategoriesController < ApplicationController
 	def destroy
 		@category = FinanceCategory.find(params[:id])
 		if FinanceWhat.where("finance_category_id = ?", @category.id).count > 0
-			redirect_to finance_categories_path, alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
+			redirect_to finance_expenses_categories_path, alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
 		else
 			@category.delete
-			redirect_to finance_categories_path, notice: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} Deleted"
+			redirect_to finance_expenses_categories_path, notice: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} Deleted"
 		end
 	end
 
