@@ -1,0 +1,73 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Map', new_finance_expenses_what_path %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<p>SORT/FILTER</p>
+<% if false %>
+<div>
+Click on a column header to sort by that column<br/>
+<input type="button" value="Show all columns" onclick="javascript:showAllColumns('table_report')"></input>
+<span>(Control-click on header to hide a field)</span>
+<input type="button" value="Create custom report!" onclick="javascript:createURL('table_report', 'table_urlBox')"></input>
+<span id="table_urlBox"></span>
+</div>
+<% end %>
+
+<table class='table table-bordered table-striped' id='table_report'>
+
+<thead>
+<tr>
+<th class='table sorttable_alpha' id='WHAT'>What</th>
+<th class='table sorttable_alpha' id='TYPE'>Type</th>
+<th class='table sorttable_alpha' id='CATEGORY'>Category</th>
+<th class='table sorttable_alpha' id='SUBCATEGORY'>Subcategory</th>
+<th class='table sorttable_alpha' id='TAX'>Tax</th>
+<th class='table sorttable_alpha' id='EDIT'>Edit</th>
+<th class='table sorttable_alpha' id='DELETE'>Delete</th>
+<th class='table sorttable_alpha' id='REMAP'>Remap</th>
+</tr>
+</thead>
+
+<tbody>
+<% @whats.each do |what| %>
+	<tr>
+	<td><%= link_to what.what, finance_expenses_what_path(id: what.id), method: :get %></td>
+	<td><%= @categorymap[what.finance_category_id]['ctype'] %></td>
+	<td><%= @categorymap[what.finance_category_id]['category'] %></td>
+	<td><%= @categorymap[what.finance_category_id]['subcategory'] %></td>
+	<td><%= @categorymap[what.finance_category_id]['tax'] %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_what_path(what.id) %></td>
+	<td><%= link_to 'Delete', finance_expenses_what_path(what.id), method: :delete, data: {confirm: "Delete #{what.what}?"} %></td>
+	<td><%= link_to 'Remap', finance_expenses_whats_remap_path(id: what.id) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<% if false %>
+<script type="text/javascript">
+  var tableFilters = {
+    sort_select: true,
+    btn_reset: true,
+    btn_reset_text: "Clear Filters",
+    btn_text: " > ",
+    alternate_rows: false,
+    flt_row_class: "tableFlt",
+    col_width_0: "15", //WHAT
+    col_width_1: "5", //TYPE
+    col_width_2: "15", //CATEGORY
+    col_width_3: "15", //SUBCATEGORY
+    col_width_4: "15", //TAX
+    col_width_5: "1", //EDIT
+    col_width_6: "1", //DELETE
+    col_width_7: "1", //REMAP
+    display_all_text: "<*>",
+  }
+  sorttable.makeSortable(document.getElementById('table_report'), 1);
+  setFilterGrid('table_report', 1, tableFilters);
+  setupSearch('table_report');
+</script>
+<% end %>

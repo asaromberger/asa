@@ -26,6 +26,11 @@ Rails.application.routes.draw do
 		resources :import
 	end
 
+	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
+	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
+	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
+	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
+
 	namespace :music do
 		resources :sync
 		resources :albums
@@ -60,15 +65,13 @@ Rails.application.routes.draw do
 		namespace :expenses do
 			resources :items
 			resources :categories
+			resources :whats
 		end
 		namespace :admin do
 			resources :import
 		end
 	end
 
-	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
-	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
-	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
-	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
+	match '/finance/expenses/whats/remap', to: 'finance/expenses/whats#remap', via: 'get', as: 'finance_expenses_whats_remap'
 
 end

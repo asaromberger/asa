@@ -1,0 +1,15 @@
+<%= form_for(@what, url: url, html: {method: method}) do |form| %>
+
+	<%= form.label :what, class: 'col-md-2' %>
+	<%= form.text_field :what, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label 'Category', class: 'col-md-2' %>
+	<%= form.select :finance_category_id, @categories.collect {|category| [category.ctype + '/' + category.category + '/' + category.subcategory + '/' + category.tax, category.id]}, {}, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.submit "#{type} What Map", class: 'btn btn-primary col-md-3' %>
+<% end %>
+
