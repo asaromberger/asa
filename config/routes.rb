@@ -6,24 +6,24 @@ Rails.application.routes.draw do
 
 	root 'sessions#new'
 
-	resources :sessions
-	resources :users
-	resources :roles
-	resources :schema
 	resources :data_checker
 	resources :password_resets
+	resources :roles
+	resources :schema
+	resources :sessions
+	resources :users
 
 	namespace :health do
 		resources :data
 		resources :import
-		resources :stats
 		resources :plots
+		resources :stats
 	end
 
 	namespace :bridge do
+		resources :import
 		resources :players
 		resources :scores
-		resources :import
 	end
 
 	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
@@ -32,13 +32,13 @@ Rails.application.routes.draw do
 	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
 
 	namespace :music do
-		resources :sync
 		resources :albums
 		resources :artists
 		resources :genres
-		resources :searches
-		resources :playlists
 		resources :play
+		resources :playlists
+		resources :searches
+		resources :sync
 	end
 
 	namespace :genealogy do
@@ -63,8 +63,9 @@ Rails.application.routes.draw do
 
 	namespace :finance do
 		namespace :expenses do
-			resources :items
+			resources :accountmaps
 			resources :categories
+			resources :items
 			resources :whats
 		end
 		namespace :admin do
