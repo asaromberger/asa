@@ -60,7 +60,7 @@ private
 
 	def require_expenses
 		unless current_user_role('finance_expenses')
-			redirect_to users_path, alert: "inadequate permissions: FINANCE CATEGORIES"
+			redirect_to users_path, alert: "inadequate permissions: FINANCE EXPENSES CATEGORIES"
 		end
 	end
 

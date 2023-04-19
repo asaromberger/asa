@@ -1,20 +1,29 @@
-class Finance::Expenses::YearbudgetController < ApplicationController
+class Finance::Expenses::RunningbudgetController < ApplicationController
 
 	before_action :require_signed_in
 	before_action :require_expenses
 
 	def index
-		if params[:year]
-			@year = params[:year]
+		if params[:fromyear]
+			@fromyear = params[:fromyear]
 		else
-			@year = Time.now.year
+			@fromyear = Time.now.year - 10
 		end
-		@title = "#{@year} Budget"
-		@years = []
+		if params[:toyear]
+			@toyear = params[:toyear]
+		else
+			@toyear = FinanceItem.all.order('date DESC').first.date.year
+		end
+		@title = "Running Budget from #{@fromyear} to #{@toyear}"
+		@pickyears = []
 		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+			@pickyears.push(year.to_i)
+		end
+		@pickyears = @pickyears.sort
+		@years = []
+		(@fromyear..@toyear).each do |year|
 			@years.push(year.to_i)
 		end
-		@years = @years.sort.reverse
 		# build what_id to what and cat_id tables
 		whats = Hash.new
 		whatcatids = Hash.new
@@ -33,19 +42,19 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 			subcategories[category.id] = category.subcategory
 			taxes[category.id] = category.tax
 		end
-		# @data[ctype][category][subcategory][month]
+		# @data[ctype][category][subcategory][year]
 		@data = Hash.new
 		@ctotals = Hash.new
-		FinanceItem.where("EXTRACT(year FROM date) = ?", @year).each do |item|
+		FinanceItem.where("EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
 			ctype = ctypes[whatcatids[item.finance_what_id]]
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
 			amount = item.amount
-			month = item.date.month
+			year = item.date.year
 			if item.pm == '-'
 				amount = -amount
 			end
-			# accumulate in cat/subcat/month
+			# accumulate in cat/subcat/year
 			if ! @data[ctype]
 				@data[ctype] = Hash.new
 			end
@@ -58,10 +67,10 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 			if ! @data[ctype][category][subcategory]
 				@data[ctype][category][subcategory] = Hash.new
 			end
-			if @data[ctype][category][subcategory][month]
-				@data[ctype][category][subcategory][month] = @data[ctype][category][subcategory][month] + amount
+			if @data[ctype][category][subcategory][year]
+				@data[ctype][category][subcategory][year] = @data[ctype][category][subcategory][year] + amount
 			else
-				@data[ctype][category][subcategory][month] = amount
+				@data[ctype][category][subcategory][year] = amount
 			end
 			# accumulate in cat/subcat/total
 			if @data[ctype][category][subcategory]['total']
@@ -73,10 +82,10 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 			if ! @data[ctype][category]['~']
 				@data[ctype][category]['~'] = Hash.new
 			end
-			if @data[ctype][category]['~'][month]
-				@data[ctype][category]['~'][month] = @data[ctype][category]['~'][month] + amount
+			if @data[ctype][category]['~'][year]
+				@data[ctype][category]['~'][year] = @data[ctype][category]['~'][year] + amount
 			else
-				@data[ctype][category]['~'][month] = amount
+				@data[ctype][category]['~'][year] = amount
 			end
 			# accumulate in cat/total
 			if @data[ctype][category]['~']['total']
@@ -85,10 +94,10 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 				@data[ctype][category]['~']['total'] = amount
 			end
 			# accumulate in ctotals
-			if @ctotals[ctype][month]
-				@ctotals[ctype][month] = @ctotals[ctype][month] + amount
+			if @ctotals[ctype][year]
+				@ctotals[ctype][year] = @ctotals[ctype][year] + amount
 			else
-				@ctotals[ctype][month] = amount
+				@ctotals[ctype][year] = amount
 			end
 			if @ctotals[ctype]['total']
 				@ctotals[ctype]['total'] = @ctotals[ctype]['total'] + amount
@@ -100,12 +109,12 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 		@data.each do |ctype, ctypedata|
 			ctypedata.each do |cat, catdata|
 				catdata.each do |subcat, subcatdata|
-					@data[ctype][cat][subcat]['average'] = @data[ctype][cat][subcat]['total'] / 12
+					@data[ctype][cat][subcat]['average'] = @data[ctype][cat][subcat]['total'] / @years.count
 				end
 			end
 		end
 		@ctotals.each do |ctype, ctypedata|
-			@ctotals[ctype]['average'] = @ctotals[ctype]['total'] / 12
+			@ctotals[ctype]['average'] = @ctotals[ctype]['total'] / @years.count
 		end
 	end
 
@@ -131,7 +140,7 @@ private
 
 	def require_expenses
 		unless current_user_role('finance_expenses')
-			redirect_to users_path, alert: "Inadequate permissions: FINANCE EXPENSES YEARBUDGET"
+			redirect_to users_path, alert: "Inadequate permissions: FINANCE EXPENSES RUNNINGBUDGET"
 		end
 	end
 
