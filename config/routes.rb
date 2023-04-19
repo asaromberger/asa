@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 			resources :accountmaps
 			resources :categories
 			resources :items
+			resources :what_maps
 			resources :whats
 		end
 		namespace :admin do
