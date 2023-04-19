@@ -1,0 +1,106 @@
+<h1><%= @title %></h1>
+
+<div class='dropdown'>
+	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>From Year <b class='caret'></b></a>
+	<ul class='dropdown-menu'>
+		<% @pickyears.each do |year| %>
+			<li><%= link_to year, finance_expenses_rentalcosts_path(fromyear: year, toyear: @toyear) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class='dropdown'>
+	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>To Year <b class='caret'></b></a>
+	<ul class='dropdown-menu'>
+		<% @pickyears.each do |year| %>
+			<li><%= link_to year, finance_expenses_rentalcosts_path(fromyear: @fromyear, toyear: year) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% @data.sort.each do |cat, catdata| %>
+
+	<h2><%= cat %></h2>
+
+	<table class='table-bordered table-striped'>
+
+	<thead>
+	<tr>
+	<th>Subcat</th>
+	<% @years.each do |year| %>
+		<th><%= year %></th>
+	<% end %>
+	<th>Total</th>
+	<th>Avg/Year</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<% catdata.sort.each do |subcat, subcatdata| %>
+		<% if subcat != 'Upkeep' && subcat != 'Rent' %>
+			<tr>
+			<% if subcat == '~' %>
+				<td class='subtotal'>Total</td>
+				<% @years.each do |year| %>
+					<td class='subtotal'><%= number_with_precision(subcatdata[year], precision: 2) %></td>
+				<% end %>
+				<td class='subtotal'><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
+				<td class='subtotal'><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
+			<% else %>
+				<td><%= link_to subcat, finance_expenses_rentalcost_path(id: 0, fromyear: @fromyear, toyear: @toyear, category: cat, subcategory: subcat) %></td>
+				<% @years.each do |year| %>
+					<td class='number'><%= number_with_precision(subcatdata[year], precision: 2) %></td>
+				<% end %>
+				<td class='number'><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
+				<td class='number'><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
+			<% end %>
+			</tr>
+		<% end %>
+	<% end %>
+	<% if catdata['Upkeep'] %>
+		<tr>
+		<% subcatdata = catdata['Upkeep'] %>
+		<td><%= link_to 'Upkeep', finance_expenses_rentalcost_path(id: 0, fromyear: @fromyear, toyear: @toyear, category: cat, subcategory: 'Upkeep') %></td>
+		<% @years.each do |year| %>
+			<% if subcatdata[year] %>
+				<td class='number'><%= number_with_precision(subcatdata[year], precision: 2) %></td>
+			<% else %>
+				<td class='number'>0.00</td>
+			<% end %>
+		<% end %>
+		<td class='number'><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
+		<td class='number'><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
+		</tr>
+	<% end %>
+	<% if catdata['Rent'] %>
+		<tr>
+		<% subcatdata = catdata['Rent'] %>
+		<td><%= link_to 'Rent', finance_expenses_rentalcost_path(id: 0, fromyear: @fromyear, toyear: @toyear, category: cat, subcategory: 'Rent') %></td>
+		<% @years.each do |year| %>
+			<% if subcatdata[year] %>
+				<td class='number'><%= number_with_precision(subcatdata[year], precision: 2) %></td>
+			<% else %>
+				<td class='number'>0.00</td>
+			<% end %>
+		<% end %>
+		<td class='number'><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
+		<td class='number'><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
+		</tr>
+	<% end %>
+	<tr>
+		<td class='subtotal'>Net</td>
+		<% @years.each do |year| %>
+			<% t = catdata['~'][year].to_f + catdata['Upkeep'][year].to_f + catdata['Rent'][year].to_f %>
+			<td class='subtotal'><%= number_with_precision(t, precision: 2) %></td>
+		<% end %>
+		<% t = catdata['~']['total'].to_f + catdata['Upkeep']['total'].to_f + catdata['Rent']['total'].to_f %>
+		<td class='subtotal'><%= number_with_precision(t, precision: 2) %></td>
+		<% t = catdata['~']['average'].to_f + catdata['Upkeep']['average'].to_f + catdata['Rent']['average'].to_f %>
+		<td class='subtotal'><%= number_with_precision(t, precision: 2) %></td>
+	</tr>
+	</tbody>
+
+	</table>
+<% end %>
