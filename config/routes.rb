@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 		namespace :expenses do
 			resources :accountmaps
 			resources :categories
+			resources :donations
 			resources :items
 			resources :rent
 			resources :rentalcosts
