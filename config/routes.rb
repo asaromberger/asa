@@ -72,6 +72,7 @@ Rails.application.routes.draw do
 			resources :runningbudget
 			resources :taxes
 			resources :transfers
+			resources :unused
 			resources :yearbudget
 			resources :what_maps
 			resources :whats
