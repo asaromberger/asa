@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 			resources :rent
 			resources :rentalcosts
 			resources :runningbudget
+			resources :taxes
 			resources :yearbudget
 			resources :what_maps
 			resources :whats
