@@ -1,0 +1,85 @@
+<h1><%= @title %></h1>
+
+<% if @exist > 0 %>
+	<h4>Found <%= @exist %> Items that already exist</h4>
+<% end %>
+
+<% if @errors && @errors.count > 0 %>
+	<b>Notes:</b>
+	<ul>
+	<% @errors.each do |error| %>
+		<li><%= error %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<p>Items can be classified in the following ways:</p>
+<ul>
+<li>If <b>Map</b> contains the right selection, you can select it</li>
+<li>Specify a <b>Map To</b> from the <b>Manage What</b> list</li>
+	<ul>
+	<li>If the item is a new one not in the <b>Manage What</b> list, you will need to also select a <b>Category</b></li>
+	</ul>
+</ul>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= form_tag new_finance_expenses_bank_input_path, method: :get do %>
+
+	<%= hidden_field_tag :documentname, @documentname %>
+
+	<table>
+
+	<thead>
+	<tr>
+	<th>Date</th>
+	<th>+/-</th>
+	<th>Check</th>
+	<th>What</th>
+	<th>Amount</th>
+	<th>Map To</th>
+	<th>Map</th>
+	<th>Category</th>
+	</tr>
+	</thead>
+
+	<tbody>
+		<% @table.each do |index, values| %>
+			<tr>
+
+			<%= hidden_field_tag "table[#{index}][date]", values['date'] %>
+			<td><%= values['date'] %></td>
+
+			<%= hidden_field_tag "table[#{index}][pm]", values['pm'] %>
+			<td><%= values['pm'] %></td>
+
+			<%= hidden_field_tag "table[#{index}][check]", values['check'] %>
+			<td><%= values['check'] %></td>
+
+			<%= hidden_field_tag "table[#{index}][what]", values['what'] %>
+			<td><%= values['what'] %></td>
+
+			<%= hidden_field_tag "table[#{index}][amount]", values['amount'] %>
+			<td><%= values['amount'] %></td>
+
+			<td><%= text_field_tag "table[#{index}][mapto]" %></td>
+
+			<td><%= select_tag "table[#{index}][whatmap]", options_for_select(values['whatmaplist'], values['whatmap']) %></td>
+
+			<td><%= select_tag "table[#{index}][category]", options_for_select(@categorylist, values['category']) %></td>
+
+			</tr>
+		<% end %>
+	</tbody>
+
+	</table>
+		
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= submit_tag 'Save', class: 'btn btn-primary col-md-1' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<div class='clearfix'><p>&nbsp;</p></div>
+<p><%= link_to 'Back to Bulk Input', edit_finance_expenses_bank_input_path(id: 0), class: 'btn btn-primary ' %></p>

@@ -1,0 +1,27 @@
+<h1><%= @title %></h1>
+
+<p>File contains a series of lines with the following tab separated columns:</p>
+<ul>
+<li>Date either as MM/DD/YYYY or YYYY-MM-DD</li>
+<li>+/-</li>
+<li>Check</li>
+<li>what</li>
+<li>Amount</li>
+</ul>
+<p>Or file is a Quicken file</p>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= form_tag finance_expenses_bank_input_index_path, method: :post, multipart: true do %>
+
+<%= select_tag :account, options_for_select(@accounts), class: 'col-xs-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= file_field_tag :document %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= submit_tag 'Submit', class: 'btn btn-primary col-md-1' %>
+
+<% end %>
