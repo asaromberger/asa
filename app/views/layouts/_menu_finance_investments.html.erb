@@ -1,9 +1,9 @@
 <li class='dropdown'>
 	<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Investments <b class='caret'></b></a>
 	<ul class='dropdown-menu' role='menu'>
-		<li>OPEN ACCOUNTS<%#= link_to 'Open Accounts', investments_path(status: :open) %></li>
-		<li>CLOSED ACCOUNTS<%#= link_to 'Closed Accounts', investments_path(status: :closed) %></li>
-		<li>ALL ACCOUNTS<%#= link_to 'All Accounts', investments_path(status: :all) %></li>
+		<li><%= link_to 'Open Accounts', finance_investments_investments_path(status: :open) %></li>
+		<li><%= link_to 'Closed Accounts', finance_investments_investments_path(status: :closed) %></li>
+		<li><%= link_to 'All Accounts', finance_investments_investments_path(status: :all) %></li>
 		<li>SUMMARY<%#= link_to 'Summary', summary_index_path %></li>
 		<li>REBALANCE<%#= link_to 'Rebalance', rebalance_index_path %></li>
 		<li class='divider'></li>
