@@ -80,7 +80,9 @@ Rails.application.routes.draw do
 		end
 		namespace :investments do
 			resources :accounts
+			resources :charts
 			resources :investments
+			resources :summary
 		end
 		namespace :admin do
 			resources :import
