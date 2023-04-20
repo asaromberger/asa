@@ -78,11 +78,16 @@ Rails.application.routes.draw do
 			resources :what_maps
 			resources :whats
 		end
+		namespace :investments do
+			resources :accounts
+			resources :investments
+		end
 		namespace :admin do
 			resources :import
 		end
 	end
 
 	match '/finance/expenses/whats/remap', to: 'finance/expenses/whats#remap', via: 'get', as: 'finance_expenses_whats_remap'
+	match '/finance/investments/accounts/close', to: 'finance/investments/accounts#close', via: 'get', as: 'finance_investments_accounts_close'
 
 end

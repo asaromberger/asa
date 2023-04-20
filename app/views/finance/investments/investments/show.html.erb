@@ -1,0 +1,52 @@
+<h1><%= @title %></h1>
+
+<% if @exists %>
+	<p><%= @exists %> already existed</p>
+<% end %>
+<% if @errors %>
+	Errors:
+	<ul>
+	<% @errors.each do |error| %>
+		<li><%= error %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<%= link_to 'New Entry', new_finance_investments_investment_path(id: @account.id, status: @status), class: 'btn btn-primary col-md-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Value</th>
+<% @headers.each do |header| %>
+	<th><%= header %></th>
+<% end %>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @investments.each do |id, values| %>
+	<tr>
+	<td><%= values['date'] %></td>
+	<td align='right'><%= number_with_precision(values['value'], precision: 2) %></td>
+	<% @headers.each do |header| %>
+		<% if header == 'Shares' %>
+			<td align='right'><%= number_with_precision(values[header], precision: 3) %></td>
+		<% else %>
+			<td align='right'><%= number_with_precision(values[header], precision: 2) %></td>
+		<% end %>
+	<% end %>
+	<td><%= link_to 'Edit', edit_finance_investments_investment_path(id: id, account: @account.id, status: @status) %></td>
+	<td><%= link_to 'Delete', finance_investments_investment_path(id: id, account: @account.id, status: @status), method: :delete, data: {confirm: "Delete entry for #{values['date']}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
