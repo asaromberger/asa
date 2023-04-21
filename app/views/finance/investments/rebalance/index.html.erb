@@ -11,7 +11,7 @@
 <tbody>
 <% @rebalances.each do |group| %>
 	<tr>
-	<td><%= link_to group.rtype, edit_finance_investments_rebalance_path(group.id) %></td>
+	<td><%= link_to group.rtype, finance_investments_rebalance_path(group.id), method: :get %></td>
 	</tr>
 <% end %>
 </tbody>

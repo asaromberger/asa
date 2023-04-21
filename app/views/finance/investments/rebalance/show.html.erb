@@ -22,7 +22,9 @@
 
 </table>
 
-<%= form_tag finance_investments_rebalance_showupdate_path(id: @rebalance.id), method: :put do %>
+<%= form_tag finance_investments_rebalance_showupdate_path, method: :get do %>
+
+	<%= hidden_field_tag :id, @rebalance.id %>
 
 	<%= label_tag 'Amount to be withdrawn' %>
 	<%= number_field_tag :withdraw, 0, step: :any %>

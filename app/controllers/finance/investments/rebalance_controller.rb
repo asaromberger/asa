@@ -8,7 +8,7 @@ class Finance::Investments::RebalanceController < ApplicationController
 		@rebalances = FinanceRebalanceType.all.order('rtype')
 	end
 
-	def edit
+	def show
 		@rebalance = FinanceRebalanceType.find(params[:id])
 		@title = "Rebalance #{@rebalance.rtype}"
 		@accounts = Hash.new
@@ -115,14 +115,10 @@ class Finance::Investments::RebalanceController < ApplicationController
 	end
 
 private
-	
-	def rebalance_type_params
-		params.require(:finance_rebalance_type).permit(:rtype)
-	end
 
 	def require_investments
 		unless current_user_role('finance_investments')
-			redirect_to root_url, alert: "inadequate permissions"
+			redirect_to users_path, alert: "Inadequate permissions: FINANCE INVESTMENTS REBALANCE"
 		end
 	end
 
