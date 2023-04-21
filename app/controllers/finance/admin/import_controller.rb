@@ -168,6 +168,7 @@ class Finance::Admin::ImportController < ApplicationController
 					frm = FinanceRebalanceMap.new
 					frm.finance_rebalance_type_id = finance_rebalance_types_ids[line[1]]
 					frm.finance_account_id = finance_account_ids[line[2]]
+					frm.target = line[3]
 					frm.save
 					newcounts['rebalance_map'] += 1
 				else

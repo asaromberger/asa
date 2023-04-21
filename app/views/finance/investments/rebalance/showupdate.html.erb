@@ -1,0 +1,64 @@
+<h1><%= @title %></h1>
+
+<table class='table-bordered table-striped'>
+
+<thead>
+<tr>
+<th>Account</th>
+<th class='text-right'>Value</th>
+<th class='text-right'>Target</th>
+<th class='text-right'>Sell</th>
+<th class='text-right'>Buy</th>
+</tr>
+</thead>
+
+<tbody>
+<% @accounts.each do |id, account| %>
+	<tr>
+	<td><%= account['name'] %></td>
+	<td align='right'><%= number_with_precision(account['value'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(account['target'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(account['sell'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(account['buy'], precision:2) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if @withdraws.count > 0 %>
+	<table class='table-bordered table-striped'>
+	<tbody>
+	<% @withdraws.each do |withdraw| %>
+		<tr>
+		<td>Withdraw</td>
+		<td align='right'><%= number_with_precision(withdraw[0], precision:2) %></td>
+		<td>From</td>
+		<td><%= withdraw[1] %></td>
+		</tr>
+	<% end %>
+	</tbody>
+	</table>
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if @transfers.count > 0 %>
+	<table class='table-bordered table-striped'>
+	<tbody>
+	<% @transfers.each do |transfer| %>
+		<tr>
+		<td>Transfer</td>
+		<td align='right'><%= number_with_precision(transfer[0], precision:2) %></td>
+		<td>From</td>
+		<td><%= transfer[1] %></td>
+		<td>To</td>
+		<td><%= transfer[2] %></td>
+		</tr>
+	<% end %>
+	</tbody>
+	</table>
+<% end %>
+

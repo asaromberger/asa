@@ -1,0 +1,39 @@
+<h1><%= @title %></h1>
+
+<table>
+
+<thead>
+<tr>
+<th>Account</th>
+<th>Value</th>
+<th>Target</th>
+</tr>
+</thead>
+
+<tbody>
+<% @accounts.each do |id, account| %>
+	<tr>
+	<td><%= account['name'] %></td>
+	<td><%= account['value'] %></td>
+	<td><%= account['target'] %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<%= form_tag finance_investments_rebalance_showupdate_path(id: @rebalance.id), method: :put do %>
+
+	<%= label_tag 'Amount to be withdrawn' %>
+	<%= number_field_tag :withdraw, 0, step: :any %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= check_box_tag :withdraw_only, nil, nil, class: 'col-xs-1' %>
+	<%= label_tag :withdraw_only, 'Withdrawal only', class: 'col-xs-11' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= submit_tag 'Rebalance', class: 'btn btn-primary col-md-2' %>
+
+<% end %>
