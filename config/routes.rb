@@ -20,16 +20,16 @@ Rails.application.routes.draw do
 		resources :stats
 	end
 
+	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
+	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
+	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
+	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
+
 	namespace :bridge do
 		resources :import
 		resources :players
 		resources :scores
 	end
-
-	match '/bridge/score/date', to: 'bridge/scores#date', via: 'get', as: 'bridge_score_date'
-	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
-	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
-	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
 
 	namespace :music do
 		resources :albums
@@ -61,8 +61,11 @@ Rails.application.routes.draw do
 		end
 	end
 
+	match '/finance/expenses/whats/remap', to: 'finance/expenses/whats#remap', via: 'get', as: 'finance_expenses_whats_remap'
+	match '/finance/investments/accounts/close', to: 'finance/investments/accounts#close', via: 'get', as: 'finance_investments_accounts_close'
 	match '/finance/investments/summary_types/showupdate', to: 'finance/investments/summary_types#showupdate', via: 'put', as: 'finance_investments_summary_types_showupdate'
 	match '/finance/investments/rebalance/showupdate', to: 'finance/investments/rebalance#showupdate', via: 'get', as: 'finance_investments_rebalance_showupdate'
+	match '/finance/investments/rebalance_types/showupdate', to: 'finance/investments/rebalance_types#showupdate', via: 'get', as: 'finance_investments_rebalance_types_showupdate'
 
 	namespace :finance do
 		namespace :expenses do
@@ -86,6 +89,7 @@ Rails.application.routes.draw do
 			resources :charts
 			resources :investments
 			resources :rebalance
+			resources :rebalance_types
 			resources :summary
 			resources :summary_types
 		end
@@ -94,7 +98,5 @@ Rails.application.routes.draw do
 		end
 	end
 
-	match '/finance/expenses/whats/remap', to: 'finance/expenses/whats#remap', via: 'get', as: 'finance_expenses_whats_remap'
-	match '/finance/investments/accounts/close', to: 'finance/investments/accounts#close', via: 'get', as: 'finance_investments_accounts_close'
 
 end
