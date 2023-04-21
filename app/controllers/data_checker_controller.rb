@@ -23,7 +23,6 @@ class DataCheckerController < ApplicationController
 			@tables[name]['errors'] = []
 			table['columns'].each do |column|
 				col = column.name
-				puts(col)
 				if col.match('_id$')
 					xrefname = col.gsub(/_id$/, '')
 					## PATCHES FOR ALTERNATE REFERENCES
@@ -37,7 +36,8 @@ class DataCheckerController < ApplicationController
 					xref = xrefname.classify.constantize
 					@tables[name]['errors'].push("References: #{xref.name}")
 					tableref.where("#{col} NOT IN (?)", @tables[xref.name]['ids']).each do |t|
-						@tables[name]['errors'].push("#{name}[#{t.id}]:#{col} = ${t.col} MISSING")
+						tcol = t.send(col)
+						@tables[name]['errors'].push("#{name}[#{t.id}]:#{col} = #{tcol} MISSING")
 					end
 				end
 			end
