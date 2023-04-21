@@ -124,6 +124,7 @@ class Finance::Admin::ImportController < ApplicationController
 				if ! fst
 					fst = FinanceSummaryType.new
 					fst.stype = line[1]
+					fst.priority = line[2]
 					fst.save
 					newcounts['summary_type'] += 1
 				else
