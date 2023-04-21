@@ -94,6 +94,7 @@ Rails.application.routes.draw do
 			resources :summary_types
 		end
 		namespace :admin do
+			resources :exports
 			resources :import
 		end
 	end
