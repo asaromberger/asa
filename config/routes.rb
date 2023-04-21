@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 	end
 
 	match '/finance/investments/summary_types/showupdate', to: 'finance/investments/summary_types#showupdate', via: 'put', as: 'finance_investments_summary_types_showupdate'
-	match '/finance/investments/rebalance/showupdate', to: 'finance/investments/rebalance#showupdate', via: 'put', as: 'finance_investments_rebalance_showupdate'
+	match '/finance/investments/rebalance/showupdate', to: 'finance/investments/rebalance#showupdate', via: 'get', as: 'finance_investments_rebalance_showupdate'
 
 	namespace :finance do
 		namespace :expenses do
