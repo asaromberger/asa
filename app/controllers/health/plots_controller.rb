@@ -127,6 +127,11 @@ class Health::PlotsController < ApplicationController
 				imiles += 1
 			end
 		end
+		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			if @charts['Daily'][type]['dates'].count == 0
+				@charts['Daily'].delete(type)
+			end
+		end
 
 		# by weekly average
 		# @charts['By Weekly Average][measure]
@@ -187,10 +192,15 @@ class Health::PlotsController < ApplicationController
 			end
 		end
 		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			flag = false
 			@charts['By Weekly Average'][type]['dates'].each do |date, values|
-				if values[0] == 0
-					@charts['By Weekly Average'][type]['dates'].delete(date)
+				if values[0] != 0
+					flag = true
+					break
 				end
+			end
+			if flag == false
+				@charts['By Weekly Average'].delete(type)
 			end
 		end
 
@@ -237,6 +247,23 @@ class Health::PlotsController < ApplicationController
 			if data.miles && data.miles > 0
 				t = data.miles.to_f / 100.0
 				@charts['By Day of Week']['Miles']['dates'][week][wday] += t
+			end
+		end
+		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			flag = false
+			@charts['By Day of Week'][type]['dates'].each do |date, values|
+				values.each do |value|
+					if value != 0
+						flag = true
+						break
+					end
+				end
+				if flag == true
+					break
+				end
+			end
+			if flag == false
+				@charts['By Day of Week'].delete(type)
 			end
 		end
 
@@ -290,6 +317,23 @@ class Health::PlotsController < ApplicationController
 				if @resistances[data.resistance]
 					@charts['By Resistance'][type]['dates'][data.date][@resistances[data.resistance]] = v
 				end
+			end
+		end
+		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			flag = false
+			@charts['By Resistance'][type]['dates'].each do |date, values|
+				values.each do |value|
+					if value != 0
+						flag = true
+						break
+					end
+				end
+				if flag == true
+					break
+				end
+			end
+			if flag == false
+				@charts['By Resistance'].delete(type)
 			end
 		end
 
