@@ -9,6 +9,7 @@
 <thead>
 <tr>
 <th>Artist</th>
+<th>Album</th>
 <th>Title</th>
 <th>Genre</th>
 <th>Track</th>
@@ -24,6 +25,7 @@
 <% @music.each do |position, song| %>
 	<tr>
 	<td><%= song.artist.html_safe %></td>
+	<td><%= song.album.html_safe %></td>
 	<td><%= song.title.html_safe %></td>
 	<td><%= song.genre.html_safe %></td>
 	<td><%= song.track_number %></td>
