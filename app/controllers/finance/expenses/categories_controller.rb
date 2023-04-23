@@ -5,7 +5,11 @@ class Finance::Expenses::CategoriesController < ApplicationController
 
 	def index
 		@title = 'Categories'
-		@categories = FinanceCategory.all.order('ctype, category, subcategory')
+		get_categories()
+		set_sort_filter()
+		filter(@categories)
+		sort(@categories)
+		@sorts = @columns
 	end
 
 	def new
@@ -61,6 +65,53 @@ private
 	def require_expenses
 		unless current_user_role('finance_expenses')
 			redirect_to users_path, alert: "inadequate permissions: FINANCE EXPENSES CATEGORIES"
+		end
+	end
+
+	def columnlist
+		return(['type', 'category', 'subcategory', 'tax'])
+	end
+
+	def get_categories
+		@categories = Hash.new
+		FinanceCategory.all.order('ctype, category, subcategory').each do |category|
+			@categories[category.id] = Hash.new
+			@categories[category.id]['ctype'] = category.ctype
+			@categories[category.id]['category'] = category.category
+			@categories[category.id]['subcategory'] = category.subcategory
+			@categories[category.id]['tax'] = category.tax
+		end
+	end
+
+	def set_sort_filter
+		@columns = columnlist()
+		if params[:sort]
+			@sort = params[:sort]
+		end
+		@filters = Hash.new
+		@columns.each do |column|
+			if params[:filters] && params[:filters][column]
+				@filters[column] = params[:filters][column]
+			end
+		end
+	end
+
+	def sort(data)
+		if @sort
+			@categories = @categories.sort_by { |id, values| values[@sort] }
+		end
+	end
+
+	def filter(data)
+		@filters.each do |column, pattern|
+			if ! pattern.blank?
+				pattern = pattern.downcase
+				@categories.each do |id, values|
+					if values[column].blank? || ! values[column].downcase.match(pattern)
+						@categories.delete(id)
+					end
+				end
+			end
 		end
 	end
 

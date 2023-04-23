@@ -5,70 +5,64 @@
 <div class='clearfix'><p>&nbsp;</p></div>
 <div class='clearfix'><p>&nbsp;</p></div>
 
-<% if false %>
-<div>
-Click on a column header to sort by that column<br/>
-<input type="button" value="Show all columns" onclick="javascript:showAllColumns('table_report')"></input>
-<span>(Control-click on header to hide a field)</span>
-<input type="button" value="Create custom report!" onclick="javascript:createURL('table_report', 'table_urlBox')"></input>
-<span id="table_urlBox"></span>
+<div class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Sort by (<%= @sort %>) <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <% @sorts.each do |sort| %>
+            <li><%= link_to sort, finance_expenses_categories_path(sort: sort, filters: @filters) %></li>
+        <% end %>
+    </ul>
 </div>
-<% else %>
-<p>SORT/FILTER</p>
-<% end %>
 
-<table class='table table-bordered table-striped' id='table_report'>
+<table class='table table-bordered table-striped'>
 
 <thead>
+
 <tr>
-<th class='table sorttable_alpha' id='TYPE'>Type</th>
-<th class='table sorttable_alpha' id='CATEGORY'>Category</th>
-<th class='table sorttable_alpha' id='SUBCATEGORY'>Subcategory</th>
-<th class='table sorttable_alpha' id='TAX'>Tax</th>
-<th class='table sorttable_alpha' id='EDIT'>Edit</th>
-<th class='table sorttable_alpha' id='DELETE'>Delete</th>
-<th class='table sorttable_alpha' id='DETAILS'>Details</th>
+<th>Type</th>
+<th>Category</th>
+<th>Subcategory</th>
+<th>Tax</th>
+<th>Edit</th>
+<th>Delete</th>
+<th>Details</th>
 </tr>
+
+<tr>
+<% @columns.each do |column| %>
+	<td>
+		<%= form_tag finance_expenses_categories_path, method: :get do %>
+			<%= hidden_field_tag :sort, @sort %>
+			<% @columns.each do |c| %>
+				<% if c == column %>
+					<%= text_field_tag "filters[#{c}]", @filters[c] %>
+				<% else %>
+					<%= hidden_field_tag "filters[#{c}]", @filters[c] %>
+				<% end %>
+			<% end %>
+		<% end %>
+	</td>
+<% end %>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
 </thead>
 
 <tbody>
-<% @categories.each do |category| %>
+<% @categories.each do |id, values| %>
 	<tr>
-	<td><%= category.ctype %></td>
-	<td><%= category.category %></td>
-	<td><%= category.subcategory %></td>
-	<td><%= category.tax %></td>
-	<td><%= link_to 'Edit', edit_finance_expenses_category_path(category.id) %></td>
-	<td><%= link_to 'Delete', finance_expenses_category_path(category.id), method: :delete, data: {confirm: "Delete #{category.ctype}/#{category.category}/#{category.subcategory}/#{category.tax}?"} %></td>
-	<td><%= link_to 'Details', finance_expenses_category_path(category.id) %></td>
+	<td><%= values['ctype'] %></td>
+	<td><%= values['category'] %></td>
+	<td><%= values['subcategory'] %></td>
+	<td><%= values['tax'] %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_category_path(id) %></td>
+	<td><%= link_to 'Delete', finance_expenses_category_path(id), method: :delete, data: {confirm: "Delete #{values['ctype']}/#{values['category']}/#{values['subcategory']}/#{values['tax']}?"} %></td>
+	<td><%= link_to 'Details', finance_expenses_category_path(id) %></td>
 	</tr>
 <% end %>
 </tbody>
 
 </table>
 
-<div class='clearfix'><p>&nbsp;</p></div>
-
-<% if false %>
-<script type="text/javascript">
-  var tableFilters = {
-    sort_select: true,
-    btn_reset: true,
-    btn_reset_text: "Clear Filters",
-    btn_text: " > ",
-    alternate_rows: false,
-    flt_row_class: "tableFlt",
-    col_width_0: "5", //TYPE
-    col_width_1: "15", //CATEGORY
-    col_width_2: "15", //SUBCATEGORY
-    col_width_3: "15", //TAX
-    col_width_4: "1", //EDIT
-    col_width_5: "1", //DELETE
-    col_width_6: "1", //DELETE
-    display_all_text: "<*>",
-  }
-  sorttable.makeSortable(document.getElementById('table_report'), 1);
-  setFilterGrid('table_report', 1, tableFilters);
-  setupSearch('table_report');
-</script>
-<% end %>
