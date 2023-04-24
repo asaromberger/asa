@@ -5,15 +5,11 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def index
 		@title = 'What To Category Map'
-		@whats = FinanceWhat.joins(:finance_category).all.order('ctype, category, subcategory, what')
-		@categorymap = Hash.new
-		FinanceCategory.all.each do |category|
-			@categorymap[category.id] = Hash.new
-			@categorymap[category.id]['ctype'] = category.ctype
-			@categorymap[category.id]['category'] = category.category
-			@categorymap[category.id]['subcategory'] = category.subcategory
-			@categorymap[category.id]['tax'] = category.tax
-		end
+		get_whats()
+		set_sort_filter()
+		filter(@whats)
+		sort(@whats)
+		@sorts = @columns
 	end
 
 	def new
@@ -96,6 +92,58 @@ private
 	def require_expenses
 		unless current_user_role('finance_expenses')
 			redirect_to root_url, alert: "inadequate permissions: FINANCE EXPENSES"
+		end
+	end
+
+	def columnlist
+		return(['what', 'ctype', 'category', 'subcategory', 'tax'])
+	end
+
+	def get_whats
+		@categorymap = Hash.new
+		FinanceCategory.all.each do |category|
+			@categorymap[category.id] = category
+		end
+		@whats = Hash.new
+		FinanceWhat.joins(:finance_category).all.order('ctype, category, subcategory, what').each do |what|
+			@whats[what.id] = Hash.new
+			@whats[what.id]['what'] = what.what
+			@whats[what.id]['ctype'] = @categorymap[what.finance_category_id].ctype
+			@whats[what.id]['category'] = @categorymap[what.finance_category_id].category
+			@whats[what.id]['subcategory'] = @categorymap[what.finance_category_id].subcategory
+			@whats[what.id]['tax'] = @categorymap[what.finance_category_id].tax
+		end
+	end
+
+	def set_sort_filter
+		@columns = columnlist()
+		if params[:sort]
+			@sort = params[:sort]
+		end
+		@filters = Hash.new
+		@columns.each do |column|
+			if params[:filters] && params[:filters][column]
+				@filters[column] = params[:filters][column]
+			end
+		end
+	end
+
+	def sort(data)
+		if @sort
+			@whats = @whats.sort_by { |id, values| values[@sort] }
+		end
+	end
+
+	def filter(data)
+		@filters.each do |column, pattern|
+			if ! pattern.blank?
+				pattern = pattern.downcase
+				@whats.each do |id, values|
+					if values[column].blank? || ! values[column].downcase.match(pattern)
+						@whats.delete(id)
+					end
+				end
+			end
 		end
 	end
 

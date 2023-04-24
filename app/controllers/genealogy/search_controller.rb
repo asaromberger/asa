@@ -7,7 +7,6 @@ class Genealogy::SearchController < ApplicationController
 		if params[:name]
 			name = params[:name].downcase
 t = Arel.sql("itype = 'name' AND lower(data -> 'given') LIKE '%#{name}%' OR lower(data -> 'surname') LIKE '%#{name}%'")
-puts(t.to_json)
 			@people = GenealogyInfo.where(Arel.sql("itype = 'name' AND lower(data -> 'given') LIKE '%#{name}%' OR lower(data -> 'surname') LIKE '%#{name}%'")).order(Arel.sql("data -> 'given', data -> 'surname'"))
 		end
 	end

@@ -28,25 +28,17 @@
 <th>Details</th>
 </tr>
 
+<%= form_tag finance_expenses_categories_path, method: :get do %>
+<%= hidden_field_tag :sort, @sort %>
 <tr>
 <% @columns.each do |column| %>
-	<td>
-		<%= form_tag finance_expenses_categories_path, method: :get do %>
-			<%= hidden_field_tag :sort, @sort %>
-			<% @columns.each do |c| %>
-				<% if c == column %>
-					<%= text_field_tag "filters[#{c}]", @filters[c] %>
-				<% else %>
-					<%= hidden_field_tag "filters[#{c}]", @filters[c] %>
-				<% end %>
-			<% end %>
-		<% end %>
-	</td>
+	<td><%= text_field_tag "filters[#{column}]", @filters[column] %></td>
 <% end %>
 <td></td>
-<td></td>
+<td><%= submit_tag 'Filter', class: 'btn btn-primary btn-xs' %></td>
 <td></td>
 </tr>
+<% end %>
 
 </thead>
 
