@@ -5,7 +5,11 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 
 	def index
 		@title = 'Whatmap Map'
-		@whatmaps = FinanceWhatMap.all.order('whatmap')
+		get_whatmaps()
+		set_sort_filter()
+		filter(@whatmaps)
+		sort(@whatmaps)
+		@sorts = @columns
 	end
 
 	def new
@@ -53,6 +57,51 @@ private
 	def require_expenses
 		unless current_user_role('finance_expenses')
 			redirect_to users_path, alert: "Inadequate permissions: FINANCE EXPENSES WHATMAPS"
+		end
+	end
+
+	def columnlist
+		return(['what', 'map'])
+	end
+
+	def get_whatmaps
+		@whatmaps = Hash.new
+		FinanceWhatMap.all.order('whatmap').each do |whatmap|
+			@whatmaps[whatmap.id] = Hash.new
+			@whatmaps[whatmap.id]['what'] = whatmap.whatmap
+			@whatmaps[whatmap.id]['map'] = whatmap.finance_what.what
+		end
+	end
+
+	def set_sort_filter
+		@columns = columnlist()
+		if params[:sort]
+			@sort = params[:sort]
+		end
+		@filters = Hash.new
+		@columns.each do |column|
+			if params[:filters] && params[:filters][column]
+				@filters[column] = params[:filters][column]
+			end
+		end
+	end
+
+	def sort(data)
+		if @sort
+			@whatmaps = @whatmaps.sort_by { |id, values| values[@sort] }
+		end
+	end
+
+	def filter(data)
+		@filters.each do |column, pattern|
+			if ! pattern.blank?
+				pattern = pattern.downcase
+				@whatmaps.each do |id, values|
+					if values[column].blank? || ! values[column].downcase.match(pattern)
+						@whatmaps.delete(id)
+					end
+				end
+			end
 		end
 	end
 
