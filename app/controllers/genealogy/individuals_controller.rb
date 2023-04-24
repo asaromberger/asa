@@ -5,16 +5,13 @@ class Genealogy::IndividualsController < ApplicationController
 	include GenealogyIndividualHelper
 
 	def new
-		puts("===== NEW =====")
 		@individual = GenealogyIndividual.new
 		@sex =  [['M', 'Male'], ['F', 'Female']]
 	end
 
 	def create
-		puts("===== CREATE =====")
 		@individual = GenealogyIndividual.new(individual_params)
 		@individual.save
-		puts("===== INDIVIDUAL =====")
 		@name = GenealogyInfo.new
 		@name.genealogy_individual_id = @individual.id
 		@name.itype = 'name'
@@ -27,7 +24,6 @@ class Genealogy::IndividualsController < ApplicationController
 			suffix: params[:suffix]
 		}
 		@name.save
-		puts("===== NAME =====")
 		redirect_to edit_genealogy_individual_path(@individual.id), notice: "Individual Created"
 	end
 

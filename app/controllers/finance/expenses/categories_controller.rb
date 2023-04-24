@@ -69,7 +69,7 @@ private
 	end
 
 	def columnlist
-		return(['type', 'category', 'subcategory', 'tax'])
+		return(['ctype', 'category', 'subcategory', 'tax'])
 	end
 
 	def get_categories

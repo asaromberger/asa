@@ -27,8 +27,6 @@ class UsersController < ApplicationController
 		@title = "Home page"
 		apps = Hash.new
 		valid_applications().each do |key, app|
-		puts("KEY:#{key}")
-		puts("APP:#{app}")
 			if Permission.where("user_id = ? AND pkey = ?", @user.id, key).count > 0
 				apps[app] = key
 			end
