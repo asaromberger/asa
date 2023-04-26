@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Category', new_finance_expenses_category_path, class: 'btn btn-primary col-md-1' %>
+<%= link_to 'New Category', new_finance_expenses_category_path(sort: @sort, filters: @filters), class: 'btn btn-primary col-md-1' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 <div class='clearfix'><p>&nbsp;</p></div>
@@ -49,9 +49,9 @@
 	<td><%= values['category'] %></td>
 	<td><%= values['subcategory'] %></td>
 	<td><%= values['tax'] %></td>
-	<td><%= link_to 'Edit', edit_finance_expenses_category_path(id) %></td>
-	<td><%= link_to 'Delete', finance_expenses_category_path(id), method: :delete, data: {confirm: "Delete #{values['ctype']}/#{values['category']}/#{values['subcategory']}/#{values['tax']}?"} %></td>
-	<td><%= link_to 'Details', finance_expenses_category_path(id) %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_category_path(id: id, sort: @sort, filters: @filters) %></td>
+	<td><%= link_to 'Delete', finance_expenses_category_path(id: id, sort: @sort, filters: @filters), method: :delete, data: {confirm: "Delete #{values['ctype']}/#{values['category']}/#{values['subcategory']}/#{values['tax']}?"} %></td>
+	<td><%= link_to 'Details', finance_expenses_category_path(id: id, sort: @sort, filters: @filters) %></td>
 	</tr>
 <% end %>
 </tbody>

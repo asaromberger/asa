@@ -11,7 +11,7 @@
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
-<%= link_to 'Add an item', new_finance_expenses_item_path(year: @year), method: :get %>
+<%= link_to 'Add an item', new_finance_expenses_item_path(year: @year, sort: @sort, filters: @filters), method: :get %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -68,8 +68,8 @@
 	<td><%= item['category'] %></td>
 	<td><%= item['subcategory'] %></td>
 	<td><%= item['tax'] %></td>
-	<td><%= link_to 'Edit', edit_finance_expenses_item_path(id: id, year: @year) %></td>
-	<td><%= link_to 'Delete', finance_expenses_item_path(id: id, year: @year), method: :delete, data: {confirm: "Delete #{item['date']}, #{item['what']}, #{item['amount']}?"} %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_item_path(id: id, year: @year, sort: @sort, filters: @filters) %></td>
+	<td><%= link_to 'Delete', finance_expenses_item_path(id: id, year: @year, sort: @sort, filters: @filters), method: :delete, data: {confirm: "Delete #{item['date']}, #{item['what']}, #{item['amount']}?"} %></td>
 	</tr>
 <% end %>
 </tbody>
