@@ -4,6 +4,10 @@
 	<%= form.date_select :date, {start_year: 1988, value: @item.date}, {class: 'date-select col-md-1'} %>
 
 	<%= hidden_field_tag :year, @year %>
+	<%= hidden_field_tag :sort, @sort %>
+	<% @filters.each do |column, value| %>
+		<%= hidden_field_tag "filters[#{column}]", value %>
+	<% end %>
 
 	<div class='clearfix'></div>
 

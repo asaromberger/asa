@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Map', new_finance_expenses_what_map_path %>
+<%= link_to 'New Map', new_finance_expenses_what_map_path(sort: @sort, filters: @filters) %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -42,8 +42,8 @@
 	<tr>
 	<td><%= values['what'] %></td>
 	<td><%= values['map'] %></td>
-	<td><%= link_to 'Edit', edit_finance_expenses_what_map_path(id) %></td>
-	<td><%= link_to 'Delete', finance_expenses_what_maps_path(id), method: :delete, data: {confirm: "Delete #{values['what']}?"} %></td>
+	<td><%= link_to 'Edit', edit_finance_expenses_what_map_path(id, sort: @sort, filters: @filters) %></td>
+	<td><%= link_to 'Delete', finance_expenses_what_map_path(id, sort: @sort, filters: @filters), method: :delete, data: {confirm: "Delete #{values['what']}?"} %></td>
 	</tr>
 <% end %>
 </tbody>

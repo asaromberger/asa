@@ -15,44 +15,50 @@ class Finance::Expenses::CategoriesController < ApplicationController
 	def new
 		@title = 'New Category'
 		@category = FinanceCategory.new
+		set_sort_filter()
 	end
 
 	def create
 		@category = FinanceCategory.new(category_params)
+		set_sort_filter()
 		if @category.save
-			redirect_to finance_expenses_categories_path, notice: 'Category Added'
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), notice: 'Category Added'
 		else
-			redirect_to finance_expenses_categories_path, alert: 'Failed to create Category'
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), alert: 'Failed to create Category'
 		end
 	end
 
 	def edit
 		@title = 'Edit Category'
 		@category = FinanceCategory.find(params[:id])
+		set_sort_filter()
 	end
 
 	def update
 		@category = FinanceCategory.find(params[:id])
+		set_sort_filter()
 		if @category.update(category_params)
-			redirect_to finance_expenses_categories_path, notice: 'Category Updated'
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), notice: 'Category Updated'
 		else
-			redirect_to finance_expenses_categories_path, alert: 'Failed to update Category'
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), alert: 'Failed to update Category'
 		end
 	end
 
 	def show
 		@category = FinanceCategory.find(params[:id])
+		set_sort_filter()
 		@title = "What maps to #{@category.ctype}/#{@category.category}/#{@category.subcategory}"
 		@whats = FinanceWhat.where("finance_category_id = ?", @category.id).order('what')
 	end
 
 	def destroy
 		@category = FinanceCategory.find(params[:id])
+		set_sort_filter()
 		if FinanceWhat.where("finance_category_id = ?", @category.id).count > 0
-			redirect_to finance_expenses_categories_path, alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
 		else
 			@category.delete
-			redirect_to finance_expenses_categories_path, notice: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} Deleted"
+			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), notice: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} Deleted"
 		end
 	end
 
@@ -79,7 +85,11 @@ private
 			@categories[category.id]['ctype'] = category.ctype
 			@categories[category.id]['category'] = category.category
 			@categories[category.id]['subcategory'] = category.subcategory
-			@categories[category.id]['tax'] = category.tax
+			if category.tax.blank?
+				@categories[category.id]['tax'] = ''
+			else
+				@categories[category.id]['tax'] = category.tax
+			end
 		end
 	end
 
@@ -98,7 +108,7 @@ private
 
 	def sort(data)
 		if @sort
-			@categories = @categories.sort_by { |id, values| values[@sort] }
+			@categories = @categories.sort_by { |id, values| values[@sort].downcase }
 		end
 	end
 

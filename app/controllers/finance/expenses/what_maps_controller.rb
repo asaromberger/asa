@@ -15,37 +15,42 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 	def new
 		@title = 'New WhatMap Map'
 		@whatmap = FinanceWhatMap.new
+		set_sort_filter()
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def create
 		@whatmap = FinanceWhatMap.new(whatmap_params)
+		set_sort_filter()
 		if @whatmap.save
-			redirect_to finance_expenses_what_maps_path, notice: "WhatMap #{@whatmap.whatmap} Added"
+			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Added"
 		else
-			redirect_to finance_expenses_what_maps_path, alert: 'Failed to create WhatMap Map'
+			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), alert: 'Failed to create WhatMap Map'
 		end
 	end
 
 	def edit
 		@title = 'Edit WhatMap Map'
 		@whatmap = FinanceWhatMap.find(params[:id])
+		set_sort_filter()
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
 		@whatmap = FinanceWhatMap.find(params[:id])
+		set_sort_filter()
 		if @whatmap.update(whatmap_params)
-			redirect_to finance_expenses_what_maps_path, notice: "WhatMap #{@whatmap.whatmap} Updated"
+			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Updated"
 		else
-			redirect_to finance_expenses_what_maps_path, alert: 'Failed to udate WhatMap map'
+			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), alert: 'Failed to udate WhatMap map'
 		end
 	end
 
 	def destroy
 		@whatmap = FinanceWhatMap.find(params[:id])
+		set_sort_filter()
 		@whatmap.delete
-		redirect_to finance_expenses_what_maps_path, notice: "WhatMap #{@whatmap.whatmap} Deleted"
+		redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Deleted"
 	end
 
 private

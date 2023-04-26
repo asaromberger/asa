@@ -44,6 +44,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@title = 'New Item'
 		@year = params[:year]
 		@item = FinanceItem.new
+		set_sort_filter()
 		@item.date = Date.new(@year.to_i, 1, 1)
 		@item.pm = '-'
 		@whats = FinanceWhat.all.order('what')
@@ -51,11 +52,12 @@ class Finance::Expenses::ItemsController < ApplicationController
 
 	def create
 		@item = FinanceItem.new(item_params)
+		set_sort_filter()
 		@year = params[:year]
 		if @item.save
-			redirect_to finance_expenses_items_path(year: @year), notice: 'Item Added'
+			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: 'Item Added'
 		else
-			redirect_to finance_expenses_items_path(year: @year), alert: 'Failed to add Item'
+			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), alert: 'Failed to add Item'
 		end
 	end
 
@@ -63,24 +65,27 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@title = 'Edit Item'
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
+		set_sort_filter()
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
+		set_sort_filter()
 		if @item.update(item_params)
-			redirect_to finance_expenses_items_path(year: @year), notice: 'Item Updated'
+			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: 'Item Updated'
 		else
-			redirect_to finance_expenses_items_path(year: @year), alert: 'Failed to update Item'
+			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), alert: 'Failed to update Item'
 		end
 	end
 
 	def destroy
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
+		set_sort_filter()
 		@item.delete
-		redirect_to finance_expenses_items_path(year: @year), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
+		redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
 	end
 
 private
