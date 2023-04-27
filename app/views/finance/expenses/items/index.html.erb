@@ -4,7 +4,7 @@
 	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>Choose Year <b class='caret'></b></a>
 	<ul class='dropdown-menu'>
 		<% @years.each do |year| %>
-			<li><%= link_to year, finance_expenses_items_path(year: year) %></li>
+			<li><%= link_to year, finance_expenses_items_path(year: year, sort: @sort, filters: @filters) %></li>
 		<% end %>
 	</ul>
 </div>
