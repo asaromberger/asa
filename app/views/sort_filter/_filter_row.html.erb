@@ -1,0 +1,10 @@
+<%= form_tag path, method: :get do %>
+<%= hidden_field_tag :sort, @sort %>
+<tr>
+<% @columns.each do |column| %>
+	<td><%= text_field_tag "filters[#{column}]", @filters[column] %></td>
+<% end %>
+<td></td>
+<td><%= submit_tag 'Filter', class: 'btn btn-primary btn-xs' %></td>
+</tr>
+<% end %>

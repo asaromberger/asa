@@ -4,14 +4,7 @@
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
-<div class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Sort by (<%= @sort %>) <b class="caret"></b></a>
-    <ul class="dropdown-menu">
-        <% @sorts.each do |sort| %>
-            <li><%= link_to sort, finance_expenses_what_maps_path(sort: sort, filters: @filters) %></li>
-        <% end %>
-    </ul>
-</div>
+<%= render 'sort_filter/sort_dropdown', path: finance_expenses_what_maps_path, method: :get %>
 
 <table class='table table-bordered table-striped' id='table_report'>
 
@@ -24,16 +17,7 @@
 <th>Delete</th>
 </tr>
 
-<%= form_tag finance_expenses_what_maps_path, method: :get do %>
-<%= hidden_field_tag :sort, @sort %>
-<tr>
-<% @columns.each do |column| %>
-	<td><%= text_field_tag "filters[#{column}]", @filters[column] %></td>
-<% end %>
-<td></td>
-<td><%= submit_tag 'Filter', class: 'btn btn-primary btn-xs' %></td>
-</tr>
-<% end %>
+<%= render 'sort_filter/filter_row', path: finance_expenses_what_maps_path %>
 
 </thead>
 

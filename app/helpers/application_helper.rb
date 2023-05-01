@@ -59,4 +59,43 @@ module ApplicationHelper
 		end
 	end
 
+	# sort/filter tables
+	def set_sort_filter(columns)
+		@columns = columns
+		@sorts = columns
+		if params[:sort]
+			@sort = params[:sort]
+		end
+		@filters = Hash.new
+		@columns.each do |column|
+			if params[:filters] && params[:filters][column]
+				@filters[column] = params[:filters][column]
+			end
+		end
+	end
+
+	def sort(data)
+		if ! @sort.blank?
+			return data.sort_by { |id, values| values[@sort].downcase }
+		else
+			return data
+		end
+	end
+
+	def filter(data)
+		@filters.each do |column, pattern|
+			if ! pattern.blank?
+puts("FILTER: #{column} # #{pattern}")
+				pattern = pattern.downcase
+				data.each do |id, values|
+					if values[column].blank? || ! values[column].downcase.match(pattern)
+						data.delete(id)
+puts("DELETE #{id}")
+					end
+				end
+			end
+		end
+		return data
+	end
+
 end

@@ -5,23 +5,22 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def index
 		@title = 'What To Category Map'
-		get_whats()
-		set_sort_filter()
-		filter(@whats)
-		sort(@whats)
-		@sorts = @columns
+		@whats = get_whats()
+		set_sort_filter(columnlist())
+		@whats = filter(@whats)
+		@whats = sort(@whats)
 	end
 
 	def new
 		@title = 'New What Map'
 		@what = FinanceWhat.new
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@categories = FinanceCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def create
 		@what = FinanceWhat.new(what_params)
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if @what.save
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What Map Added'
 		else
@@ -32,13 +31,13 @@ class Finance::Expenses::WhatsController < ApplicationController
 	def edit
 		@title = 'Edit What Map'
 		@what = FinanceWhat.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@categories = FinanceCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def update
 		@what = FinanceWhat.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if @what.update(what_params)
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What map Updated'
 		else
@@ -48,7 +47,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def show
 		@what = FinanceWhat.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@title = "Where is '#{@what.what}'"
 		@items = FinanceItem.where("finance_what_id = ?", @what.id).order('date')
 	end
@@ -56,7 +55,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 	def remap
 		@title = 'Remap specified What to another what'
 		@what = FinanceWhat.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@whats = [['', 0]]
 		FinanceWhat.where("id != ?", @what.id).order('what').each do |what|
 			@whats.push([what.what, what.id])
@@ -66,7 +65,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 	def remapupdate
 		@id = params[:id]
 		@what = FinanceWhat.find(@id)
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@newid = params[:newid]
 		@newwhat = FinanceWhat.find(@newid)
 		# update WhatMaps
@@ -88,7 +87,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def destroy
 		@what = FinanceWhat.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if FinanceItem.where("finance_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by an Item"
 		elsif FinanceWhatMap.where("finance_what_id = ?", @what.id).count > 0
@@ -120,47 +119,16 @@ private
 		FinanceCategory.all.each do |category|
 			@categorymap[category.id] = category
 		end
-		@whats = Hash.new
+		whats = Hash.new
 		FinanceWhat.joins(:finance_category).all.order('ctype, category, subcategory, what').each do |what|
-			@whats[what.id] = Hash.new
-			@whats[what.id]['what'] = what.what
-			@whats[what.id]['ctype'] = @categorymap[what.finance_category_id].ctype
-			@whats[what.id]['category'] = @categorymap[what.finance_category_id].category
-			@whats[what.id]['subcategory'] = @categorymap[what.finance_category_id].subcategory
-			@whats[what.id]['tax'] = @categorymap[what.finance_category_id].tax
+			whats[what.id] = Hash.new
+			whats[what.id]['what'] = what.what
+			whats[what.id]['ctype'] = @categorymap[what.finance_category_id].ctype
+			whats[what.id]['category'] = @categorymap[what.finance_category_id].category
+			whats[what.id]['subcategory'] = @categorymap[what.finance_category_id].subcategory
+			whats[what.id]['tax'] = @categorymap[what.finance_category_id].tax
 		end
-	end
-
-	def set_sort_filter
-		@columns = columnlist()
-		if params[:sort]
-			@sort = params[:sort]
-		end
-		@filters = Hash.new
-		@columns.each do |column|
-			if params[:filters] && params[:filters][column]
-				@filters[column] = params[:filters][column]
-			end
-		end
-	end
-
-	def sort(data)
-		if @sort
-			@whats = @whats.sort_by { |id, values| values[@sort] }
-		end
-	end
-
-	def filter(data)
-		@filters.each do |column, pattern|
-			if ! pattern.blank?
-				pattern = pattern.downcase
-				@whats.each do |id, values|
-					if values[column].blank? || ! values[column].downcase.match(pattern)
-						@whats.delete(id)
-					end
-				end
-			end
-		end
+		return whats
 	end
 
 end

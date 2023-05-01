@@ -33,18 +33,17 @@ class Finance::Expenses::ItemsController < ApplicationController
 			@subcategories[category.id] = category.subcategory
 			@taxes[category.id] = category.tax
 		end
-		get_items()
-		set_sort_filter()
-		filter(@items)
-		sort(@items)
-		@sorts = @columns
+		@items = get_items()
+		set_sort_filter(columnlist())
+		@items = filter(@items)
+		@items = sort(@items)
 	end
 
 	def new
 		@title = 'New Item'
 		@year = params[:year]
 		@item = FinanceItem.new
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@item.date = Date.new(@year.to_i, 1, 1)
 		@item.pm = '-'
 		@whats = FinanceWhat.all.order('what')
@@ -52,7 +51,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 
 	def create
 		@item = FinanceItem.new(item_params)
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@year = params[:year]
 		if @item.save
 			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: 'Item Added'
@@ -65,14 +64,14 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@title = 'Edit Item'
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if @item.update(item_params)
 			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: 'Item Updated'
 		else
@@ -83,7 +82,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 	def destroy
 		@year = params[:year]
 		@item = FinanceItem.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@item.delete
 		redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
 	end
@@ -105,51 +104,20 @@ private
 	end
 
 	def get_items
-		@items = Hash.new
+		items = Hash.new
 		FinanceItem.where("EXTRACT(year FROM date) = ?", @year).order('date').each do |item|
-			@items[item.id] = Hash.new
-			@items[item.id]['date'] = item.date
-			@items[item.id]['pm'] = item.pm
-			@items[item.id]['checkno'] = item.checkno
-			@items[item.id]['what'] = @whats[item.finance_what_id]
-			@items[item.id]['amount'] = item.amount
-			@items[item.id]['ctype'] = @ctypes[@whatcatids[item.finance_what_id]]
-			@items[item.id]['category'] = @categories[@whatcatids[item.finance_what_id]]
-			@items[item.id]['subcategory'] = @subcategories[@whatcatids[item.finance_what_id]]
-			@items[item.id]['tax'] = @taxes[@whatcatids[item.finance_what_id]]
+			items[item.id] = Hash.new
+			items[item.id]['date'] = item.date
+			items[item.id]['pm'] = item.pm
+			items[item.id]['checkno'] = item.checkno
+			items[item.id]['what'] = @whats[item.finance_what_id]
+			items[item.id]['amount'] = item.amount
+			items[item.id]['ctype'] = @ctypes[@whatcatids[item.finance_what_id]]
+			items[item.id]['category'] = @categories[@whatcatids[item.finance_what_id]]
+			items[item.id]['subcategory'] = @subcategories[@whatcatids[item.finance_what_id]]
+			items[item.id]['tax'] = @taxes[@whatcatids[item.finance_what_id]]
 		end
-	end
-
-	def set_sort_filter
-		@columns = columnlist()
-		if params[:sort]
-			@sort = params[:sort]
-		end
-		@filters = Hash.new
-		@columns.each do |column|
-			if params[:filters] && params[:filters][column]
-				@filters[column] = params[:filters][column]
-			end
-		end
-	end
-
-	def sort(data)
-		if @sort
-			@items = @items.sort_by { |id, values| values[@sort] }
-		end
-	end
-
-	def filter(data)
-		@filters.each do |column, pattern|
-			if ! pattern.blank?
-				pattern = pattern.downcase
-				@items.each do |id, values|
-					if values[column].blank? || ! values[column].to_s.downcase.match(pattern)
-						@items.delete(id)
-					end
-				end
-			end
-		end
+		return items
 	end
 
 end

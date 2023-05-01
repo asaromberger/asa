@@ -56,12 +56,12 @@ class Health::ImportController < ApplicationController
 				else
 					resistance = nil
 				end
-				if @headers['Calories']
+				if @headers['Calories'] && line[@headers['Calories']]
 					calories = line[@headers['Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					calories = nil
 				end
-				if @headers['Weight']
+				if @headers['Weight'] && line[@headers['Weight']]
 					weight = line[@headers['Weight']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 				else
 					weight = nil
@@ -94,7 +94,7 @@ class Health::ImportController < ApplicationController
 					if resistance
 						data.resistance = resistance
 					end
-					if resistance
+					if calories
 						data.calories = calories
 					end
 					if weight
