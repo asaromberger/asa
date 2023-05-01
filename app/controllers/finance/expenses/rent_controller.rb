@@ -65,6 +65,7 @@ class Finance::Expenses::RentController < ApplicationController
 					end
 					if amount != 0 && amount == lastamount
 						@rows[index]['to'] = "#{year}-#{tmonth}"
+						@rows[index]['months'] += 1
 					elsif amount != 0
 						index = index + 1;
 						@rows[index] = Hash.new
@@ -73,6 +74,7 @@ class Finance::Expenses::RentController < ApplicationController
 						@rows[index]['rent'] = amount
 						@rows[index]['from'] = "#{year}-#{tmonth}"
 						@rows[index]['to'] = "#{year}-#{tmonth}"
+						@rows[index]['months'] = 1
 					end
 					lastamount = amount
 				end
