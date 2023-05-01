@@ -1,7 +1,15 @@
 <li id="fat-menu" class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
   <ul class="dropdown-menu">
-    <li><%= link_to "Home", users_path(select: 'home') %></li>
+	<% apps = Hash.new %>
+	<% valid_applications().each do |key, app| %>
+		<% if Permission.where("user_id = ? AND pkey = ?", current_user.id, key).count > 0 %>
+			<% apps[app] = key %>
+		<% end %>
+	<% end %>
+	<% apps.each do |app, key| %>
+		<li><%= link_to app.capitalize, users_path(app_select: app) %></li>
+	<% end %>
     <li class="divider"></li>
     <li><%= link_to "Reset Password", edit_password_reset_path(id: current_user.id) %></li>
     <li class="divider"></li>

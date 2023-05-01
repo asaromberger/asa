@@ -59,6 +59,19 @@ module ApplicationHelper
 		end
 	end
 
+	def valid_applications
+		return([
+			['health', 'health'],
+			['bridge', 'bridge'],
+			['music', 'music'],
+			['genealogy', 'genealogy'],
+			['genealogy_admin', 'genealogy'],
+			['finance_expenses', 'finance'],
+			['finance_investments', 'finance'],
+			['finance_admin', 'finance'],
+		])
+	end
+
 	# sort/filter tables
 	def set_sort_filter(columns)
 		@columns = columns

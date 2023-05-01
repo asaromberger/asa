@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 				redirect_to genealogy_search_index_path
 			end
 			if @user.application == 'finance'
-			#	redirect_to FINANCE LANDING
+				redirect_to finance_expenses_items_path
 			end
 		end
 		@title = "Home page"
@@ -69,19 +69,6 @@ class UsersController < ApplicationController
 
 	def user_password
 		params.require(:user).permit(:password, :password_confirmation)
-	end
-
-	def valid_applications
-		return([
-			['health', 'health'],
-			['bridge', 'bridge'],
-			['music', 'music'],
-			['genealogy', 'genealogy'],
-			['genealogy_admin', 'genealogy'],
-			['finance_expenses', 'finance'],
-			['finance_investments', 'finance'],
-			['finance_admin', 'finance'],
-		])
 	end
 
 end
