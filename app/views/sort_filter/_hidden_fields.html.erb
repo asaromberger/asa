@@ -1,0 +1,5 @@
+<%= hidden_field_tag :sort, @sort %>
+<% @filters.each do |column, value| %>
+	<%= hidden_field_tag "filters[#{column}]", value %>
+<% end %>
+

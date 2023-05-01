@@ -34,11 +34,6 @@ class Health::DataController < ApplicationController
 		else
 			@data.resistance = 10
 		end
-		@data.calories = 0
-		@data.weight = 0
-		@data.steps = 0
-		@data.flights = 0
-		@data.miles = 0
 	end
 
 	def create
@@ -66,8 +61,6 @@ class Health::DataController < ApplicationController
 			@data.user_id = current_user.id
 			@data.date = @cdata.date + 1.day
 			@data.resistance = @cdata.resistance
-			@data.calories = 0
-			@data.weight = 0
 			redirect_to new_health_datum_path(id: 0, date: @data.date, resistance: @data.resistance), notice: 'Data updated'
 		end
 	end
@@ -92,12 +85,6 @@ class Health::DataController < ApplicationController
 	def checknull
 		if params[:health_datum][:resistance].blank?
 			params[:health_datum][:resistance] = 0
-		end
-		if params[:health_datum][:calories].blank?
-			params[:health_datum][:calories] = 0
-		end
-		if params[:health_datum][:weight].blank?
-			params[:health_datum][:weight] = 0
 		end
 	end
 

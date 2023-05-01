@@ -5,23 +5,23 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 
 	def index
 		@title = 'Whatmap Map'
-		get_whatmaps()
-		set_sort_filter()
-		filter(@whatmaps)
-		sort(@whatmaps)
+		@whatmaps = get_whatmaps()
+		set_sort_filter(columnlist())
+		@whatmaps = filter(@whatmaps)
+		@whatmaps = sort(@whatmaps)
 		@sorts = @columns
 	end
 
 	def new
 		@title = 'New WhatMap Map'
 		@whatmap = FinanceWhatMap.new
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def create
 		@whatmap = FinanceWhatMap.new(whatmap_params)
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if @whatmap.save
 			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Added"
 		else
@@ -32,13 +32,13 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 	def edit
 		@title = 'Edit WhatMap Map'
 		@whatmap = FinanceWhatMap.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
 		@whatmap = FinanceWhatMap.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		if @whatmap.update(whatmap_params)
 			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Updated"
 		else
@@ -48,7 +48,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 
 	def destroy
 		@whatmap = FinanceWhatMap.find(params[:id])
-		set_sort_filter()
+		set_sort_filter(columnlist())
 		@whatmap.delete
 		redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Deleted"
 	end
@@ -70,44 +70,13 @@ private
 	end
 
 	def get_whatmaps
-		@whatmaps = Hash.new
+		whatmaps = Hash.new
 		FinanceWhatMap.all.order('whatmap').each do |whatmap|
-			@whatmaps[whatmap.id] = Hash.new
-			@whatmaps[whatmap.id]['what'] = whatmap.whatmap
-			@whatmaps[whatmap.id]['map'] = whatmap.finance_what.what
+			whatmaps[whatmap.id] = Hash.new
+			whatmaps[whatmap.id]['what'] = whatmap.whatmap
+			whatmaps[whatmap.id]['map'] = whatmap.finance_what.what
 		end
-	end
-
-	def set_sort_filter
-		@columns = columnlist()
-		if params[:sort]
-			@sort = params[:sort]
-		end
-		@filters = Hash.new
-		@columns.each do |column|
-			if params[:filters] && params[:filters][column]
-				@filters[column] = params[:filters][column]
-			end
-		end
-	end
-
-	def sort(data)
-		if @sort
-			@whatmaps = @whatmaps.sort_by { |id, values| values[@sort] }
-		end
-	end
-
-	def filter(data)
-		@filters.each do |column, pattern|
-			if ! pattern.blank?
-				pattern = pattern.downcase
-				@whatmaps.each do |id, values|
-					if values[column].blank? || ! values[column].downcase.match(pattern)
-						@whatmaps.delete(id)
-					end
-				end
-			end
-		end
+		return whatmaps
 	end
 
 end

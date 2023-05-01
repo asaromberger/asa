@@ -1,0 +1,12 @@
+<div class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Sort by (<%= @sort %>) <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+		<% filter = '' %>
+		<% @filters.each do |column, value| %>
+			<% filter += "&filters[#{column}]=#{value}" %>
+		<% end %>
+        <% @sorts.each do |sort| %>
+            <li><%= link_to sort, "#{path}?sort=#{sort}#{filter}".html_safe %></li>
+        <% end %>
+    </ul>
+</div>
