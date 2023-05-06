@@ -35,7 +35,7 @@
 <%	def draw_tree(node) %>
 		<div class='indent'>
 		<% node.each do |id, values| %>
-			<%= link_to values['name'], genealogy_tree_index_path(id: id) %></br>
+			<%= link_to values['name'], genealogy_tree_index_path(id: id) %><br/>
 			<% if values['tree'].count > 0 %>
 				<% draw_tree(values['tree']) %>
 			<% end %>
