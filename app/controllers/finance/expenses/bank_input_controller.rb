@@ -17,7 +17,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 		# this is file input. input goes to input table then to new
 		# clear input table
 		FinanceInput.delete_all
-		@title = 'Classify Bulk Input'
+		@title = 'Classify Bank Input'
 		@document = params[:document]
 		@documentname = @document.original_filename
 		if @documentname.blank?
@@ -195,7 +195,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 
 	def new
 		# classification page
-		@title = 'Classify Bulk Input'
+		@title = 'Classify Bank Input'
 		if params[:errors]
 			@errors = params[:errors]
 		else

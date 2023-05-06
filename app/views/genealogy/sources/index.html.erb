@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<div><%= link_to 'Add', new_genealogy_source_path, class: 'btn btn-primary btn-sm' %>
+<p><%= link_to 'Add', new_genealogy_source_path, class: 'btn btn-primary btn-sm' %></p>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -30,7 +30,7 @@
 	<% else %>
 		<td></td>
 	<% end %>
-	<td><%= link_to 'Edit', edit_genealogy_source_path(source.id) %>
+	<td><%= link_to 'Edit', edit_genealogy_source_path(source.id) %></td>
 	<td><%= link_to 'Remove', genealogy_source_path(id: source.id), method: :delete, data: { confirm: "Remove #{source.title}?" } %></td>
 	</tr>
 <% end %>

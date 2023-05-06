@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<div><%= link_to 'Add', new_genealogy_repo_path, class: 'btn btn-primary btn-sm' %>
+<p><%= link_to 'Add', new_genealogy_repo_path, class: 'btn btn-primary btn-sm' %></p>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -26,7 +26,7 @@
 	<td><%= repo.city %></td>
 	<td><%= repo.state %></td>
 	<td><%= repo.country %></td>
-	<td><%= link_to 'Edit', edit_genealogy_repo_path(repo.id) %>
+	<td><%= link_to 'Edit', edit_genealogy_repo_path(repo.id) %></td>
 	<td><%= link_to 'Remove', genealogy_repo_path(id: repo.id), method: :delete, data: { confirm: "Remove #{repo.name}?" } %></td>
 	</tr>
 <% end %>

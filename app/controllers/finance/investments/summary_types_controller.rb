@@ -35,7 +35,7 @@ class Finance::Investments::SummaryTypesController < ApplicationController
 				end
 			else
 				if investment_map.count > 0
-					investment_map.delete
+					investment_map.first.delete
 				end
 			end
 		end
