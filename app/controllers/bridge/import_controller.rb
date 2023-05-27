@@ -42,7 +42,7 @@ class Bridge::ImportController < ApplicationController
 		flag = 0
 		data = CSV.open(document.tempfile, 'r')
 		data.each do |line|
-			# line[0] = Date, line[1] = Player, line[2] = Score
+			# line[0] = Date, line[1] = Player, line[2] = Score, line[3] = pair
 			if flag == 0
 				if trim(line[0]) != 'Date'
 					redirect_to new_bridge_import_path, alert: "First column must be 'Date'"
@@ -54,6 +54,10 @@ class Bridge::ImportController < ApplicationController
 				end
 				if trim(line[2]) != 'Score'
 					redirect_to new_bridge_import_path, alert: "Third column must be 'Score'"
+					return
+				end
+				if trim(line[3]) != 'Pair'
+					redirect_to new_bridge_import_path, alert: "Forth column must be 'Pair'"
 					return
 				end
 				flag = 1
@@ -75,17 +79,22 @@ class Bridge::ImportController < ApplicationController
 				score.date = date
 				score.bridge_player_id = player.id
 				@scores["#{date}:#{player.name}"] = score
-				update_score_count += 1
-			else
 				new_score_count += 1
+			else
+				update_score_count += 1
 			end
 			score.score = trim(line[2]).to_f
+			if line[3]
+				score.pair = trim(line[3]).to_i
+			else
+				score.pair = nil
+			end
 			score.save
 		end
 		@messages.push("#{new_player_count} New Players")
 		@messages.push("#{new_score_count} New Scores")
 		@messages.push("#{update_score_count} Updated Scores")
-		redirect_to new_health_import_path(messages: @messages.to_json)
+		redirect_to new_bridge_import_path(messages: @messages.to_json)
 	end
 
 private

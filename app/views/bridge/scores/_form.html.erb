@@ -13,6 +13,7 @@
 	<tr>
 	<th>Player</th>
 	<th>Score</th>
+	<th>Pair</th>
 	</tr>
 	</thead>
 
@@ -20,7 +21,8 @@
 	<% @players.each do |player| %>
 		<tr>
 		<td><%= player.name %></td>
-		<td><%= number_field_tag "score[#{player.id}]", @scores[player.id], step: 0.1 %></td>
+		<td><%= number_field_tag "score[#{player.id}]", @scores[player.id], step: 0.01 %></td>
+		<td><%= number_field_tag "pair[#{player.id}]", @pairs[player.id] %></td>
 		</tr>
 	<% end %>
 	</tbody>

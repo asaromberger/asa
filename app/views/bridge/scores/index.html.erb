@@ -78,7 +78,7 @@
 <tr>
 <td class='fixed-column bold'>Score</td>
 <% @dates.each do |date, value| %>
-	<td class='bold boldrightborder' colspan=2><%= @bottom[date]['score'] %></td>
+	<td class='bold boldrightborder' colspan=2><%= number_with_precision(@bottom[date]['score'], precision: 2) %></td>
 <% end %>
 </tr>
 

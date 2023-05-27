@@ -102,8 +102,10 @@ class Bridge::ScoresController < ApplicationController
 			@date = Time.now.to_date
 		end
 		@scores = Hash.new
+		@pairs = Hash.new
 		BridgeScore.where("date = ?", @date).each do |score|
 			@scores[score.bridge_player_id] = score.score
+			@pairs[score.bridge_player_id] = score.pair
 		end
 	end
 
@@ -121,6 +123,7 @@ class Bridge::ScoresController < ApplicationController
 					scores[player.id].bridge_player_id = player.id
 				end
 				scores[player.id].score = params[:score][player.id.to_s].to_f
+				scores[player.id].pair = params[:pair][player.id.to_s].to_i
 				scores[player.id].save
 			else
 				scores[player.id].delete
@@ -137,7 +140,9 @@ class Bridge::ScoresController < ApplicationController
 			if score.score && score.score > 0
 				@scores[score.bridge_player_id] = Hash.new
 				@scores[score.bridge_player_id]['score'] = score.score
-				@scores[score.bridge_player_id]['name'] = BridgePlayer.find(score.bridge_player_id).name
+				player = BridgePlayer.find(score.bridge_player_id)
+				@scores[score.bridge_player_id]['name'] = player.name
+				@scores[score.bridge_player_id]['pair'] = score.pair
 			end
 		end
 		players = @scores.count
@@ -149,6 +154,8 @@ class Bridge::ScoresController < ApplicationController
 		@scores.each do |pid, values|
 			values['percent'] = values['score'] * 100 / max_score
 		end
+		# @scores = @scores.sort_by { |pid, values| values['name'].downcase }
+		@scores = @scores.sort_by { |pid, values| [-values['score'], values['pair'], values['name'].downcase] }
 		@bottom = Hash.new
 		@bottom['players'] = players
 		@bottom['score'] = total_score
@@ -222,10 +229,10 @@ class Bridge::ScoresController < ApplicationController
 		BridgePlayer.all.each do |player|
 			players[player.id] = player.name
 		end
-		content = "Date, Player, Score\n"
+		content = "Date,Player,Score,Pair\n"
 		BridgeScore.joins(:bridge_player).all.order('date, name').each do |score|
 			if ! score.score.blank? && score.score > 0
-				content = "#{content}#{score.date},#{players[score.bridge_player_id]},#{score.score}\n"
+				content = "#{content}#{score.date},#{players[score.bridge_player_id]},#{score.score},#{score.pair}\n"
 			end
 		end
 		send_data(content, type: 'application/csv', filename: 'Scores.csv', disposition: :inline)
