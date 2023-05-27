@@ -8,6 +8,7 @@
 <thead>
 <tr>
 <th>Player</th>
+<th>Pair</th>
 <th>Score</th>
 <th>Percent</th>
 </tr>
@@ -17,6 +18,7 @@
 <% @scores.each do |pid, values| %>
 	<tr>
 	<td><%= values['name'] %></td>
+	<td><%= values['pair'] %></td>
 	<td><%= values['score'] %></td>
 	<td><%= percent_fmt(values['percent']) %></td>
 	</tr>
@@ -31,7 +33,7 @@
 </tr>
 <tr>
 <td>Score</td>
-<td><%= @bottom['score'] %></td>
+<td><%= number_with_precision(@bottom['score'], precision: 2) %></td>
 </tr>
 
 </tbody>
