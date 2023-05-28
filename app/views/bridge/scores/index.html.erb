@@ -10,7 +10,7 @@
 <li>Click on a player to get a detailed report for that player</li>
 </ul>
 
-<p><%= link_to "Add a Session", new_bridge_score_path, class: 'btn btn-primary btn-xs' %></p>
+<p><%= link_to "Add a Session", new_bridge_score_path(start_date: @start_date, end_date: @end_date), class: 'btn btn-primary btn-xs' %></p>
 
 <div class="dropdown col-sx-2 on-top">
 	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Start (<%= @start_date %>) <b class="caret"></b></a>
@@ -36,18 +36,24 @@
 <tr>
 <th class='fixed-column'>Player</th>
 <% @dates.each do |date, value| %>
-	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date) %></th>
+	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
 <% end %>
 <th>Percent</th>
 <th>Rank</th>
 <th>Times</th>
+</tr>
+<tr>
+<th>TEMP</th>
+<% @recorded.each do |date, value| %>
+	<th colspan=2><%= value %></th>
+<% end %>
 </tr>
 </thead>
 
 <tbody>
 <% @scores.each do |pid, values| %>
 	<tr>
-	<td class='fixed-column'><%= link_to values['name'], bridge_score_player_path(id: pid) %></td>
+	<td class='fixed-column'><%= link_to values['name'], bridge_score_player_path(id: pid, start_date: @start_date, end_date: @end_date) %></td>
 	<% @dates.each do |date, value| %>
 		<% if values['score'][date] %>
 			<td><%= values['score'][date] %></td>

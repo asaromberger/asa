@@ -7,17 +7,7 @@ class Bridge::ScoresController < ApplicationController
 	def index
 		@title = 'Scores'
 		@scores = Hash.new
-		today = Time.now.to_date
-		if params[:end_date]
-			@end_date = params[:end_date].to_date
-		else
-			@end_date = today
-		end
-		if params[:start_date]
-			@start_date = params[:start_date].to_date
-		else
-			@start_date = @end_date - (13 * 7 - 1).days
-		end
+		start_end_date()
 		@date_list = []
 		date = BridgeScore.all.order('date').first
 		if date
@@ -25,7 +15,7 @@ class Bridge::ScoresController < ApplicationController
 		else
 			date = Time.now.to_date
 		end
-		while(date <= today)
+		while(date <= @today)
 			@date_list.push(date)
 			date += 7.days
 		end
@@ -36,11 +26,13 @@ class Bridge::ScoresController < ApplicationController
 			@scores[player.id]['name'] = player.name
 			@scores[player.id]['score'] = Hash.new
 			@scores[player.id]['percent'] = Hash.new
+			@scores[player.id]['pair'] = Hash.new	# TEMP #
 		end
 		BridgeScore.where("date >= ? AND date <= ?", @start_date, @end_date).each do |score|
 			if score.score > 0
 				@dates[score.date] = true
 				@scores[score.bridge_player_id]['score'][score.date] = score.score
+				@scores[score.bridge_player_id]['pair'][score.date] = score.pair # TEMP #
 			end
 		end
 		@dates = @dates.sort_by { |date, value| date}
@@ -90,17 +82,30 @@ class Bridge::ScoresController < ApplicationController
 			i += 1
 			@right[pid]['rank'] = i
 		end
+		# TEMP
+		@recorded = Hash.new
+		@dates.each do |date, value|
+			@recorded[date] = 'RECORDED'
+			@scores.each do |pid, values|
+				if values['score'][date] && (! values['pair'][date] || values['pair'][date] <= 0)
+					@recorded[date] = ""
+					break
+				end
+			end
+		end
+		# END TEMP
 	end
 
 	# create/edit a date
 	def new
-		@title = 'Session'
 		@players = BridgePlayer.all.order('name')
+		start_end_date()
 		if params[:date]
 			@date = params[:date].to_date
 		else
 			@date = Time.now.to_date
 		end
+		@title = "Session #{@date}"
 		@scores = Hash.new
 		@pairs = Hash.new
 		BridgeScore.where("date = ?", @date).each do |score|
@@ -111,12 +116,13 @@ class Bridge::ScoresController < ApplicationController
 
 	def create
 		@date = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
+		start_end_date()
 		scores = Hash.new
 		BridgeScore.where("date = ?", @date).each do |score|
 			scores[score.bridge_player_id] = score
 		end
 		BridgePlayer.all.each do |player|
-			if params[:score][player.id.to_s]
+			if params[:score][player.id.to_s] && params[:score][player.id.to_s].to_f > 0.0
 				if ! scores[player.id]
 					scores[player.id] = BridgeScore.new
 					scores[player.id].date = @date
@@ -126,14 +132,17 @@ class Bridge::ScoresController < ApplicationController
 				scores[player.id].pair = params[:pair][player.id.to_s].to_i
 				scores[player.id].save
 			else
-				scores[player.id].delete
+				if scores[player.id]
+					scores[player.id].delete
+				end
 			end
 		end
-		redirect_to bridge_scores_path, notice: "Scores updated for #{@date}"
+		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date), notice: "Scores updated for #{@date}"
 	end
 
 	def date
 		@date = params[:date].to_date
+		start_end_date()
 		@title = "Scores for #{@date}"
 		@scores = Hash.new
 		BridgeScore.where("date = ?", @date).each do |score|
@@ -164,6 +173,7 @@ class Bridge::ScoresController < ApplicationController
 	def player
 		@player = BridgePlayer.find(params[:id].to_i)
 		@title = "Scores for #{@player.name}"
+		start_end_date()
 		@scores = Hash.new
 		@dates = Hash.new
 		bridge_player_ids = BridgeScore.all.pluck('DISTINCT bridge_player_id')
@@ -243,6 +253,20 @@ private
 	def require_bridge
 		unless current_user_role('bridge')
 			redirect_to users_path, alert: "Inadequate permissions: BRIDGEPLAYERS"
+		end
+	end
+
+	def start_end_date
+		@today = Time.now.to_date
+		if params[:end_date]
+			@end_date = params[:end_date].to_date
+		else
+			@end_date = @today
+		end
+		if params[:start_date]
+			@start_date = params[:start_date].to_date
+		else
+			@start_date = @end_date - (13 * 7 - 1).days
 		end
 	end
 
