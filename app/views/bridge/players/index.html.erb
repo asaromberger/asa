@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to "New Player", new_bridge_player_path, class: 'btn btn-xs btn-primary' %>
+<%= link_to "New Player", new_bridge_player_path(start_date: @start_date, end_date: @end_date), class: 'btn btn-xs btn-primary' %>
 
 <table>
 
@@ -15,7 +15,7 @@
 <% @players.each do |player| %>
 	<tr>
 	<td><%= player.name %></td>
-	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id) %></td>
+	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id, start_date: @start_date, end_date: @end_date) %></td>
 	</tr>
 <% end %>
 </tbody>

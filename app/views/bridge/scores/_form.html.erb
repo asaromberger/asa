@@ -1,8 +1,11 @@
-<%= link_to "Add a Player", new_bridge_player_path(date: @date), class: 'btn btn-xs btn-primary' %>
+<%= link_to "Add a Player", new_bridge_player_path(date: @date, start_date: @start_date, end_date: @end_date), class: 'btn btn-xs btn-primary' %>
 
 <p>&nbsp;</p>
 
 <%= form_tag bridge_scores_path(id: 0), method: :post do %>
+
+	<%= hidden_field_tag :start_date, @start_date %>
+	<%= hidden_field_tag :end_date, @end_date %>
 
 	<%= select_date(@date, {prefix: :date}, {:class => 'date_select col-sm-2 col-xs-3'}) %>
 	<p>&nbsp;</p>
