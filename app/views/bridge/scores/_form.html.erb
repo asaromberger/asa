@@ -7,7 +7,7 @@
 	<%= hidden_field_tag :start_date, @start_date %>
 	<%= hidden_field_tag :end_date, @end_date %>
 
-	<%= select_date(@date, {prefix: :date}, {:class => 'date_select col-sm-2 col-xs-3'}) %>
+	<%= select_date(@date, {prefix: :date, start_year: 2017}, {:class => 'date_select col-sm-2 col-xs-3'}) %>
 	<p>&nbsp;</p>
 
 	<table>
