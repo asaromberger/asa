@@ -9,15 +9,15 @@ class Bridge::ScoresController < ApplicationController
 		@scores = Hash.new
 		start_end_date()
 		@date_list = []
-		date = BridgeScore.all.order('date').first
-		if date
-			date = date.date
+		dates = BridgeScore.all.order('date').pluck('DISTINCT date')
+		if dates.count > 0
+			date = dates[dates.count - 1]
 		else
 			date = Time.now.to_date
 		end
-		while(date <= @today)
-			@date_list.push(date)
-			date += 7.days
+		dates.each do |d|
+puts("==== #{d}")
+			@date_list.push(d)
 		end
 		@dates = Hash.new
 		bridge_player_ids = BridgeScore.all.pluck('DISTINCT bridge_player_id')
@@ -26,13 +26,11 @@ class Bridge::ScoresController < ApplicationController
 			@scores[player.id]['name'] = player.name
 			@scores[player.id]['score'] = Hash.new
 			@scores[player.id]['percent'] = Hash.new
-			@scores[player.id]['pair'] = Hash.new	# TEMP #
 		end
 		BridgeScore.where("date >= ? AND date <= ?", @start_date, @end_date).each do |score|
 			if score.score > 0
 				@dates[score.date] = true
 				@scores[score.bridge_player_id]['score'][score.date] = score.score
-				@scores[score.bridge_player_id]['pair'][score.date] = score.pair # TEMP #
 			end
 		end
 		@dates = @dates.sort_by { |date, value| date}
@@ -82,18 +80,6 @@ class Bridge::ScoresController < ApplicationController
 			i += 1
 			@right[pid]['rank'] = i
 		end
-		# TEMP
-		@recorded = Hash.new
-		@dates.each do |date, value|
-			@recorded[date] = 'RECORDED'
-			@scores.each do |pid, values|
-				if values['score'][date] && (! values['pair'][date] || values['pair'][date] <= 0)
-					@recorded[date] = ""
-					break
-				end
-			end
-		end
-		# END TEMP
 	end
 
 	# create/edit a date
