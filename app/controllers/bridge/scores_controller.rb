@@ -8,6 +8,11 @@ class Bridge::ScoresController < ApplicationController
 		@title = 'Scores'
 		@scores = Hash.new
 		start_end_date()
+		if params[:times]
+			@times = params[:times].to_i
+		else
+			@times = 1
+		end
 		@date_list = []
 		dates = BridgeScore.all.order('date').pluck('DISTINCT date')
 		if dates.count > 0
@@ -79,6 +84,11 @@ puts("==== #{d}")
 		@rating.each do |pid, score|
 			i += 1
 			@right[pid]['rank'] = i
+		end
+		@scores.each do |pid, values|
+			if @right[pid]['times'] < @times
+				@scores.delete(pid)
+			end
 		end
 	end
 
