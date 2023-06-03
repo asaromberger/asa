@@ -98,12 +98,10 @@ module ApplicationHelper
 	def filter(data)
 		@filters.each do |column, pattern|
 			if ! pattern.blank?
-puts("FILTER: #{column} # #{pattern}")
 				pattern = pattern.downcase
 				data.each do |id, values|
 					if values[column].blank? || ! values[column].to_s.downcase.match(pattern)
 						data.delete(id)
-puts("DELETE #{id}")
 					end
 				end
 			end

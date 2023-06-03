@@ -1,11 +1,11 @@
-class Bridge::ScoresController < ApplicationController
+class Bridge::PairsScoresController < ApplicationController
 
 	before_action :require_signed_in
 	before_action :require_bridge
 
 	# list
 	def index
-		@title = 'Scores'
+		@title = 'Pairs Scores'
 		@scores = Hash.new
 		start_end_date()
 		if params[:times]
@@ -24,68 +24,106 @@ class Bridge::ScoresController < ApplicationController
 			@date_list.push(d)
 		end
 		@dates = Hash.new
-		bridge_player_ids = BridgeScore.all.pluck('DISTINCT bridge_player_id')
-		BridgePlayer.where("id IN (?)", bridge_player_ids).order('name').each do |player|
-			@scores[player.id] = Hash.new
-			@scores[player.id]['name'] = player.name
-			@scores[player.id]['score'] = Hash.new
-			@scores[player.id]['percent'] = Hash.new
+		@players = Hash.new
+		BridgePlayer.all.each do |player|
+			@players[player.id] = player.name
 		end
+		# collect results[date][pair]['players'] = list
+		# collect results[date][pair]['soore'] = score
+		results = Hash.new
 		BridgeScore.where("date >= ? AND date <= ?", @start_date, @end_date).each do |score|
 			if score.score > 0
-				@dates[score.date] = true
-				@scores[score.bridge_player_id]['score'][score.date] = score.score
+				if results[score.date].blank?
+					results[score.date] = Hash.new
+					@dates[score.date] = 0
+				end
+				if results[score.date][score.pair].blank?
+					results[score.date][score.pair] = Hash.new
+					results[score.date][score.pair]['players'] = []
+				end
+				results[score.date][score.pair]['score'] = score.score
+				results[score.date][score.pair]['players'].push(@players[score.bridge_player_id])
 			end
 		end
-		@dates = @dates.sort_by { |date, value| date}
+		# reorder list to prevent A & B AND B & A
+		results.each do |date, pairs|
+			pairs.each do |pair, values|
+				values['players'] = values['players'].sort_by { |names| names.downcase }
+			end
+		end
+		# collect @scores[pair][date]['score'] = score
+		@scores = Hash.new
+		results.each do |date, pairs|
+			pairs.each do |pair, values|
+				team = ""
+				values['players'].each do |name|
+					if team == ""
+						team = name
+					else
+						team = "#{team} & #{name}"
+					end
+				end
+				if @scores[team].blank?
+					@scores[team] = Hash.new
+				end
+				if @scores[team][date].blank?
+					@scores[team][date] = Hash.new
+				end
+				@scores[team][date]['score'] = values['score']
+			end
+		end
+		# sort by pairs
+		@scores = @scores.sort_by { |name, values| name.downcase }
+		@dates = @dates.sort_by { |date, value| date }
+		# date (column) totals
 		@bottom = Hash.new
 		@dates.each do |date, value|
 			total_score = 0
-			players = 0
-			@scores.each do |pid, values|
-				if values['score'][date]
-					total_score += values['score'][date]
-					players += 1
+			teams = 0
+			@scores.each do |team, dates|
+				if dates[date] && dates[date]['score'] && dates[date]['score'] > 0
+					total_score += dates[date]['score']
+					teams += 1
 				end
 			end
-			max_score = total_score * 2 / players
-			@scores.each do |pid, values|
-				if values['score'][date]
-					values['percent'][date] = values['score'][date] * 100 / max_score
+			max_score = total_score * 2 / teams
+			@scores.each do |names, dates|
+				if dates[date] && dates[date]['score']
+					dates[date]['percent'] = dates[date]['score'] * 100 / max_score
 				end
 			end
 			@bottom[date] = Hash.new
-			@bottom[date]['players'] = players
+			@bottom[date]['players'] = teams
 			@bottom[date]['score'] = total_score
 		end
 		@right = Hash.new
 		@rating = Hash.new
-		@scores.each do |pid, values|
-			@right[pid] = Hash.new
-			@right[pid]['percent'] = 0
-			@right[pid]['times'] = 0
-			@dates.each do |date, value|
-				if values['percent'][date]
-					@right[pid]['percent'] += values['percent'][date]
-					@right[pid]['times'] += 1
+		@scores.each do |name, dates|
+			@right[name] = Hash.new
+			@right[name]['percent'] = 0
+			@right[name]['times'] = 0
+			dates.each do |date, values|
+				if values['percent']
+					@right[name]['percent'] += values['percent']
+					@right[name]['times'] += 1
 				end
 			end
-			if @right[pid]['times'] == 0
-				@right[pid]['percent'] = 0
-				@rating[pid] = 0
+			if @right[name]['times'] == 0
+				@right[name]['percent'] = 0
+				@rating[name] = 0
 			else
-				@right[pid]['percent'] /= @right[pid]['times']
-				@rating[pid] = @right[pid]['percent']
+				@right[name]['percent'] /= @right[name]['times']
+				@rating[name] = @right[name]['percent']
 			end
 		end
-		@rating = @rating.sort_by { |pid, score| -score }
+		@rating = @rating.sort_by { |name, score| -score }
 		i = 0
 		@rating.each do |pid, score|
 			i += 1
 			@right[pid]['rank'] = i
 		end
-		@scores.each do |pid, values|
-			if @right[pid]['times'] < @times
+		@scores.each do |name, dates|
+			if @right[name]['times'] < @times
 				@scores.delete(pid)
 			end
 		end
@@ -93,6 +131,7 @@ class Bridge::ScoresController < ApplicationController
 
 	# create/edit a date
 	def new
+	fail
 		@players = BridgePlayer.all.order('name')
 		start_end_date()
 		if params[:date]
@@ -110,6 +149,7 @@ class Bridge::ScoresController < ApplicationController
 	end
 
 	def create
+	fail
 		@date = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
 		start_end_date()
 		scores = Hash.new
@@ -136,6 +176,7 @@ class Bridge::ScoresController < ApplicationController
 	end
 
 	def date
+	fail
 		@date = params[:date].to_date
 		start_end_date()
 		@title = "Scores for #{@date}"
@@ -165,7 +206,8 @@ class Bridge::ScoresController < ApplicationController
 		@bottom['score'] = total_score
 	end
 
-	def player
+	def pair
+	fail
 		@player = BridgePlayer.find(params[:id].to_i)
 		@title = "Scores for #{@player.name}"
 		start_end_date()
@@ -227,20 +269,6 @@ class Bridge::ScoresController < ApplicationController
 			i += 1
 			@right[pid]['rank'] = i
 		end
-	end
-
-	def scores_export
-		players = Hash.new
-		BridgePlayer.all.each do |player|
-			players[player.id] = player.name
-		end
-		content = "Date,Player,Score,Pair\n"
-		BridgeScore.joins(:bridge_player).all.order('date, name').each do |score|
-			if ! score.score.blank? && score.score > 0
-				content = "#{content}#{score.date},#{players[score.bridge_player_id]},#{score.score},#{score.pair}\n"
-			end
-		end
-		send_data(content, type: 'application/csv', filename: 'Scores.csv', disposition: :inline)
 	end
 
 private

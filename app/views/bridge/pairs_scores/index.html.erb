@@ -1,0 +1,91 @@
+<h1><%= @title %></h1>
+<style>
+.on-top {
+	z-index: 99999 !important;
+}
+</style>
+
+<ul>
+<li>Click on a date to get a detailed report for that date</li>
+<li>Click on a player to get a detailed report for that player</li>
+</ul>
+
+<div class="dropdown col-sx-2 on-top">
+	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Start (<%= @start_date %>) <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<% @date_list.each do |date| %>
+			<li><%= link_to date, bridge_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class="dropdown col-sx-2 on-top">
+	<a href="#" data-toggle="dropdown" class="dropdown-toggle">End (<%= @end_date %>) <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<% @date_list.each do |date| %>
+			<li><%= link_to date, bridge_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th class='fixed-column'>Player</th>
+<% @dates.each do |date, value| %>
+	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
+<% end %>
+<th>Percent</th>
+<th>Rank</th>
+<th>Times</th>
+</tr>
+</thead>
+
+<tbody>
+<% @scores.each do |name, dates| %>
+	<tr>
+	<td class='fixed-column'><%= link_to name, bridge_score_player_path(id: name, start_date: @start_date, end_date: @end_date) %></td>
+	<% @dates.each do |date, junk| %>
+		<% if dates[date] %>
+			<% values = dates[date] %>
+			<% if values['score'] %>
+				<td><%= values['score'] %></td>
+				<td class='boldrightborder'><%= percent_fmt(values['percent']) %></td>
+			<% else %>
+				<td></td>
+				<td class='boldrightborder'></td>
+			<% end %>
+		<% else %>
+				<td></td>
+				<td class='boldrightborder'></td>
+		<% end %>
+	<% end %>
+	<td class='bold'><%= ((@right[name]['percent'] * 10).to_i.to_f / 10).to_s + '%' %></td>
+	<td class='bold'><%= @right[name]['rank'] %></td>
+	<td class='bold'><%= @right[name]['times'] %></td>
+	</tr>
+<% end %>
+
+<tr>
+<td class='fixed-column'>&nbsp;</td>
+<% @dates.each do |date, value| %>
+	<td class='bold boldrightborder' colspan=2></td>
+<% end %>
+</tr>
+<tr>
+<td class='fixed-column bold'>Teams</td>
+<% @dates.each do |date, value| %>
+	<td class='bold boldrightborder' colspan=2><%= @bottom[date]['players'] %></td>
+<% end %>
+</tr>
+<tr>
+<td class='fixed-column bold'>Score</td>
+<% @dates.each do |date, value| %>
+	<td class='bold boldrightborder' colspan=2><%= number_with_precision(@bottom[date]['score'], precision: 2) %></td>
+<% end %>
+</tr>
+
+</tbody>
+
+</table>

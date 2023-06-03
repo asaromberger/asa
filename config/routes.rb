@@ -24,11 +24,14 @@ Rails.application.routes.draw do
 	match '/bridge/score/player', to: 'bridge/scores#player', via: 'get', as: 'bridge_score_player'
 	match '//bridgescore/players_export', to: 'bridge/scores#players_export', via: 'get', as: 'bridge_score_players_export'
 	match '/bridge/score/scores_export', to: 'bridge/scores#scores_export', via: 'get', as: 'bridge_score_scores_export'
+	match '/bridge/pairs_score/date', to: 'bridge/pairs_scores#date', via: 'get', as: 'bridge_pairs_score_date'
+	match '/bridge/pairs_score/pair', to: 'bridge/pairs_scores#pair', via: 'get', as: 'bridge_pairs_score_pair'
 
 	namespace :bridge do
 		resources :import
 		resources :players
 		resources :scores
+		resources :pairs_scores
 	end
 
 	namespace :music do

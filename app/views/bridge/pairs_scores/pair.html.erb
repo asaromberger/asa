@@ -1,0 +1,41 @@
+<h1><%= @title %></h1>
+
+<p><%= link_to "Back", bridge_scores_path(start_date: @start_date, end_date: @end_date), class: 'btn btn-primary btn-xs' %></p>
+
+<p><%= link_to "Edit Player", edit_bridge_player_path(id: @player.id, start_date: @start_date, end_date: @end_date), class: 'btn btn-primary btn-xs' %></p>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Score</th>
+<th>Percent</th>
+</tr>
+</thead>
+
+<tbody>
+<% @dates.each do |date, value| %>
+	<% if @scores[@player.id]['score'][date] && @scores[@player.id]['score'][date] > 0 %>
+		<tr>
+		<td><%= date %></td>
+		<td><%= @scores[@player.id]['score'][date] %></td>
+		<td><%= percent_fmt(@scores[@player.id]['percent'][date]) %></td>
+		</tr>
+	<% end %>
+<% end %>
+
+<tr>
+<td class='bold'>Percent</td>
+<td></td>
+<td class='bold'><%= percent_fmt(@right[@player.id]['percent']) %></td>
+</tr>
+<tr>
+<td class='bold'>Rank</td>
+<td></td>
+<td class='bold'><%= @right[@player.id]['rank'] %></td>
+</tr>
+
+</tbody>
+
+</table>
