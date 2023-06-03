@@ -178,7 +178,7 @@ class Bridge::ScoresController < ApplicationController
 			@scores[player.id]['score'] = Hash.new
 			@scores[player.id]['percent'] = Hash.new
 		end
-		BridgeScore.all.each do |score|
+		BridgeScore.where("date >= ? and date <= ?", @start_date, @end_date).each do |score|
 			if score.score > 0
 				@dates[score.date] = true
 				@scores[score.bridge_player_id]['score'][score.date] = score.score

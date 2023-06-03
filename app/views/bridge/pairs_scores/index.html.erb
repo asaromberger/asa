@@ -14,7 +14,7 @@
 	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Start (<%= @start_date %>) <b class="caret"></b></a>
 	<ul class="dropdown-menu">
 		<% @date_list.each do |date| %>
-			<li><%= link_to date, bridge_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
+			<li><%= link_to date, bridge_pairs_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
 		<% end %>
 	</ul>
 </div>
@@ -23,7 +23,7 @@
 	<a href="#" data-toggle="dropdown" class="dropdown-toggle">End (<%= @end_date %>) <b class="caret"></b></a>
 	<ul class="dropdown-menu">
 		<% @date_list.each do |date| %>
-			<li><%= link_to date, bridge_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
+			<li><%= link_to date, bridge_pairs_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
 		<% end %>
 	</ul>
 </div>
@@ -32,9 +32,9 @@
 
 <thead>
 <tr>
-<th class='fixed-column'>Player</th>
+<th class='fixed-column'>Pair</th>
 <% @dates.each do |date, value| %>
-	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
+	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_pairs_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
 <% end %>
 <th>Percent</th>
 <th>Rank</th>
@@ -45,7 +45,7 @@
 <tbody>
 <% @scores.each do |name, dates| %>
 	<tr>
-	<td class='fixed-column'><%= link_to name, bridge_score_player_path(id: name, start_date: @start_date, end_date: @end_date) %></td>
+	<td class='fixed-column'><%= link_to name, bridge_pairs_score_pair_path(id: name, start_date: @start_date, end_date: @end_date) %></td>
 	<% @dates.each do |date, junk| %>
 		<% if dates[date] %>
 			<% values = dates[date] %>

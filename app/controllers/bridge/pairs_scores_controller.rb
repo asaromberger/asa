@@ -94,7 +94,7 @@ class Bridge::PairsScoresController < ApplicationController
 			end
 			@bottom[date] = Hash.new
 			@bottom[date]['players'] = teams
-			@bottom[date]['score'] = total_score
+			@bottom[date]['score'] = total_score * 2
 		end
 		@right = Hash.new
 		@rating = Hash.new
@@ -129,87 +129,51 @@ class Bridge::PairsScoresController < ApplicationController
 		end
 	end
 
-	# create/edit a date
-	def new
-	fail
-		@players = BridgePlayer.all.order('name')
-		start_end_date()
-		if params[:date]
-			@date = params[:date].to_date
-		else
-			@date = Time.now.to_date
-		end
-		@title = "Session #{@date}"
-		@scores = Hash.new
-		@pairs = Hash.new
-		BridgeScore.where("date = ?", @date).each do |score|
-			@scores[score.bridge_player_id] = score.score
-			@pairs[score.bridge_player_id] = score.pair
-		end
-	end
-
-	def create
-	fail
-		@date = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
-		start_end_date()
-		scores = Hash.new
-		BridgeScore.where("date = ?", @date).each do |score|
-			scores[score.bridge_player_id] = score
-		end
-		BridgePlayer.all.each do |player|
-			if params[:score][player.id.to_s] && params[:score][player.id.to_s].to_f > 0.0
-				if ! scores[player.id]
-					scores[player.id] = BridgeScore.new
-					scores[player.id].date = @date
-					scores[player.id].bridge_player_id = player.id
-				end
-				scores[player.id].score = params[:score][player.id.to_s].to_f
-				scores[player.id].pair = params[:pair][player.id.to_s].to_i
-				scores[player.id].save
-			else
-				if scores[player.id]
-					scores[player.id].delete
-				end
-			end
-		end
-		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date), notice: "Scores updated for #{@date}"
-	end
-
 	def date
-	fail
 		@date = params[:date].to_date
 		start_end_date()
 		@title = "Scores for #{@date}"
-		@scores = Hash.new
+		scores = Hash.new
+		names = Hash.new
 		BridgeScore.where("date = ?", @date).each do |score|
 			if score.score && score.score > 0
-				@scores[score.bridge_player_id] = Hash.new
-				@scores[score.bridge_player_id]['score'] = score.score
-				player = BridgePlayer.find(score.bridge_player_id)
-				@scores[score.bridge_player_id]['name'] = player.name
-				@scores[score.bridge_player_id]['pair'] = score.pair
+				scores[score.pair] = score.score
+				if names[score.pair]
+					names[score.pair] = "#{names[score.pair]} & #{BridgePlayer.find(score.bridge_player_id).name}"
+				else
+					names[score.pair] = BridgePlayer.find(score.bridge_player_id).name
+				end
 			end
 		end
-		players = @scores.count
+		@scores = Hash.new
+		names.each do |pair, name|
+			@scores[name] = Hash.new
+			@scores[name]['score'] = scores[pair]
+		end
 		total_score = 0
-		@scores.each do |pid, values|
+		@scores.each do |name, values|
 			total_score += values['score']
 		end
-		max_score = total_score * 2 / players
-		@scores.each do |pid, values|
+		max_score = total_score * 2 / @scores.count
+		@scores.each do |name, values|
+
 			values['percent'] = values['score'] * 100 / max_score
 		end
 		# @scores = @scores.sort_by { |pid, values| values['name'].downcase }
-		@scores = @scores.sort_by { |pid, values| [-values['score'], values['pair'], values['name'].downcase] }
+		@scores = @scores.sort_by { |name, values| -values['score'] }
 		@bottom = Hash.new
-		@bottom['players'] = players
-		@bottom['score'] = total_score
+		@bottom['players'] = @scores.count
+		@bottom['score'] = total_score * 2
 	end
 
 	def pair
-	fail
-		@player = BridgePlayer.find(params[:id].to_i)
-		@title = "Scores for #{@player.name}"
+		player1name = params[:id].sub(/ &.*/, '')
+		player1 = BridgePlayer.where("name = ?", player1name).first
+		player2name = params[:id].sub(/.*& /, '')
+		player2 = BridgePlayer.where("name = ?", player2name).first
+		@player = player1
+		@team = params[:id]
+		@title = "Scores for #{@team}"
 		start_end_date()
 		@scores = Hash.new
 		@dates = Hash.new
@@ -220,7 +184,7 @@ class Bridge::PairsScoresController < ApplicationController
 			@scores[player.id]['score'] = Hash.new
 			@scores[player.id]['percent'] = Hash.new
 		end
-		BridgeScore.all.each do |score|
+		BridgeScore.where("date >= ? and date <= ?", @start_date, @end_date).each do |score|
 			if score.score > 0
 				@dates[score.date] = true
 				@scores[score.bridge_player_id]['score'][score.date] = score.score
