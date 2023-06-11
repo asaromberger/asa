@@ -28,7 +28,7 @@
 <tbody>
 <% @whats.each do |id, values| %>
 	<tr>
-	<td><%= link_to values['what'], finance_expenses_whats_path(id: id, sort: @sort, filters: @filters), method: :get %></td>
+	<td><%= link_to values['what'], finance_expenses_what_path(id: id, sort: @sort, filters: @filters), method: :get %></td>
 	<td><%= values['ctype'] %></td>
 	<td><%= values['category'] %></td>
 	<td><%= values['subcategory'] %></td>
