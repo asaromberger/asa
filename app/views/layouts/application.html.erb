@@ -6,9 +6,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", media: 'all', 'data-turbo-track': 'reload' %>
-	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_importmap_tags %>
+    <%#= stylesheet_link_tag "application", media: 'all', 'data-turbo-track': 'reload' %>
+	<%#= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%#= javascript_importmap_tags %>
+	<link rel='stylesheet' href='/assets/custome.css'/>
 	<script src='/assets/application.js' data-turbolinks-track="reload"></script>
 	<script src='/assets/custome.js' data-turbolinks-track="reload"></script>
 	<%= yield(:head) %>

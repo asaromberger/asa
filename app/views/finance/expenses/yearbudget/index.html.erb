@@ -45,27 +45,27 @@
 			<td><%= tcat %></td>
 			<% tcat = '' %>
 			<% if subcat == '~' %>
-				<% tclass = 'subtotal' %>
+				<% tclass = 'subtotal ' %>
 				<td class='<%= tclass %>'><%= 'Total' %></td>
 			<% else %>
 				<% tclass = "" %>
 				<td><%= link_to subcat, finance_expenses_runningbudget_path(id: 0, fromyear: @year, toyear: @year, type: ctype, cat: cat, subcat: subcat) %></td>
 			<% end %>
 			<% 12.times do |month| %>
-				<td class='<%= tclass %> number' <%= tclass %> ><%= number_with_precision(subcatdata[month + 1], precision: 2) %></td>
+				<td class='<%= tclass %>number'><%= number_with_precision(subcatdata[month + 1], precision: 2) %></td>
 			<% end %>
-			<td class='<%= tclass %> number' <%= tclass %> ><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
-			<td class='<%= tclass %> number' <%= tclass %> ><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
+			<td class='<%= tclass %>number'><%= number_with_precision(subcatdata['total'], precision: 2) %></td>
+			<td class='<%= tclass %>number'><%= number_with_precision(subcatdata['average'], precision: 2) %></td>
 			</tr>
 		<% end %>
 	<% end %>
 	<tr>
 	<td colspan=2 class='totaltitle'>TOTAL</td>
 	<% 12.times do |month| %>
-		<td class='total'><%= number_with_precision(@ctotals[ctype][month + 1], precision: 2) %></td>
+		<td class='total number'><%= number_with_precision(@ctotals[ctype][month + 1], precision: 2) %></td>
 	<% end %>
-	<td class='total'><%= number_with_precision(@ctotals[ctype]['total'], precision: 2) %></td>
-	<td class='total'><%= number_with_precision(@ctotals[ctype]['average'], precision: 2) %></td>
+	<td class='total number'><%= number_with_precision(@ctotals[ctype]['total'], precision: 2) %></td>
+	<td class='total number'><%= number_with_precision(@ctotals[ctype]['average'], precision: 2) %></td>
 	</tr>
 	</tbody>
 
