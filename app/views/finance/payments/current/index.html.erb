@@ -7,6 +7,7 @@
 <th>Date</th>
 <th>Type</th>
 <th>What</th>
+<th>Amount</th>
 <th>Account</th>
 <th>Note</th>
 <th>Action</th>
@@ -24,6 +25,7 @@
 	<td class="<%= hilite %>"><%= current.date %></td>
 	<td><%= current.ptype %></td>
 	<td><%= link_to current.what, finance_payments_current_path(id: current.id) %></td>
+	<td><%= number_with_precision(current.amount, precision: 2) %></td>
 	<% if current.from.blank? || current.from == 0 %>
 		<td><%= current.to %></td>
 	<% else %>

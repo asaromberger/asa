@@ -10,6 +10,7 @@
 <tr>
 <th>Date</th>
 <th>What</th>
+<th>Amount</th>
 <th>From Account</th>
 <th>Day of Month</th>
 <th>Month Frequency</th>
@@ -24,6 +25,7 @@
 	<tr>
 	<td><%= bill.date %></td>
 	<td><%= bill.what %></td>
+	<td><%= number_with_precision(bill.amount, precision: 2) %></td>
 	<td><%= bill.from %></td>
 	<td><%= bill.dom %></td>
 	<td><%= bill.inc %></td>
