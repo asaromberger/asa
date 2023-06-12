@@ -1,0 +1,33 @@
+<h1><%= @title %></h1>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>What</th>
+<th>Account</th>
+<th>Note</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+<% @currents.each do |current| %>
+	<tr>
+	<td><%= current.date %></td>
+	<td><%= current.ptype %></td>
+	<td><%= link_to current.what, finance_payments_current_path(id: current.id) %></td>
+	<% if current.from.blank? || current.from == 0 %>
+		<td><%= current.to %></td>
+	<% else %>
+		<td><%= current.from %></td>
+	<% end %>
+	<td><%= current.note %></td>
+	<td><%= link_to 'Action', finance_payments_current_path(id: current.id), method: :delete, data: {confirm: "Take Action on #{current.what}" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

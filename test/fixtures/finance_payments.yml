@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2023-06-11
+  what: MyText
+  amount: 1.5
+  from: MyText
+  to: MyText
+  remaining: 1.5
+  rate: 1.5
+  dom: 1
+  inc: 1
+  note: MyText
+
+two:
+  date: 2023-06-11
+  what: MyText
+  amount: 1.5
+  from: MyText
+  to: MyText
+  remaining: 1.5
+  rate: 1.5
+  dom: 1
+  inc: 1
+  note: MyText

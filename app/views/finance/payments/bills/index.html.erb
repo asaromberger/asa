@@ -1,0 +1,37 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Bill', new_finance_payments_bill_path, class: 'btn btn-xs btn-primary' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>What</th>
+<th>From Account</th>
+<th>Day of Month</th>
+<th>Month Frequency</th>
+<th>Note</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @bills.each do |bill| %>
+	<tr>
+	<td><%= bill.date %></td>
+	<td><%= bill.what %></td>
+	<td><%= bill.from %></td>
+	<td><%= bill.dom %></td>
+	<td><%= bill.inc %></td>
+	<td><%= bill.note %></td>
+	<td><%= link_to 'Edit', edit_finance_payments_bill_path(id: bill.id) %></td>
+	<td><%= link_to 'Delete', finance_payments_bill_path(id: bill.id), method: :delete, data: {confirm: "Delete #{bill.what}" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
