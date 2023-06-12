@@ -44,7 +44,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@year = params[:year]
 		@item = FinanceItem.new
 		set_sort_filter(columnlist())
-		if @year == Time.now.year
+		if @year.to_i == Time.now.year
 			@item.date = Time.now.to_date
 		else
 			@item.date = Date.new(@year.to_i, 1, 1)

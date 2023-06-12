@@ -1,0 +1,37 @@
+<%= form_for(@cd, url: url, html: {method: method}) do |form| %>
+
+	<%= form.hidden_field :ptype %>
+
+	<%= form.label :date, class: 'col-md-2' %>
+	<%= form.date_select :date, {}, {class: 'col-md-2'} %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label :what, class: 'col-md-2' %>
+	<%= form.text_field :what, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label "Amount", class: 'col-md-2' %>
+	<%= form.number_field :amount, step: 0.01, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label :rate, class: 'col-md-2' %>
+	<%= form.number_field :rate, step: 0.01, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label "Which Account", class: 'col-md-2' %>
+	<%= form.text_field :to, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label :note, class: 'col-md-2' %>
+	<%= form.text_field :note, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.submit "#{type} CD", class: 'btn btn-primary col-md-3' %>
+<% end %>
+

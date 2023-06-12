@@ -1,0 +1,37 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New CD', new_finance_payments_cd_path, class: 'btn btn-xs btn-primary' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>What</th>
+<th>Value</th>
+<th>Rate</th>
+<th>In Account</th>
+<th>Note</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @cds.each do |cd| %>
+	<tr>
+	<td><%= cd.date %></td>
+	<td><%= cd.what %></td>
+	<td><%= number_with_precision(cd.amount, precision: 2) %></td>
+	<td><%= number_with_precision(cd.rate, precision: 2) %></td>
+	<td><%= cd.to %></td>
+	<td><%= cd.note %></td>
+	<td><%= link_to 'Edit', edit_finance_payments_cd_path(id: cd.id) %></td>
+	<td><%= link_to 'Delete', finance_payments_cd_path(id: cd.id), method: :delete, data: {confirm: "Delete #{cd.what}" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

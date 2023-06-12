@@ -1,0 +1,43 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Transfer', new_finance_payments_transfer_path, class: 'btn btn-xs btn-primary' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>What</th>
+<th>Amount per month</th>
+<th>From</th>
+<th>To</th>
+<th>Remaining</th>
+<th>Day of Month</th>
+<th>Month Frequency</th>
+<th>Note</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @transfers.each do |transfer| %>
+	<tr>
+	<td><%= transfer.date %></td>
+	<td><%= transfer.what %></td>
+	<td><%= number_with_precision(transfer.amount, precision: 2) %></td>
+	<td><%= transfer.from %></td>
+	<td><%= transfer.to %></td>
+	<td><%= number_with_precision(transfer.remaining, precision: 2) %></td>
+	<td><%= transfer.dom %></td>
+	<td><%= transfer.inc %></td>
+	<td><%= transfer.note %></td>
+	<td><%= link_to 'Edit', edit_finance_payments_transfer_path(id: transfer.id) %></td>
+	<td><%= link_to 'Delete', finance_payments_transfer_path(id: transfer.id), method: :delete, data: {confirm: "Delete #{transfer.what}" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
