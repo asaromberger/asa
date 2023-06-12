@@ -6,6 +6,7 @@ class Finance::Payments::CurrentController < ApplicationController
 	def index
 		@title = "Current Actions"
 		@currents = FinancePayment.all.order('date')
+		@today = Time.now.to_date
 	end
 
 	def show

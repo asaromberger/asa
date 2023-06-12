@@ -15,8 +15,13 @@
 
 <tbody>
 <% @currents.each do |current| %>
+	<% if current.date < @today + 7.day %>
+		<% hilite = 'current-hilite' %>
+	<% else %>
+		<% hilite = '' %>
+	<% end %>
 	<tr>
-	<td><%= current.date %></td>
+	<td class="<%= hilite %>"><%= current.date %></td>
 	<td><%= current.ptype %></td>
 	<td><%= link_to current.what, finance_payments_current_path(id: current.id) %></td>
 	<% if current.from.blank? || current.from == 0 %>
