@@ -32,7 +32,6 @@ class Finance::Payments::CurrentController < ApplicationController
 			@results['From'] = @current.from
 			@results['To'] = @current.to
 			@results['Remaining'] = precision(@current.remaining, 2)
-			@results['Day of Month'] = @current.dom
 			@results['Month Frequenty'] = @current.inc
 			@results['Note'] = @current.note
 		else

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_11_191356) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_14_183251) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -100,7 +100,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_11_191356) do
     t.text "to"
     t.float "remaining"
     t.float "rate"
-    t.integer "dom"
     t.integer "inc"
     t.text "note"
     t.datetime "created_at", null: false
