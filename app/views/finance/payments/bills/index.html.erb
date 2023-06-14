@@ -12,7 +12,6 @@
 <th>What</th>
 <th>Amount</th>
 <th>From Account</th>
-<th>Day of Month</th>
 <th>Month Frequency</th>
 <th>Note</th>
 <th>Edit</th>
@@ -27,7 +26,6 @@
 	<td><%= bill.what %></td>
 	<td><%= number_with_precision(bill.amount, precision: 2) %></td>
 	<td><%= bill.from %></td>
-	<td><%= bill.dom %></td>
 	<td><%= bill.inc %></td>
 	<td><%= bill.note %></td>
 	<td><%= link_to 'Edit', edit_finance_payments_bill_path(id: bill.id) %></td>

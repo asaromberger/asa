@@ -48,7 +48,7 @@ class Finance::Payments::TransfersController < ApplicationController
 private
 	
 	def transfer_params
-		params.require(:finance_payment).permit(:ptype, :date, :what, :amount, :from, :to, :remaining, :dom, :inc, :note)
+		params.require(:finance_payment).permit(:ptype, :date, :what, :amount, :from, :to, :remaining, :inc, :note)
 	end
 
 	def require_payments

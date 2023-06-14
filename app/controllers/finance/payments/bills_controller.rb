@@ -48,7 +48,7 @@ class Finance::Payments::BillsController < ApplicationController
 private
 	
 	def bill_params
-		params.require(:finance_payment).permit(:ptype, :date, :what, :amount, :from, :dom, :inc, :note)
+		params.require(:finance_payment).permit(:ptype, :date, :what, :amount, :from, :inc, :note)
 	end
 
 	def require_payments

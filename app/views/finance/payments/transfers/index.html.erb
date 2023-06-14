@@ -14,7 +14,6 @@
 <th>From</th>
 <th>To</th>
 <th>Remaining</th>
-<th>Day of Month</th>
 <th>Month Frequency</th>
 <th>Note</th>
 <th>Edit</th>
@@ -31,7 +30,6 @@
 	<td><%= transfer.from %></td>
 	<td><%= transfer.to %></td>
 	<td><%= number_with_precision(transfer.remaining, precision: 2) %></td>
-	<td><%= transfer.dom %></td>
 	<td><%= transfer.inc %></td>
 	<td><%= transfer.note %></td>
 	<td><%= link_to 'Edit', edit_finance_payments_transfer_path(id: transfer.id) %></td>
