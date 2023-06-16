@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_14_183251) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_191421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -92,21 +92,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_14_183251) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_payments", force: :cascade do |t|
-    t.date "date"
-    t.text "what"
-    t.float "amount"
-    t.text "from"
-    t.text "to"
-    t.float "remaining"
-    t.float "rate"
-    t.integer "inc"
-    t.text "note"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "ptype"
-  end
-
   create_table "finance_rebalance_maps", force: :cascade do |t|
     t.integer "finance_rebalance_type_id"
     t.integer "finance_account_id"
@@ -126,6 +111,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_14_183251) do
     t.integer "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "finance_trackings", force: :cascade do |t|
+    t.date "date"
+    t.text "what"
+    t.float "amount"
+    t.text "from"
+    t.text "to"
+    t.float "remaining"
+    t.float "rate"
+    t.integer "inc"
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "ptype"
   end
 
   create_table "finance_what_maps", force: :cascade do |t|

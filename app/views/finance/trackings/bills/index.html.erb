@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Bill', new_finance_payments_bill_path, class: 'btn btn-xs btn-primary' %>
+<%= link_to 'New Bill', new_finance_trackings_bill_path, class: 'btn btn-xs btn-primary' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -28,8 +28,8 @@
 	<td><%= bill.from %></td>
 	<td><%= bill.inc %></td>
 	<td><%= bill.note %></td>
-	<td><%= link_to 'Edit', edit_finance_payments_bill_path(id: bill.id) %></td>
-	<td><%= link_to 'Delete', finance_payments_bill_path(id: bill.id), method: :delete, data: {confirm: "Delete #{bill.what}" } %></td>
+	<td><%= link_to 'Edit', edit_finance_trackings_bill_path(id: bill.id) %></td>
+	<td><%= link_to 'Delete', finance_trackings_bill_path(id: bill.id), method: :delete, data: {confirm: "Delete #{bill.what}" } %></td>
 	</tr>
 <% end %>
 </tbody>

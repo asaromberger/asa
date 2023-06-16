@@ -97,8 +97,8 @@ Rails.application.routes.draw do
 			resources :summary
 			resources :summary_types
 		end
-		namespace :payments do
-			resources :current
+		namespace :trackings do
+			resources :trackings
 			resources :transfers
 			resources :cds
 			resources :bills

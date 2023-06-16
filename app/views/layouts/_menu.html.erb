@@ -58,8 +58,8 @@
 				<%= render 'layouts/menu_finance_admin' %>
 			<% end %>
 
-			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_payments') %>
-				<%= render 'layouts/menu_finance_payments' %>
+			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_trackings') %>
+				<%= render 'layouts/menu_finance_trackings' %>
 			<% end %>
 
 			<% if signed_in? && current_user.application == 'finance' && current_user_role('finance_investments') %>
