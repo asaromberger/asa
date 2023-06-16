@@ -1,0 +1,40 @@
+<h1><%= @title %></h1>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>What</th>
+<th>Amount</th>
+<th>Account</th>
+<th>Note</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+<% @trackings.each do |tracking| %>
+	<% if tracking.date < @today + 7.day %>
+		<% hilite = 'tracking-hilite' %>
+	<% else %>
+		<% hilite = '' %>
+	<% end %>
+	<tr>
+	<td class="<%= hilite %>"><%= tracking.date %></td>
+	<td><%= tracking.ptype %></td>
+	<td><%= link_to tracking.what, finance_trackings_tracking_path(id: tracking.id) %></td>
+	<td><%= number_with_precision(tracking.amount, precision: 2) %></td>
+	<% if tracking.from.blank? || tracking.from == 0 %>
+		<td><%= tracking.to %></td>
+	<% else %>
+		<td><%= tracking.from %></td>
+	<% end %>
+	<td><%= tracking.note %></td>
+	<td><%= link_to 'Action', finance_trackings_tracking_path(id: tracking.id), method: :delete, data: {confirm: "Take Action on #{tracking.what}" } %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

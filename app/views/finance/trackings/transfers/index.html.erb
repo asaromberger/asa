@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Transfer', new_finance_payments_transfer_path, class: 'btn btn-xs btn-primary' %>
+<%= link_to 'New Transfer', new_finance_trackings_transfer_path, class: 'btn btn-xs btn-primary' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -32,8 +32,8 @@
 	<td><%= number_with_precision(transfer.remaining, precision: 2) %></td>
 	<td><%= transfer.inc %></td>
 	<td><%= transfer.note %></td>
-	<td><%= link_to 'Edit', edit_finance_payments_transfer_path(id: transfer.id) %></td>
-	<td><%= link_to 'Delete', finance_payments_transfer_path(id: transfer.id), method: :delete, data: {confirm: "Delete #{transfer.what}" } %></td>
+	<td><%= link_to 'Edit', edit_finance_trackings_transfer_path(id: transfer.id) %></td>
+	<td><%= link_to 'Delete', finance_trackings_transfer_path(id: transfer.id), method: :delete, data: {confirm: "Delete #{transfer.what}" } %></td>
 	</tr>
 <% end %>
 </tbody>

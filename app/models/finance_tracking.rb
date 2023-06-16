@@ -1,0 +1,2 @@
+class FinanceTracking < ApplicationRecord
+end

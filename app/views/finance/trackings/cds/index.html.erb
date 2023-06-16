@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New CD', new_finance_payments_cd_path, class: 'btn btn-xs btn-primary' %>
+<%= link_to 'New CD', new_finance_trackings_cd_path, class: 'btn btn-xs btn-primary' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -28,8 +28,8 @@
 	<td><%= number_with_precision(cd.rate, precision: 2) %></td>
 	<td><%= cd.to %></td>
 	<td><%= cd.note %></td>
-	<td><%= link_to 'Edit', edit_finance_payments_cd_path(id: cd.id) %></td>
-	<td><%= link_to 'Delete', finance_payments_cd_path(id: cd.id), method: :delete, data: {confirm: "Delete #{cd.what}" } %></td>
+	<td><%= link_to 'Edit', edit_finance_trackings_cd_path(id: cd.id) %></td>
+	<td><%= link_to 'Delete', finance_trackings_cd_path(id: cd.id), method: :delete, data: {confirm: "Delete #{cd.what}" } %></td>
 	</tr>
 <% end %>
 </tbody>
