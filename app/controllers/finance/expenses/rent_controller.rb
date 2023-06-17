@@ -12,11 +12,11 @@ class Finance::Expenses::RentController < ApplicationController
 		if params[:toyear]
 			@toyear = params[:toyear]
 		else
-			@toyear = FinanceItem.all.order('date DESC').first.date.year
+			@toyear = FinanceExpensesItem.all.order('date DESC').first.date.year
 		end
 		@title = "Rents from #{@fromyear} to #{@toyear}"
 		@pickyears = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@pickyears.push(year.to_i)
 		end
 		@pickyears = @pickyears.sort
@@ -42,7 +42,7 @@ class Finance::Expenses::RentController < ApplicationController
 			end
 		end
 		# accumulate rents by unit/year/month
-		FinanceItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", unitids, @fromyear, @toyear).order('finance_what_id, date').each do |item|
+		FinanceExpensesItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", unitids, @fromyear, @toyear).order('finance_what_id, date').each do |item|
 			year = item.date.year
 			month = item.date.month
 			unit = item.finance_what.what

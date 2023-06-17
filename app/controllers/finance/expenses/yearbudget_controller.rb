@@ -11,7 +11,7 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 		end
 		@title = "#{@year} Budget"
 		@years = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@years.push(year.to_i)
 		end
 		@years = @years.sort.reverse
@@ -36,7 +36,7 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 		# @data[ctype][category][subcategory][month]
 		@data = Hash.new
 		@ctotals = Hash.new
-		FinanceItem.where("EXTRACT(year FROM date) = ?", @year).each do |item|
+		FinanceExpensesItem.where("EXTRACT(year FROM date) = ?", @year).each do |item|
 			ctype = ctypes[whatcatids[item.finance_what_id]]
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
@@ -123,7 +123,7 @@ class Finance::Expenses::YearbudgetController < ApplicationController
 			what_ids.push(what.id)
 			@whats[what.id] = what.what
 		end
-		@items = FinanceItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
+		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 		render 'finance/expenses/runningbudget/show'
 	end
 

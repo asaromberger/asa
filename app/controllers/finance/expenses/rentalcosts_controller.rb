@@ -12,11 +12,11 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		if params[:toyear]
 			@toyear = params[:toyear]
 		else
-			@toyear = FinanceItem.all.order('date DESC').first.date.year
+			@toyear = FinanceExpensesItem.all.order('date DESC').first.date.year
 		end
 		@title = "Rental Costs from #{@fromyear} to #{@toyear}"
 		@pickyears = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@pickyears.push(year.to_i)
 		end
 		@pickyears = @pickyears.sort
@@ -42,7 +42,7 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		end
 		# @data[category][subcategory][year]
 		@data = Hash.new
-		FinanceItem.joins(:finance_what => :finance_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
+		FinanceExpensesItem.joins(:finance_what => :finance_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
 			if subcategory == 'Security Deposit'
@@ -103,7 +103,7 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		@toyear = params[:toyear]
 		category_id = FinanceCategory.where("ctype = 'rental' AND category = ? AND subcategory = ?", params[:category], params['subcategory']).pluck('id').first
 		what_ids = FinanceWhat.where("finance_category_id = ?", category_id).pluck('DISTINCT id')
-		@items = FinanceItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
+		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 	end
 
 private

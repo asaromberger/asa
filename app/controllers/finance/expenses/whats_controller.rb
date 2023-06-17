@@ -49,7 +49,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		@what = FinanceWhat.find(params[:id])
 		set_sort_filter(columnlist())
 		@title = "Where is '#{@what.what}'"
-		@items = FinanceItem.where("finance_what_id = ?", @what.id).order('date')
+		@items = FinanceExpensesItem.where("finance_what_id = ?", @what.id).order('date')
 	end
 
 	def remap
@@ -74,9 +74,9 @@ class Finance::Expenses::WhatsController < ApplicationController
 			map.save
 		end
 		count = 0
-		FinanceItem.where("finance_what_id = ?", @id).count
+		FinanceExpensesItem.where("finance_what_id = ?", @id).count
 		# update Items
-		FinanceItem.where("finance_what_id = ?", @id).each do |item|
+		FinanceExpensesItem.where("finance_what_id = ?", @id).each do |item|
 			item.finance_what_id = @newid
 			item.save
 			count += 1
@@ -88,7 +88,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 	def destroy
 		@what = FinanceWhat.find(params[:id])
 		set_sort_filter(columnlist())
-		if FinanceItem.where("finance_what_id = ?", @what.id).count > 0
+		if FinanceExpensesItem.where("finance_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by an Item"
 		elsif FinanceWhatMap.where("finance_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by a WhatMap"

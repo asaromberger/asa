@@ -11,7 +11,7 @@ class Finance::Expenses::TaxesController < ApplicationController
 		end
 		@title = "#{@year} Taxes"
 		@years = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@years.push(year.to_i)
 		end
 		@years = @years.sort.reverse
@@ -37,7 +37,7 @@ class Finance::Expenses::TaxesController < ApplicationController
 		taxcategoryids = FinanceCategory.where("(tax IS NOT NULL AND tax != '') OR ctype = 'rental'").pluck('DISTINCT id')
 		# @data[ctype][category][subcategory][tax]
 		@data = Hash.new
-		FinanceItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", @year, taxcategoryids).each do |item|
+		FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", @year, taxcategoryids).each do |item|
 			ctype = ctypes[whatcatids[item.finance_what_id]]
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
@@ -67,7 +67,7 @@ class Finance::Expenses::TaxesController < ApplicationController
 	def show
 		@title = "Taxes for #{params[:year]} for #{params[:ctype]}/#{params[:cat]}/#{params[:subcat]}/#{params[:tax]}"
 		categoryids = FinanceCategory.where("ctype = ? AND category = ? AND subcategory = ? AND tax = ?", params[:ctype], params[:cat], params[:subcat], params[:tax]).pluck('DISTINCT id')
-		@items = FinanceItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", params[:year], categoryids).order('date')
+		@items = FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", params[:year], categoryids).order('date')
 		@summary = Hash.new
 		@items.each do |item|
 			amount = item.amount
