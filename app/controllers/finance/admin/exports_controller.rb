@@ -68,7 +68,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		end
 
 		# items           whats
-		FinanceItem.all.order('id').each do |map|
+		FinanceExpensesItem.all.order('id').each do |map|
 			content += "\"item\",\"#{map.date}\",\"#{map.pm}\",\"#{map.checkno}\",\"#{whats[map.finance_what_id]}\",\"#{map.amount}\"\n"
 		end
 

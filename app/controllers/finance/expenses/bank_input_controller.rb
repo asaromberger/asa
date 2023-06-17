@@ -245,12 +245,12 @@ class Finance::Expenses::BankInputController < ApplicationController
 				else
 					newwhat = what
 				end
-				item = FinanceItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what = ? AND amount = ?", date, pm, check, newwhat, amount)
+				item = FinanceExpensesItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what = ? AND amount = ?", date, pm, check, newwhat, amount)
 				if whatmap > 0
 					if item.count > 0
 						item = item.first
 					else
-						item = FinanceItem.new
+						item = FinanceExpensesItem.new
 						item.date = date
 						item.pm = pm
 						item.checkno = check
@@ -276,7 +276,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 			FinanceWhatMap.where("whatmap = ?", what).each do |map|
 				whatlist.push(map.finance_what.what)
 			end
-			item = FinanceItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what IN (?) AND amount = ?", date, pm, check, whatlist, amount)
+			item = FinanceExpensesItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what IN (?) AND amount = ?", date, pm, check, whatlist, amount)
 			if item.count > 0
 				@exist = @exist + 1
 				input.delete

@@ -12,11 +12,11 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		if params[:toyear]
 			@toyear = params[:toyear]
 		else
-			@toyear = FinanceItem.all.order('date DESC').first.date.year
+			@toyear = FinanceExpensesItem.all.order('date DESC').first.date.year
 		end
 		@title = "Running Budget from #{@fromyear} to #{@toyear}"
 		@pickyears = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@pickyears.push(year.to_i)
 		end
 		@pickyears = @pickyears.sort
@@ -45,7 +45,7 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		# @data[ctype][category][subcategory][year]
 		@data = Hash.new
 		@ctotals = Hash.new
-		FinanceItem.where("EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
+		FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
 			ctype = ctypes[whatcatids[item.finance_what_id]]
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
@@ -132,7 +132,7 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 			what_ids.push(what.id)
 			@whats[what.id] = what.what
 		end
-		@items = FinanceItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
+		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 		render 'finance/expenses/runningbudget/show'
 	end
 

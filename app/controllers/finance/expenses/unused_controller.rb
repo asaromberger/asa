@@ -7,7 +7,7 @@ class Finance::Expenses::UnusedController < ApplicationController
 		@title = 'Unused'
 		category_ids = FinanceWhat.all.pluck('DISTINCT finance_category_id')
 		@categories = FinanceCategory.where("id NOT IN (?)", category_ids).order('ctype, category, subcategory')
-		item_what_ids = FinanceItem.all.pluck('DISTINCT finance_what_id')
+		item_what_ids = FinanceExpensesItem.all.pluck('DISTINCT finance_what_id')
 		what_maps_what_ids = FinanceWhatMap.all.pluck('DISTINCT finance_what_id')
 		@whats = FinanceWhat.where("id NOT IN (?) AND id NOT IN (?)", item_what_ids, what_maps_what_ids).order('what')
 	end
@@ -23,7 +23,7 @@ class Finance::Expenses::UnusedController < ApplicationController
 			end
 		elsif params[:table] == 'what'
 			what = FinanceWhat.find(params[:id])
-			if FinanceItem.where("finance_what_id = ?", what.id).count > 0
+			if FinanceExpensesItem.where("finance_what_id = ?", what.id).count > 0
 				redirect_to finance_expenses_unused_index_path, alert: "What in use by Item: #{what.what}"
 			elsif FinanceWhatMap.where("finance_what_id = ?", what.id).count > 0
 				redirect_to finance_expenses_unused_index_path, alert: "What in use by WhatMap: #{what.what}"

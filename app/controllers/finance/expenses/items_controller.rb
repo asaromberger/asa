@@ -11,7 +11,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 		end
 		@title = "#{@year} Expenses"
 		@years = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@years.push(year.to_i)
 		end
 		@years = @years.sort.reverse
@@ -42,7 +42,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 	def new
 		@title = 'New Item'
 		@year = params[:year]
-		@item = FinanceItem.new
+		@item = FinanceExpensesItem.new
 		set_sort_filter(columnlist())
 		if @year.to_i == Time.now.year
 			@item.date = Time.now.to_date
@@ -54,7 +54,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 	end
 
 	def create
-		@item = FinanceItem.new(item_params)
+		@item = FinanceExpensesItem.new(item_params)
 		set_sort_filter(columnlist())
 		@year = params[:year]
 		if @item.save
@@ -67,14 +67,14 @@ class Finance::Expenses::ItemsController < ApplicationController
 	def edit
 		@title = 'Edit Item'
 		@year = params[:year]
-		@item = FinanceItem.find(params[:id])
+		@item = FinanceExpensesItem.find(params[:id])
 		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
 		@year = params[:year]
-		@item = FinanceItem.find(params[:id])
+		@item = FinanceExpensesItem.find(params[:id])
 		set_sort_filter(columnlist())
 		if @item.update(item_params)
 			redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: 'Item Updated'
@@ -85,7 +85,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 
 	def destroy
 		@year = params[:year]
-		@item = FinanceItem.find(params[:id])
+		@item = FinanceExpensesItem.find(params[:id])
 		set_sort_filter(columnlist())
 		@item.delete
 		redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
@@ -94,7 +94,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 private
 
 	def item_params
-		params.require(:finance_item).permit(:date, :pm, :checkno, :finance_what_id, :amount)
+		params.require(:finance_expenses_item).permit(:date, :pm, :checkno, :finance_what_id, :amount)
 	end
 
 	def require_expenses
@@ -109,7 +109,7 @@ private
 
 	def get_items
 		items = Hash.new
-		FinanceItem.where("EXTRACT(year FROM date) = ?", @year).order('date').each do |item|
+		FinanceExpensesItem.where("EXTRACT(year FROM date) = ?", @year).order('date').each do |item|
 			items[item.id] = Hash.new
 			items[item.id]['date'] = item.date
 			items[item.id]['pm'] = item.pm

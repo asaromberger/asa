@@ -233,7 +233,7 @@ class Finance::Admin::ImportController < ApplicationController
 				end
 				finance_what_ids[fw.what] = fw.id
 			elsif line[0] == 'item'
-				fi = FinanceItem.where("date = ? AND pm = ? AND finance_what_id = ? AND amount = ?", line[1], line[2], finance_what_ids[line[4]], line[5]).first
+				fi = FinanceExpensesItem.where("date = ? AND pm = ? AND finance_what_id = ? AND amount = ?", line[1], line[2], finance_what_ids[line[4]], line[5]).first
 				if ! fi
 					fi = FinanceItem.new
 					fi.date = line[1]

@@ -24,7 +24,7 @@ class Finance::Expenses::TransfersController < ApplicationController
 			taxes[category.id] = category.tax
 		end
 		@transfers = Hash.new
-		FinanceItem.joins(:finance_what).where("lower(what) LIKE '%transfer%'").order('date').each do |transfer|
+		FinanceExpensesItem.joins(:finance_what).where("lower(what) LIKE '%transfer%'").order('date').each do |transfer|
 			@transfers[transfer.id] = Hash.new
 			@transfers[transfer.id]['date'] = transfer.date
 			@transfers[transfer.id]['pm'] = transfer.pm

@@ -12,11 +12,11 @@ class Finance::Expenses::DonationsController < ApplicationController
 		if params[:toyear]
 			@toyear = params[:toyear]
 		else
-			@toyear = FinanceItem.all.order('date DESC').first.date.year
+			@toyear = FinanceExpensesItem.all.order('date DESC').first.date.year
 		end
 		@title = "Donations from #{@fromyear} to #{@toyear}"
 		@pickyears = []
-		FinanceItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceExpensesItem.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@pickyears.push(year.to_i)
 		end
 		@pickyears = @pickyears.sort
@@ -39,7 +39,7 @@ class Finance::Expenses::DonationsController < ApplicationController
 			@donations[what.id]['total'] = 0
 		end
 		# accumulate donations
-		FinanceItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", whatids, @fromyear, @toyear).each do |item|
+		FinanceExpensesItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", whatids, @fromyear, @toyear).each do |item|
 			@donations[item.finance_what_id][item.date.year] = @donations[item.finance_what_id][item.date.year] + item.amount
 			@donations[item.finance_what_id]['total'] = @donations[item.finance_what_id]['total'] + item.amount
 		end
@@ -53,7 +53,7 @@ class Finance::Expenses::DonationsController < ApplicationController
 	def show
 		what = FinanceWhat.find(params[:id])
 		@title = "Donations to #{what.what}"
-		@items = FinanceItem.where("finance_what_id = ?", params[:id]).order('date')
+		@items = FinanceExpensesItem.where("finance_what_id = ?", params[:id]).order('date')
 	end
 
 private

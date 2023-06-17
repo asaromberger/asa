@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_191421) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_17_213430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -54,6 +54,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_191421) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "finance_expenses_items", force: :cascade do |t|
+    t.date "date"
+    t.string "pm"
+    t.string "checkno"
+    t.integer "finance_what_id"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "finance_inputs", force: :cascade do |t|
     t.date "date"
     t.string "pm"
@@ -78,16 +88,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_191421) do
     t.decimal "shares"
     t.decimal "pershare"
     t.decimal "guaranteed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "finance_items", force: :cascade do |t|
-    t.date "date"
-    t.string "pm"
-    t.string "checkno"
-    t.integer "finance_what_id"
-    t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
