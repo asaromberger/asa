@@ -8,7 +8,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 	def edit
 		@title = 'Bank Input'
 		@accounts = [['','']]
-		FinanceAccountmap.all.order('ctype').pluck('DISTINCT ctype').each do |type|
+		FinanceExpensesAccountmap.all.order('ctype').pluck('DISTINCT ctype').each do |type|
 		@accounts.push([type, type])
 		end
 	end
@@ -30,7 +30,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 		if lines[0][0] && lines[0][0].gsub(/:.*/, '') == 'OFXHEADER'
 			# Quicken input
 			accountmap = Hash.new
-			FinanceAccountmap.all.each do |map|
+			FinanceExpensesAccountmap.all.each do |map|
 				accountmap[map.account] = map.ctype
 			end
 			# remerge lines

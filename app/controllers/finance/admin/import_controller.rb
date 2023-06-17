@@ -66,9 +66,9 @@ class Finance::Admin::ImportController < ApplicationController
 		data = CSV.open(document.tempfile, 'r')
 		data.each do |line|
 			if line[0] == 'accountmap'
-				fam = FinanceAccountmap.where("account = ? AND ctype = ?", line[1], line[2]).first
+				fam = FinanceExpensesAccountmap.where("account = ? AND ctype = ?", line[1], line[2]).first
 				if ! fam
-					fam = FinanceAccountmap.new
+					fam = FinanceExpensesAccountmap.new
 					fam.account = line[1]
 					fam.ctype = line[2]
 					fam.save

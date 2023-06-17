@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_17_213430) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_17_221255) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -30,13 +30,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_17_213430) do
     t.integer "pair"
   end
 
-  create_table "finance_accountmaps", force: :cascade do |t|
-    t.string "account"
-    t.string "ctype"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "finance_accounts", force: :cascade do |t|
     t.string "account"
     t.string "atype"
@@ -50,6 +43,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_17_213430) do
     t.string "category"
     t.string "subcategory"
     t.string "tax"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "finance_expenses_accountmaps", force: :cascade do |t|
+    t.string "account"
+    t.string "ctype"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
