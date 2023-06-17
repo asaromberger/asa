@@ -5,16 +5,16 @@ class Finance::Expenses::AccountmapsController < ApplicationController
 
 	def index
 		@title = 'Account Number to Category Type'
-		@accountmaps = FinanceAccountmap.all.order('account')
+		@accountmaps = FinanceExpensesAccountmap.all.order('account')
 	end
 
 	def new
 		@title = 'New Account Map'
-		@accountmap = FinanceAccountmap.new
+		@accountmap = FinanceExpensesAccountmap.new
 	end
 
 	def create
-		@accountmap = FinanceAccountmap.new(accountmap_params)
+		@accountmap = FinanceExpensesAccountmap.new(accountmap_params)
 		if @accountmap.save
 			redirect_to finance_expenses_accountmaps_path, notice: 'Account Map Added'
 		else
@@ -24,11 +24,11 @@ class Finance::Expenses::AccountmapsController < ApplicationController
 
 	def edit
 		@title = 'Edit Account Map'
-		@accountmap = FinanceAccountmap.find(params[:id])
+		@accountmap = FinanceExpensesAccountmap.find(params[:id])
 	end
 
 	def update
-		@accountmap = FinanceAccountmap.find(params[:id])
+		@accountmap = FinanceExpensesAccountmap.find(params[:id])
 		if @accountmap.update(accountmap_params)
 			redirect_to finance_expenses_accountmaps_path, notice: 'Account map Updated'
 		else
@@ -37,7 +37,7 @@ class Finance::Expenses::AccountmapsController < ApplicationController
 	end
 
 	def destroy
-		@accountmap = FinanceAccountmap.find(params[:id])
+		@accountmap = FinanceExpensesAccountmap.find(params[:id])
 		@accountmap.delete
 		redirect_to finance_expenses_accountmaps_path, notice: "Accountmap #{@accountmap.account} Deleted"
 	end
@@ -45,7 +45,7 @@ class Finance::Expenses::AccountmapsController < ApplicationController
 private
 	
 	def accountmap_params
-		params.require(:finance_accountmap).permit(:account, :ctype)
+		params.require(:finance_expenses_accountmap).permit(:account, :ctype)
 	end
 
 	def require_expenses

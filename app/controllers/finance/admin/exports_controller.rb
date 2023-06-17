@@ -13,7 +13,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		content = ""
 
 		# accountmaps
-		FinanceAccountmap.all.order('id').each do |map|
+		FinanceExpensesAccountmap.all.order('id').each do |map|
 			content += "\"accountmap\",\"#{map.account}\",\"#{map.ctype}\"\n"
 		end
 

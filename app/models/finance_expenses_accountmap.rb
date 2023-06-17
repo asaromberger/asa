@@ -1,0 +1,3 @@
+class FinanceExpensesAccountmap < ApplicationRecord
+
+end
