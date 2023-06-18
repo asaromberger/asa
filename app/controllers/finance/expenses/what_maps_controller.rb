@@ -16,7 +16,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 		@title = 'New WhatMap Map'
 		@whatmap = FinanceExpensesWhatMap.new
 		set_sort_filter(columnlist())
-		@whats = FinanceWhat.all.order('what')
+		@whats = FinanceExpensesWhat.all.order('what')
 	end
 
 	def create
@@ -33,7 +33,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 		@title = 'Edit WhatMap Map'
 		@whatmap = FinanceExpensesWhatMap.find(params[:id])
 		set_sort_filter(columnlist())
-		@whats = FinanceWhat.all.order('what')
+		@whats = FinanceExpensesWhat.all.order('what')
 	end
 
 	def update
@@ -56,7 +56,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 private
 	
 	def whatmap_params
-		params.require(:finance_expenses_what_map).permit(:whatmap, :finance_what_id)
+		params.require(:finance_expenses_what_map).permit(:whatmap, :finance_expenses_what_id)
 	end
 
 	def require_expenses
@@ -74,7 +74,7 @@ private
 		FinanceExpensesWhatMap.all.order('whatmap').each do |whatmap|
 			whatmaps[whatmap.id] = Hash.new
 			whatmaps[whatmap.id]['what'] = whatmap.whatmap
-			whatmaps[whatmap.id]['map'] = whatmap.finance_what.what
+			whatmaps[whatmap.id]['map'] = whatmap.finance_expenses_what.what
 		end
 		return whatmaps
 	end

@@ -18,7 +18,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 		# build what_id to what and cat_id tables
 		@whats = Hash.new
 		@whatcatids = Hash.new
-		FinanceWhat.all.each do |what|
+		FinanceExpensesWhat.all.each do |what|
 			@whats[what.id] = what.what
 			@whatcatids[what.id] = what.finance_expenses_category_id
 		end
@@ -50,7 +50,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 			@item.date = Date.new(@year.to_i, 1, 1)
 		end
 		@item.pm = '-'
-		@whats = FinanceWhat.all.order('what')
+		@whats = FinanceExpensesWhat.all.order('what')
 	end
 
 	def create
@@ -69,7 +69,7 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@year = params[:year]
 		@item = FinanceExpensesItem.find(params[:id])
 		set_sort_filter(columnlist())
-		@whats = FinanceWhat.all.order('what')
+		@whats = FinanceExpensesWhat.all.order('what')
 	end
 
 	def update
@@ -88,13 +88,13 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@item = FinanceExpensesItem.find(params[:id])
 		set_sort_filter(columnlist())
 		@item.delete
-		redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: "Item #{@item.date} #{@item.finance_what.what} Deleted"
+		redirect_to finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), notice: "Item #{@item.date} #{@item.finance_expenses_what.what} Deleted"
 	end
 
 private
 
 	def item_params
-		params.require(:finance_expenses_item).permit(:date, :pm, :checkno, :finance_what_id, :amount)
+		params.require(:finance_expenses_item).permit(:date, :pm, :checkno, :finance_expenses_what_id, :amount)
 	end
 
 	def require_expenses
@@ -114,12 +114,12 @@ private
 			items[item.id]['date'] = item.date
 			items[item.id]['pm'] = item.pm
 			items[item.id]['checkno'] = item.checkno
-			items[item.id]['what'] = @whats[item.finance_what_id]
+			items[item.id]['what'] = @whats[item.finance_expenses_what_id]
 			items[item.id]['amount'] = item.amount
-			items[item.id]['ctype'] = @ctypes[@whatcatids[item.finance_what_id]]
-			items[item.id]['category'] = @categories[@whatcatids[item.finance_what_id]]
-			items[item.id]['subcategory'] = @subcategories[@whatcatids[item.finance_what_id]]
-			items[item.id]['tax'] = @taxes[@whatcatids[item.finance_what_id]]
+			items[item.id]['ctype'] = @ctypes[@whatcatids[item.finance_expenses_what_id]]
+			items[item.id]['category'] = @categories[@whatcatids[item.finance_expenses_what_id]]
+			items[item.id]['subcategory'] = @subcategories[@whatcatids[item.finance_expenses_what_id]]
+			items[item.id]['tax'] = @taxes[@whatcatids[item.finance_expenses_what_id]]
 		end
 		return items
 	end

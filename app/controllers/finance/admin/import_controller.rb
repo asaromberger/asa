@@ -216,9 +216,9 @@ class Finance::Admin::ImportController < ApplicationController
 				end
 				finance_rebalance_map_ids["#{finance_rebalance_types_ids[line[1]]}:#{finance_account_ids[line[2]]}"] = frm.id
 			elsif line[0] == 'what'
-				fw = FinanceWhat.where("what = ? and finance_expenses_category_id = ?", line[1], finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]).first
+				fw = FinanceExpensesWhat.where("what = ? and finance_expenses_category_id = ?", line[1], finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]).first
 				if ! fw
-					fw = FinanceWhat.new
+					fw = FinanceExpensesWhat.new
 					fw.what = line[1]
 					fw.finance_expenses_category_id = finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]
 					fw.save
@@ -233,31 +233,31 @@ class Finance::Admin::ImportController < ApplicationController
 				end
 				finance_what_ids[fw.what] = fw.id
 			elsif line[0] == 'item'
-				fi = FinanceExpensesItem.where("date = ? AND pm = ? AND finance_what_id = ? AND amount = ?", line[1], line[2], finance_what_ids[line[4]], line[5]).first
+				fi = FinanceExpensesItem.where("date = ? AND pm = ? AND finance_expenses_what_id = ? AND amount = ?", line[1], line[2], finance_what_ids[line[4]], line[5]).first
 				if ! fi
 					fi = FinanceItem.new
 					fi.date = line[1]
 					fi.pm = line[2]
 					fi.checkno = line[3]
-					fi.finance_what_id = finance_what_ids[line[4]]
+					fi.finance_expenses_what_id = finance_what_ids[line[4]]
 					fi.amount = line[5]
 					fi.save
 					newcounts['item'] += 1
 				else
 					dupcounts['item'] += 1
-					if finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_what_id}:#{fi.amount}"]
+					if finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_expenses_what_id}:#{fi.amount}"]
 						if @messages.count < max_message_count
 							@messages.push("DUP: item; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}; #{line[5]}")
 						end
 					end
 				end
-				finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_what_id}:#{fi.amount}"] = fi.id
+				finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_expenses_what_id}:#{fi.amount}"] = fi.id
 			elsif line[0] == 'what_map'
-				fwm = FinanceExpensesWhatMap.where("whatmap = ? AND finance_what_id = ?", line[1], finance_what_ids[line[2]]).first
+				fwm = FinanceExpensesWhatMap.where("whatmap = ? AND finance_expenses_what_id = ?", line[1], finance_what_ids[line[2]]).first
 				if ! fwm
 					fwm = FinanceExpensesWhatMap.new
 					fwm.whatmap = line[1]
-					fwm.finance_what_id = finance_what_ids[line[2]]
+					fwm.finance_expenses_what_id = finance_what_ids[line[2]]
 					fwm.save
 					newcounts['what_map'] += 1
 				else

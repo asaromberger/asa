@@ -47,13 +47,13 @@ class Finance::Expenses::CategoriesController < ApplicationController
 		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
 		@title = "What maps to #{@category.ctype}/#{@category.category}/#{@category.subcategory}"
-		@whats = FinanceWhat.where("finance_expenses_category_id = ?", @category.id).order('what')
+		@whats = FinanceExpensesWhat.where("finance_expenses_category_id = ?", @category.id).order('what')
 	end
 
 	def destroy
 		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
-		if FinanceWhat.where("finance_expenses_category_id = ?", @category.id).count > 0
+		if FinanceExpensesWhat.where("finance_expenses_category_id = ?", @category.id).count > 0
 			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
 		else
 			@category.delete

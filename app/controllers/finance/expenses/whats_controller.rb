@@ -13,13 +13,13 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def new
 		@title = 'New What Map'
-		@what = FinanceWhat.new
+		@what = FinanceExpensesWhat.new
 		set_sort_filter(columnlist())
 		@categories = FinanceExpensesCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def create
-		@what = FinanceWhat.new(what_params)
+		@what = FinanceExpensesWhat.new(what_params)
 		set_sort_filter(columnlist())
 		if @what.save
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What Map Added'
@@ -30,13 +30,13 @@ class Finance::Expenses::WhatsController < ApplicationController
 
 	def edit
 		@title = 'Edit What Map'
-		@what = FinanceWhat.find(params[:id])
+		@what = FinanceExpensesWhat.find(params[:id])
 		set_sort_filter(columnlist())
 		@categories = FinanceExpensesCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def update
-		@what = FinanceWhat.find(params[:id])
+		@what = FinanceExpensesWhat.find(params[:id])
 		set_sort_filter(columnlist())
 		if @what.update(what_params)
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What map Updated'
@@ -46,51 +46,51 @@ class Finance::Expenses::WhatsController < ApplicationController
 	end
 
 	def show
-		@what = FinanceWhat.find(params[:id])
+		@what = FinanceExpensesWhat.find(params[:id])
 		set_sort_filter(columnlist())
 		@title = "Where is '#{@what.what}'"
-		@items = FinanceExpensesItem.where("finance_what_id = ?", @what.id).order('date')
+		@items = FinanceExpensesItem.where("finance_expenses_what_id = ?", @what.id).order('date')
 	end
 
 	def remap
 		@title = 'Remap specified What to another what'
-		@what = FinanceWhat.find(params[:id])
+		@what = FinanceExpensesWhat.find(params[:id])
 		set_sort_filter(columnlist())
 		@whats = [['', 0]]
-		FinanceWhat.where("id != ?", @what.id).order('what').each do |what|
+		FinanceExpensesWhat.where("id != ?", @what.id).order('what').each do |what|
 			@whats.push([what.what, what.id])
 		end
 	end
 
 	def remapupdate
 		@id = params[:id]
-		@what = FinanceWhat.find(@id)
+		@what = FinanceExpensesWhat.find(@id)
 		set_sort_filter(columnlist())
 		@newid = params[:newid]
-		@newwhat = FinanceWhat.find(@newid)
+		@newwhat = FinanceExpensesWhat.find(@newid)
 		# update WhatMaps
-		FinanceExpensesWhatMap.where("finance_what_id = ?", @id).each do |map|
-			map.finance_what_id = @newid
+		FinanceExpensesWhatMap.where("finance_expenses_what_id = ?", @id).each do |map|
+			map.finance_expenses_what_id = @newid
 			map.save
 		end
 		count = 0
-		FinanceExpensesItem.where("finance_what_id = ?", @id).count
+		FinanceExpensesItem.where("finance_expenses_what_id = ?", @id).count
 		# update Items
-		FinanceExpensesItem.where("finance_what_id = ?", @id).each do |item|
-			item.finance_what_id = @newid
+		FinanceExpensesItem.where("finance_expenses_what_id = ?", @id).each do |item|
+			item.finance_expenses_what_id = @newid
 			item.save
 			count += 1
 		end
-		FinanceWhat.find(@id).delete
+		FinanceExpensesWhat.find(@id).delete
 		redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: "#{count} '#{@what.what}' remapped to '#{@newwhat.what}'"
 	end
 
 	def destroy
-		@what = FinanceWhat.find(params[:id])
+		@what = FinanceExpensesWhat.find(params[:id])
 		set_sort_filter(columnlist())
-		if FinanceExpensesItem.where("finance_what_id = ?", @what.id).count > 0
+		if FinanceExpensesItem.where("finance_expenses_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by an Item"
-		elsif FinanceExpensesWhatMap.where("finance_what_id = ?", @what.id).count > 0
+		elsif FinanceExpensesWhatMap.where("finance_expenses_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by a WhatMap"
 		else
 			@what.delete
@@ -101,7 +101,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 private
 	
 	def what_params
-		params.require(:finance_what).permit(:what, :finance_expenses_category_id)
+		params.require(:finance_expenses_what).permit(:what, :finance_expenses_category_id)
 	end
 
 	def require_expenses
@@ -120,7 +120,7 @@ private
 			@categorymap[category.id] = category
 		end
 		whats = Hash.new
-		FinanceWhat.joins(:finance_expenses_category).all.order('ctype, category, subcategory, what').each do |what|
+		FinanceExpensesWhat.joins(:finance_expenses_category).all.order('ctype, category, subcategory, what').each do |what|
 			whats[what.id] = Hash.new
 			whats[what.id]['what'] = what.what
 			whats[what.id]['ctype'] = @categorymap[what.finance_expenses_category_id].ctype
