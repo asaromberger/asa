@@ -1,0 +1,2 @@
+class FinanceExpensesInput < ApplicationRecord
+end

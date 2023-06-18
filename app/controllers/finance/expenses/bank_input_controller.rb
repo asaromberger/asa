@@ -16,7 +16,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 	def create
 		# this is file input. input goes to input table then to new
 		# clear input table
-		FinanceInput.delete_all
+		FinanceExpensesInput.delete_all
 		@title = 'Classify Bank Input'
 		@document = params[:document]
 		@documentname = @document.original_filename
@@ -66,7 +66,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 					what = line.gsub(/&amp;/, '&')
 				elsif key == '/STMTTRN'
 					what = "#{account}:#{what}"
-					input = FinanceInput.new
+					input = FinanceExpensesInput.new
 					input.date = date
 					input.pm = pm
 					input.checkno = check
@@ -172,7 +172,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 						next
 					end
 					date = "#{year}-#{month}-#{day}"
-					input = FinanceInput.new
+					input = FinanceExpensesInput.new
 					input.date = date
 					if input.date.blank?
 						@errors.push("BAD DATE: #{date}")
@@ -266,7 +266,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 		@table = Hash.new
 		lineno = 0
 		maxlines = 30
-		FinanceInput.all.order('date').each do |input|
+		FinanceExpensesInput.all.order('date').each do |input|
 			date = input.date
 			pm = input.pm
 			check = input.checkno
