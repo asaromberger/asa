@@ -29,7 +29,7 @@ class Finance::Expenses::DonationsController < ApplicationController
 		# find donations
 		@donations = Hash.new
 		whatids = []
-		FinanceWhat.where("finance_expenses_category_id IN (?)", donationcatids).order('what').each do |what|
+		FinanceExpensesWhat.where("finance_expenses_category_id IN (?)", donationcatids).order('what').each do |what|
 			whatids.push(what.id)
 			@donations[what.id] = Hash.new
 			@donations[what.id]['name'] = what.what
@@ -39,9 +39,9 @@ class Finance::Expenses::DonationsController < ApplicationController
 			@donations[what.id]['total'] = 0
 		end
 		# accumulate donations
-		FinanceExpensesItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", whatids, @fromyear, @toyear).each do |item|
-			@donations[item.finance_what_id][item.date.year] = @donations[item.finance_what_id][item.date.year] + item.amount
-			@donations[item.finance_what_id]['total'] = @donations[item.finance_what_id]['total'] + item.amount
+		FinanceExpensesItem.where("finance_expenses_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", whatids, @fromyear, @toyear).each do |item|
+			@donations[item.finance_expenses_what_id][item.date.year] = @donations[item.finance_expenses_what_id][item.date.year] + item.amount
+			@donations[item.finance_expenses_what_id]['total'] = @donations[item.finance_expenses_what_id]['total'] + item.amount
 		end
 		@donations.each do |id, values|
 			if values['total'] == 0
@@ -51,9 +51,9 @@ class Finance::Expenses::DonationsController < ApplicationController
 	end
 
 	def show
-		what = FinanceWhat.find(params[:id])
+		what = FinanceExpensesWhat.find(params[:id])
 		@title = "Donations to #{what.what}"
-		@items = FinanceExpensesItem.where("finance_what_id = ?", params[:id]).order('date')
+		@items = FinanceExpensesItem.where("finance_expenses_what_id = ?", params[:id]).order('date')
 	end
 
 private

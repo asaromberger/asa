@@ -27,7 +27,7 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		# build what_id to what and cat_id tables
 		whats = Hash.new
 		whatcatids = Hash.new
-		FinanceWhat.all.each do |what|
+		FinanceExpensesWhat.all.each do |what|
 			whats[what.id] = what.what
 			whatcatids[what.id] = what.finance_expenses_category_id
 		end
@@ -42,9 +42,9 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		end
 		# @data[category][subcategory][year]
 		@data = Hash.new
-		FinanceExpensesItem.joins(:finance_what => :finance_expenses_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
-			category = categories[whatcatids[item.finance_what_id]]
-			subcategory = subcategories[whatcatids[item.finance_what_id]]
+		FinanceExpensesItem.joins(:finance_expenses_what => :finance_expenses_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
+			category = categories[whatcatids[item.finance_expenses_what_id]]
+			subcategory = subcategories[whatcatids[item.finance_expenses_what_id]]
 			if subcategory == 'Security Deposit'
 				next
 			end
@@ -102,8 +102,8 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		@fromyear = params[:fromyear]
 		@toyear = params[:toyear]
 		category_id = FinanceExpensesCategory.where("ctype = 'rental' AND category = ? AND subcategory = ?", params[:category], params['subcategory']).pluck('id').first
-		what_ids = FinanceWhat.where("finance_expenses_category_id = ?", category_id).pluck('DISTINCT id')
-		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
+		what_ids = FinanceExpensesWhat.where("finance_expenses_category_id = ?", category_id).pluck('DISTINCT id')
+		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_expenses_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 	end
 
 private

@@ -62,19 +62,19 @@ class Finance::Admin::ExportsController < ApplicationController
 
 		# whats           categories
 		whats = Hash.new
-		FinanceWhat.all.order('id').each do |map|
+		FinanceExpensesWhat.all.order('id').each do |map|
 			content += "\"what\",\"#{map.what}\",\"#{categories[map.finance_expenses_category_id][0]}\",\"#{categories[map.finance_expenses_category_id][1]}\",\"#{categories[map.finance_expenses_category_id][2]}\",\"#{categories[map.finance_expenses_category_id][3]}\"\n"
 			whats[map.id] = map.what
 		end
 
 		# items           whats
 		FinanceExpensesItem.all.order('id').each do |map|
-			content += "\"item\",\"#{map.date}\",\"#{map.pm}\",\"#{map.checkno}\",\"#{whats[map.finance_what_id]}\",\"#{map.amount}\"\n"
+			content += "\"item\",\"#{map.date}\",\"#{map.pm}\",\"#{map.checkno}\",\"#{whats[map.finance_expenses_what_id]}\",\"#{map.amount}\"\n"
 		end
 
 		# what_maps       whats           categories
 		FinanceExpensesWhatMap.all.order('id').each do |map|
-			content += "\"what_map\",\"#{map.whatmap}\",\"#{whats[map.finance_what_id]}\"\n"
+			content += "\"what_map\",\"#{map.whatmap}\",\"#{whats[map.finance_expenses_what_id]}\"\n"
 		end
 		
 		send_data(content, type: 'application/csv', filename: 'Financials.csv', disposition: :inline)

@@ -1,4 +1,4 @@
-class FinanceWhat < ApplicationRecord
+class FinanceExpensesWhat < ApplicationRecord
 
 	belongs_to :finance_expenses_category
 

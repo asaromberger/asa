@@ -8,7 +8,7 @@ class Finance::Expenses::TransfersController < ApplicationController
 		# build what_id to what and cat_id tables
 		whats = Hash.new
 		whatcatids = Hash.new
-		FinanceWhat.all.each do |what|
+		FinanceExpensesWhat.all.each do |what|
 			whats[what.id] = what.what
 			whatcatids[what.id] = what.finance_expenses_category_id
 		end
@@ -24,15 +24,15 @@ class Finance::Expenses::TransfersController < ApplicationController
 			taxes[category.id] = category.tax
 		end
 		@transfers = Hash.new
-		FinanceExpensesItem.joins(:finance_what).where("lower(what) LIKE '%transfer%'").order('date').each do |transfer|
+		FinanceExpensesItem.joins(:finance_expenses_what).where("lower(what) LIKE '%transfer%'").order('date').each do |transfer|
 			@transfers[transfer.id] = Hash.new
 			@transfers[transfer.id]['date'] = transfer.date
 			@transfers[transfer.id]['pm'] = transfer.pm
-			@transfers[transfer.id]['what'] = whats[transfer.finance_what_id]
+			@transfers[transfer.id]['what'] = whats[transfer.finance_expenses_what_id]
 			@transfers[transfer.id]['amount'] = transfer.amount
-			@transfers[transfer.id]['type'] = ctypes[whatcatids[transfer.finance_what_id]]
-			@transfers[transfer.id]['category'] = categories[whatcatids[transfer.finance_what_id]]
-			@transfers[transfer.id]['subcategory'] = subcategories[whatcatids[transfer.finance_what_id]]
+			@transfers[transfer.id]['type'] = ctypes[whatcatids[transfer.finance_expenses_what_id]]
+			@transfers[transfer.id]['category'] = categories[whatcatids[transfer.finance_expenses_what_id]]
+			@transfers[transfer.id]['subcategory'] = subcategories[whatcatids[transfer.finance_expenses_what_id]]
 		end
 	end
 

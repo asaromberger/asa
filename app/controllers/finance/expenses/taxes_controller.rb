@@ -18,7 +18,7 @@ class Finance::Expenses::TaxesController < ApplicationController
 		# build what_id to what and cat_id tables
 		whats = Hash.new
 		whatcatids = Hash.new
-		FinanceWhat.all.each do |what|
+		FinanceExpensesWhat.all.each do |what|
 			whats[what.id] = what.what
 			whatcatids[what.id] = what.finance_expenses_category_id
 		end
@@ -37,11 +37,11 @@ class Finance::Expenses::TaxesController < ApplicationController
 		taxcategoryids = FinanceExpensesCategory.where("(tax IS NOT NULL AND tax != '') OR ctype = 'rental'").pluck('DISTINCT id')
 		# @data[ctype][category][subcategory][tax]
 		@data = Hash.new
-		FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", @year, taxcategoryids).each do |item|
-			ctype = ctypes[whatcatids[item.finance_what_id]]
-			category = categories[whatcatids[item.finance_what_id]]
-			subcategory = subcategories[whatcatids[item.finance_what_id]]
-			tax = taxes[whatcatids[item.finance_what_id]]
+		FinanceExpensesItem.joins(:finance_expenses_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", @year, taxcategoryids).each do |item|
+			ctype = ctypes[whatcatids[item.finance_expenses_what_id]]
+			category = categories[whatcatids[item.finance_expenses_what_id]]
+			subcategory = subcategories[whatcatids[item.finance_expenses_what_id]]
+			tax = taxes[whatcatids[item.finance_expenses_what_id]]
 			amount = item.amount
 			if item.pm == '-'
 				amount = -amount
@@ -74,10 +74,10 @@ class Finance::Expenses::TaxesController < ApplicationController
 			if item.pm == '-'
 				amount = -amount
 			end
-			if @summary[item.finance_what.what]
-				@summary[item.finance_what.what] = @summary[item.finance_what.what] + amount
+			if @summary[item.finance_expenses_what.what]
+				@summary[item.finance_expenses_what.what] = @summary[item.finance_expenses_what.what] + amount
 			else
-				@summary[item.finance_what.what] = amount
+				@summary[item.finance_expenses_what.what] = amount
 			end
 		end
 	end

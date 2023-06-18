@@ -219,25 +219,25 @@ class Finance::Expenses::BankInputController < ApplicationController
 					newwhat = mapto
 				end
 				if category > 0
-					twhat = FinanceWhat.where("what = ?", newwhat)
+					twhat = FinanceExpensesWhat.where("what = ?", newwhat)
 					if twhat.count == 0
-						twhat = FinanceWhat.new
+						twhat = FinanceExpensesWhat.new
 						twhat.what = newwhat
 						twhat.finance_expenses_category_id = category
 						twhat.save
 					end
-					whatmap = FinanceWhat.where("what = ?", newwhat).first.id
+					whatmap = FinanceExpensesWhat.where("what = ?", newwhat).first.id
 				end
 				if ! mapto.blank?
 					twhatmap = FinanceExpensesWhatMap.joins(:finance_what).where("whatmap = ? AND finance_whats.what = ?", what, mapto)
 					if twhatmap.count == 0
 						# need to create a new map
-						twhat = FinanceWhat.where("what = ?", mapto)
+						twhat = FinanceExpensesWhat.where("what = ?", mapto)
 						if twhat.count > 0
 							whatmap = twhat.first.id
 							twhatmap = FinanceExpensesWhatMap.new
 							twhatmap.whatmap = what
-							twhatmap.finance_what_id = whatmap
+							twhatmap.finance_expenses_what_id = whatmap
 							twhatmap.save
 						end
 					end
@@ -256,7 +256,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 						item.checkno = check
 						item.amount = amount
 					end
-					item.finance_what_id = whatmap
+					item.finance_expenses_what_id = whatmap
 					item.save
 				end
 			end
@@ -274,9 +274,9 @@ class Finance::Expenses::BankInputController < ApplicationController
 			amount = input.amount
 			whatlist = [what]
 			FinanceExpensesWhatMap.where("whatmap = ?", what).each do |map|
-				whatlist.push(map.finance_what.what)
+				whatlist.push(map.finance_expenses_what.what)
 			end
-			item = FinanceExpensesItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what IN (?) AND amount = ?", date, pm, check, whatlist, amount)
+			item = FinanceExpensesItem.joins(:finance_expenses_what).where("date = ? AND pm = ? AND checkno = ? AND what IN (?) AND amount = ?", date, pm, check, whatlist, amount)
 			if item.count > 0
 				@exist = @exist + 1
 				input.delete
@@ -290,14 +290,14 @@ class Finance::Expenses::BankInputController < ApplicationController
 				@table[lineno]['amount'] = amount
 				@table[lineno]['whatmaplist'] = [['', 0]]
 				FinanceExpensesWhatMap.where("whatmap = ?", what).each do |wl|
-					@table[lineno]['whatmaplist'].push([wl.finance_what.what, wl.finance_what_id])
+					@table[lineno]['whatmaplist'].push([wl.finance_expenses_what.what, wl.finance_expenses_what_id])
 				end
 				if @table[lineno]['whatmaplist'].count == 2
 					@table[lineno]['whatmap'] = @table[lineno]['whatmaplist'][1][1]
 				else
 					@table[lineno]['whatmap'] = 0
 				end
-				twhat = FinanceWhat.where("what = ?", what)
+				twhat = FinanceExpensesWhat.where("what = ?", what)
 				if twhat.count > 0
 					@table[lineno]['category'] = twhat.first.finance_expenses_category_id
 				else

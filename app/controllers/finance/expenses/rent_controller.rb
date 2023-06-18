@@ -31,7 +31,7 @@ class Finance::Expenses::RentController < ApplicationController
 		# initialize unit/year/month grid
 		temp = Hash.new
 		unitids = []
-		FinanceWhat.where("finance_expenses_category_id in (?)", catids).order('what').each do |unit|
+		FinanceExpensesWhat.where("finance_expenses_category_id in (?)", catids).order('what').each do |unit|
 			unitids.push(unit.id)
 			temp[unit.what] = Hash.new
 			@years.each do |year|
@@ -42,10 +42,10 @@ class Finance::Expenses::RentController < ApplicationController
 			end
 		end
 		# accumulate rents by unit/year/month
-		FinanceExpensesItem.where("finance_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", unitids, @fromyear, @toyear).order('finance_what_id, date').each do |item|
+		FinanceExpensesItem.where("finance_expenses_what_id IN (?) AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", unitids, @fromyear, @toyear).order('finance_expenses_what_id, date').each do |item|
 			year = item.date.year
 			month = item.date.month
-			unit = item.finance_what.what
+			unit = item.finance_expenses_what.what
 			if item.pm == '-'
 				temp[unit][year][month] = temp[unit][year][month] - item.amount
 			else

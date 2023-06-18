@@ -27,7 +27,7 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		# build what_id to what and cat_id tables
 		whats = Hash.new
 		whatcatids = Hash.new
-		FinanceWhat.all.each do |what|
+		FinanceExpensesWhat.all.each do |what|
 			whats[what.id] = what.what
 			whatcatids[what.id] = what.finance_expenses_category_id
 		end
@@ -46,9 +46,9 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		@data = Hash.new
 		@ctotals = Hash.new
 		FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
-			ctype = ctypes[whatcatids[item.finance_what_id]]
-			category = categories[whatcatids[item.finance_what_id]]
-			subcategory = subcategories[whatcatids[item.finance_what_id]]
+			ctype = ctypes[whatcatids[item.finance_expenses_what_id]]
+			category = categories[whatcatids[item.finance_expenses_what_id]]
+			subcategory = subcategories[whatcatids[item.finance_expenses_what_id]]
 			amount = item.amount
 			year = item.date.year
 			if item.pm == '-'
@@ -128,11 +128,11 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		category_ids = FinanceExpensesCategory.where("ctype = ? AND category = ? AND subcategory = ?", @type, @cat, @subcat).pluck('id')
 		@whats = Hash.new
 		what_ids = []
-		FinanceWhat.where("finance_expenses_category_id IN (?)", category_ids).each do |what|
+		FinanceExpensesWhat.where("finance_expenses_category_id IN (?)", category_ids).each do |what|
 			what_ids.push(what.id)
 			@whats[what.id] = what.what
 		end
-		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
+		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_expenses_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 		render 'finance/expenses/runningbudget/show'
 	end
 
