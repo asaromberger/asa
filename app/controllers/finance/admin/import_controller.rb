@@ -253,9 +253,9 @@ class Finance::Admin::ImportController < ApplicationController
 				end
 				finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_what_id}:#{fi.amount}"] = fi.id
 			elsif line[0] == 'what_map'
-				fwm = FinanceWhatMap.where("whatmap = ? AND finance_what_id = ?", line[1], finance_what_ids[line[2]]).first
+				fwm = FinanceExpensesWhatMap.where("whatmap = ? AND finance_what_id = ?", line[1], finance_what_ids[line[2]]).first
 				if ! fwm
-					fwm = FinanceWhatMap.new
+					fwm = FinanceExpensesWhatMap.new
 					fwm.whatmap = line[1]
 					fwm.finance_what_id = finance_what_ids[line[2]]
 					fwm.save

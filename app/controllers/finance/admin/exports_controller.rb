@@ -73,7 +73,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		end
 
 		# what_maps       whats           categories
-		FinanceWhatMap.all.order('id').each do |map|
+		FinanceExpensesWhatMap.all.order('id').each do |map|
 			content += "\"what_map\",\"#{map.whatmap}\",\"#{whats[map.finance_what_id]}\"\n"
 		end
 		

@@ -69,7 +69,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		@newid = params[:newid]
 		@newwhat = FinanceWhat.find(@newid)
 		# update WhatMaps
-		FinanceWhatMap.where("finance_what_id = ?", @id).each do |map|
+		FinanceExpensesWhatMap.where("finance_what_id = ?", @id).each do |map|
 			map.finance_what_id = @newid
 			map.save
 		end
@@ -90,7 +90,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		set_sort_filter(columnlist())
 		if FinanceExpensesItem.where("finance_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by an Item"
-		elsif FinanceWhatMap.where("finance_what_id = ?", @what.id).count > 0
+		elsif FinanceExpensesWhatMap.where("finance_what_id = ?", @what.id).count > 0
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: "What #{@what.what} is in use by a WhatMap"
 		else
 			@what.delete
