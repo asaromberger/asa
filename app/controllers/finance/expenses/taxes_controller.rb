@@ -20,24 +20,24 @@ class Finance::Expenses::TaxesController < ApplicationController
 		whatcatids = Hash.new
 		FinanceWhat.all.each do |what|
 			whats[what.id] = what.what
-			whatcatids[what.id] = what.finance_category_id
+			whatcatids[what.id] = what.finance_expenses_category_id
 		end
 		# build cat_id to ctype, category, subcategory, tax tables
 		ctypes = Hash.new
 		categories = Hash.new
 		subcategories = Hash.new
 		taxes = Hash.new
-		FinanceCategory.all.each do |category|
+		FinanceExpensesCategory.all.each do |category|
 			ctypes[category.id] = category.ctype
 			categories[category.id] = category.category
 			subcategories[category.id] = category.subcategory
 			taxes[category.id] = category.tax
 		end
 		# tax category ids
-		taxcategoryids = FinanceCategory.where("(tax IS NOT NULL AND tax != '') OR ctype = 'rental'").pluck('DISTINCT id')
+		taxcategoryids = FinanceExpensesCategory.where("(tax IS NOT NULL AND tax != '') OR ctype = 'rental'").pluck('DISTINCT id')
 		# @data[ctype][category][subcategory][tax]
 		@data = Hash.new
-		FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", @year, taxcategoryids).each do |item|
+		FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", @year, taxcategoryids).each do |item|
 			ctype = ctypes[whatcatids[item.finance_what_id]]
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
@@ -66,8 +66,8 @@ class Finance::Expenses::TaxesController < ApplicationController
 
 	def show
 		@title = "Taxes for #{params[:year]} for #{params[:ctype]}/#{params[:cat]}/#{params[:subcat]}/#{params[:tax]}"
-		categoryids = FinanceCategory.where("ctype = ? AND category = ? AND subcategory = ? AND tax = ?", params[:ctype], params[:cat], params[:subcat], params[:tax]).pluck('DISTINCT id')
-		@items = FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_category_id in (?)", params[:year], categoryids).order('date')
+		categoryids = FinanceExpensesCategory.where("ctype = ? AND category = ? AND subcategory = ? AND tax = ?", params[:ctype], params[:cat], params[:subcat], params[:tax]).pluck('DISTINCT id')
+		@items = FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", params[:year], categoryids).order('date')
 		@summary = Hash.new
 		@items.each do |item|
 			amount = item.amount

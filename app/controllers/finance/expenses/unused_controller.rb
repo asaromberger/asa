@@ -5,8 +5,8 @@ class Finance::Expenses::UnusedController < ApplicationController
 
 	def index
 		@title = 'Unused'
-		category_ids = FinanceWhat.all.pluck('DISTINCT finance_category_id')
-		@categories = FinanceCategory.where("id NOT IN (?)", category_ids).order('ctype, category, subcategory')
+		category_ids = FinanceWhat.all.pluck('DISTINCT finance_expenses_category_id')
+		@categories = FinanceExpensesCategory.where("id NOT IN (?)", category_ids).order('ctype, category, subcategory')
 		item_what_ids = FinanceExpensesItem.all.pluck('DISTINCT finance_what_id')
 		what_maps_what_ids = FinanceWhatMap.all.pluck('DISTINCT finance_what_id')
 		@whats = FinanceWhat.where("id NOT IN (?) AND id NOT IN (?)", item_what_ids, what_maps_what_ids).order('what')
@@ -14,8 +14,8 @@ class Finance::Expenses::UnusedController < ApplicationController
 
 	def destroy
 		if params[:table] == 'category'
-			category = FinanceCategory.find(params[:id])
-			if FinanceWhat.where("finance_category_id = ?", category.id).count > 0
+			category = FinanceExpensesCategory.find(params[:id])
+			if FinanceWhat.where("finance_expenses_category_id = ?", category.id).count > 0
 				redirect_to finance_expenses_unused_index_path, alert: "Category in use: #{category.ctype}/#{category.category}/#{category.subcategory}/#{category.tax}"
 			else
 				category.delete

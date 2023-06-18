@@ -29,20 +29,20 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		whatcatids = Hash.new
 		FinanceWhat.all.each do |what|
 			whats[what.id] = what.what
-			whatcatids[what.id] = what.finance_category_id
+			whatcatids[what.id] = what.finance_expenses_category_id
 		end
 		# build cat_id to category, subcategory, tax tables
 		categories = Hash.new
 		subcategories = Hash.new
 		taxes = Hash.new
-		FinanceCategory.all.each do |category|
+		FinanceExpensesCategory.all.each do |category|
 			categories[category.id] = category.category
 			subcategories[category.id] = category.subcategory
 			taxes[category.id] = category.tax
 		end
 		# @data[category][subcategory][year]
 		@data = Hash.new
-		FinanceExpensesItem.joins(:finance_what => :finance_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
+		FinanceExpensesItem.joins(:finance_what => :finance_expenses_category).where("ctype = 'rental' AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", @fromyear, @toyear).each do |item|
 			category = categories[whatcatids[item.finance_what_id]]
 			subcategory = subcategories[whatcatids[item.finance_what_id]]
 			if subcategory == 'Security Deposit'
@@ -101,8 +101,8 @@ class Finance::Expenses::RentalcostsController < ApplicationController
 		@title = "#{params[:category]}/#{params[:subcategory]}"
 		@fromyear = params[:fromyear]
 		@toyear = params[:toyear]
-		category_id = FinanceCategory.where("ctype = 'rental' AND category = ? AND subcategory = ?", params[:category], params['subcategory']).pluck('id').first
-		what_ids = FinanceWhat.where("finance_category_id = ?", category_id).pluck('DISTINCT id')
+		category_id = FinanceExpensesCategory.where("ctype = 'rental' AND category = ? AND subcategory = ?", params[:category], params['subcategory']).pluck('id').first
+		what_ids = FinanceWhat.where("finance_expenses_category_id = ?", category_id).pluck('DISTINCT id')
 		@items = FinanceExpensesItem.where("EXTRACT(year FROM date) >= ? AND EXTRAcT(year FROM date) <= ? AND finance_what_id IN (?)", @fromyear, @toyear, what_ids).order('date')
 	end
 

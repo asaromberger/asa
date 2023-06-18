@@ -108,9 +108,9 @@ class Finance::Admin::ImportController < ApplicationController
 				if ! line[4]
 					line[4] = ''
 				end
-				fc = FinanceCategory.where("ctype = ? AND category = ? AND subcategory = ?", line[1], line[2], line[3]).first
+				fc = FinanceExpensesCategory.where("ctype = ? AND category = ? AND subcategory = ?", line[1], line[2], line[3]).first
 				if ! fc
-					fc = FinanceCategory.new
+					fc = FinanceExpensesCategory.new
 					fc.ctype = line[1]
 					fc.category = line[2]
 					fc.subcategory = line[3]
@@ -216,11 +216,11 @@ class Finance::Admin::ImportController < ApplicationController
 				end
 				finance_rebalance_map_ids["#{finance_rebalance_types_ids[line[1]]}:#{finance_account_ids[line[2]]}"] = frm.id
 			elsif line[0] == 'what'
-				fw = FinanceWhat.where("what = ? and finance_category_id = ?", line[1], finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]).first
+				fw = FinanceWhat.where("what = ? and finance_expenses_category_id = ?", line[1], finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]).first
 				if ! fw
 					fw = FinanceWhat.new
 					fw.what = line[1]
-					fw.finance_category_id = finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]
+					fw.finance_expenses_category_id = finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]
 					fw.save
 					newcounts['what'] += 1
 				else

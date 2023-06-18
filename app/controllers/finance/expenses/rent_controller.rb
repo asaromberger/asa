@@ -25,13 +25,13 @@ class Finance::Expenses::RentController < ApplicationController
 			@years.push(year.to_i)
 		end
 		# find rent categories
-		catids = FinanceCategory.where("tax = 'Rent'").pluck('id')
+		catids = FinanceExpensesCategory.where("tax = 'Rent'").pluck('id')
 		# find units
 		# accumulate rents
 		# initialize unit/year/month grid
 		temp = Hash.new
 		unitids = []
-		FinanceWhat.where("finance_category_id in (?)", catids).order('what').each do |unit|
+		FinanceWhat.where("finance_expenses_category_id in (?)", catids).order('what').each do |unit|
 			unitids.push(unit.id)
 			temp[unit.what] = Hash.new
 			@years.each do |year|

@@ -223,7 +223,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 					if twhat.count == 0
 						twhat = FinanceWhat.new
 						twhat.what = newwhat
-						twhat.finance_category_id = category
+						twhat.finance_expenses_category_id = category
 						twhat.save
 					end
 					whatmap = FinanceWhat.where("what = ?", newwhat).first.id
@@ -299,7 +299,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 				end
 				twhat = FinanceWhat.where("what = ?", what)
 				if twhat.count > 0
-					@table[lineno]['category'] = twhat.first.finance_category_id
+					@table[lineno]['category'] = twhat.first.finance_expenses_category_id
 				else
 					@table[lineno]['category'] = 0
 				end
@@ -310,7 +310,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 			end
 		end
 		@categorylist = [['', 0]]
-		FinanceCategory.all.order('ctype, category, subcategory, tax').each do |category|
+		FinanceExpensesCategory.all.order('ctype, category, subcategory, tax').each do |category|
 			@categorylist.push(["#{category.ctype}/#{category.category}/#{category.subcategory}/#{category.tax}", category.id])
 		end
 		if @table.count == 0
