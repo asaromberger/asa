@@ -13,12 +13,12 @@ class Finance::Expenses::CategoriesController < ApplicationController
 
 	def new
 		@title = 'New Category'
-		@category = FinanceCategory.new
+		@category = FinanceExpensesCategory.new
 		set_sort_filter(columnlist())
 	end
 
 	def create
-		@category = FinanceCategory.new(category_params)
+		@category = FinanceExpensesCategory.new(category_params)
 		set_sort_filter(columnlist())
 		if @category.save
 			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), notice: 'Category Added'
@@ -29,12 +29,12 @@ class Finance::Expenses::CategoriesController < ApplicationController
 
 	def edit
 		@title = 'Edit Category'
-		@category = FinanceCategory.find(params[:id])
+		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
 	end
 
 	def update
-		@category = FinanceCategory.find(params[:id])
+		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
 		if @category.update(category_params)
 			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), notice: 'Category Updated'
@@ -44,16 +44,16 @@ class Finance::Expenses::CategoriesController < ApplicationController
 	end
 
 	def show
-		@category = FinanceCategory.find(params[:id])
+		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
 		@title = "What maps to #{@category.ctype}/#{@category.category}/#{@category.subcategory}"
-		@whats = FinanceWhat.where("finance_category_id = ?", @category.id).order('what')
+		@whats = FinanceWhat.where("finance_expenses_category_id = ?", @category.id).order('what')
 	end
 
 	def destroy
-		@category = FinanceCategory.find(params[:id])
+		@category = FinanceExpensesCategory.find(params[:id])
 		set_sort_filter(columnlist())
-		if FinanceWhat.where("finance_category_id = ?", @category.id).count > 0
+		if FinanceWhat.where("finance_expenses_category_id = ?", @category.id).count > 0
 			redirect_to finance_expenses_categories_path(sort: @sort, filters: @filters), alert: "Category #{@category.ctype}/#{@category.category}/#{@category.subcategory}/#{@category.tax} is in use by a What"
 		else
 			@category.delete
@@ -64,7 +64,7 @@ class Finance::Expenses::CategoriesController < ApplicationController
 private
 	
 	def category_params
-		params.require(:finance_category).permit(:ctype, :category, :subcategory, :tax)
+		params.require(:finance_expenses_category).permit(:ctype, :category, :subcategory, :tax)
 	end
 
 	def require_expenses
@@ -79,7 +79,7 @@ private
 
 	def get_categories
 		categories = Hash.new
-		FinanceCategory.all.order('ctype, category, subcategory').each do |category|
+		FinanceExpensesCategory.all.order('ctype, category, subcategory').each do |category|
 			categories[category.id] = Hash.new
 			categories[category.id]['ctype'] = category.ctype
 			categories[category.id]['category'] = category.category

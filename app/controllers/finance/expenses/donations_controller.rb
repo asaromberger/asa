@@ -25,11 +25,11 @@ class Finance::Expenses::DonationsController < ApplicationController
 			@years.push(year.to_i)
 		end
 		# find donations categories
-		donationcatids = FinanceCategory.where("tax = 'Donations'").pluck('DISTINCT id')
+		donationcatids = FinanceExpensesCategory.where("tax = 'Donations'").pluck('DISTINCT id')
 		# find donations
 		@donations = Hash.new
 		whatids = []
-		FinanceWhat.where("finance_category_id IN (?)", donationcatids).order('what').each do |what|
+		FinanceWhat.where("finance_expenses_category_id IN (?)", donationcatids).order('what').each do |what|
 			whatids.push(what.id)
 			@donations[what.id] = Hash.new
 			@donations[what.id]['name'] = what.what

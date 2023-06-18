@@ -26,7 +26,7 @@ class Finance::Admin::ExportsController < ApplicationController
 
 		# categories
 		categories = Hash.new
-		FinanceCategory.all.order('id').each do |map|
+		FinanceExpensesCategory.all.order('id').each do |map|
 			content += "\"category\",\"#{map.ctype}\",\"#{map.category}\",\"#{map.subcategory}\",\"#{map.tax}\"\n"
 			categories[map.id] = [map.ctype, map.category, map.subcategory, map.tax]
 		end
@@ -63,7 +63,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		# whats           categories
 		whats = Hash.new
 		FinanceWhat.all.order('id').each do |map|
-			content += "\"what\",\"#{map.what}\",\"#{categories[map.finance_category_id][0]}\",\"#{categories[map.finance_category_id][1]}\",\"#{categories[map.finance_category_id][2]}\",\"#{categories[map.finance_category_id][3]}\"\n"
+			content += "\"what\",\"#{map.what}\",\"#{categories[map.finance_expenses_category_id][0]}\",\"#{categories[map.finance_expenses_category_id][1]}\",\"#{categories[map.finance_expenses_category_id][2]}\",\"#{categories[map.finance_expenses_category_id][3]}\"\n"
 			whats[map.id] = map.what
 		end
 

@@ -20,14 +20,14 @@ class Finance::Expenses::ItemsController < ApplicationController
 		@whatcatids = Hash.new
 		FinanceWhat.all.each do |what|
 			@whats[what.id] = what.what
-			@whatcatids[what.id] = what.finance_category_id
+			@whatcatids[what.id] = what.finance_expenses_category_id
 		end
 		# build cat_id to ctype, category, subcategory, tax tables
 		@ctypes = Hash.new
 		@categories = Hash.new
 		@subcategories = Hash.new
 		@taxes = Hash.new
-		FinanceCategory.all.each do |category|
+		FinanceExpensesCategory.all.each do |category|
 			@ctypes[category.id] = category.ctype
 			@categories[category.id] = category.category
 			@subcategories[category.id] = category.subcategory

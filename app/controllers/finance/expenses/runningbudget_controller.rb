@@ -29,14 +29,14 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		whatcatids = Hash.new
 		FinanceWhat.all.each do |what|
 			whats[what.id] = what.what
-			whatcatids[what.id] = what.finance_category_id
+			whatcatids[what.id] = what.finance_expenses_category_id
 		end
 		# build cat_id to ctype, category, subcategory, tax tables
 		ctypes = Hash.new
 		categories = Hash.new
 		subcategories = Hash.new
 		taxes = Hash.new
-		FinanceCategory.all.each do |category|
+		FinanceExpensesCategory.all.each do |category|
 			ctypes[category.id] = category.ctype
 			categories[category.id] = category.category
 			subcategories[category.id] = category.subcategory
@@ -125,10 +125,10 @@ class Finance::Expenses::RunningbudgetController < ApplicationController
 		@type = params[:type]
 		@cat = params[:cat]
 		@subcat = params[:subcat]
-		category_ids = FinanceCategory.where("ctype = ? AND category = ? AND subcategory = ?", @type, @cat, @subcat).pluck('id')
+		category_ids = FinanceExpensesCategory.where("ctype = ? AND category = ? AND subcategory = ?", @type, @cat, @subcat).pluck('id')
 		@whats = Hash.new
 		what_ids = []
-		FinanceWhat.where("finance_category_id IN (?)", category_ids).each do |what|
+		FinanceWhat.where("finance_expenses_category_id IN (?)", category_ids).each do |what|
 			what_ids.push(what.id)
 			@whats[what.id] = what.what
 		end

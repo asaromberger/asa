@@ -15,7 +15,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		@title = 'New What Map'
 		@what = FinanceWhat.new
 		set_sort_filter(columnlist())
-		@categories = FinanceCategory.all.order('ctype, category, subcategory, tax')
+		@categories = FinanceExpensesCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def create
@@ -32,7 +32,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		@title = 'Edit What Map'
 		@what = FinanceWhat.find(params[:id])
 		set_sort_filter(columnlist())
-		@categories = FinanceCategory.all.order('ctype, category, subcategory, tax')
+		@categories = FinanceExpensesCategory.all.order('ctype, category, subcategory, tax')
 	end
 
 	def update
@@ -101,7 +101,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 private
 	
 	def what_params
-		params.require(:finance_what).permit(:what, :finance_category_id)
+		params.require(:finance_what).permit(:what, :finance_expenses_category_id)
 	end
 
 	def require_expenses
@@ -116,17 +116,17 @@ private
 
 	def get_whats
 		@categorymap = Hash.new
-		FinanceCategory.all.each do |category|
+		FinanceExpensesCategory.all.each do |category|
 			@categorymap[category.id] = category
 		end
 		whats = Hash.new
-		FinanceWhat.joins(:finance_category).all.order('ctype, category, subcategory, what').each do |what|
+		FinanceWhat.joins(:finance_expenses_category).all.order('ctype, category, subcategory, what').each do |what|
 			whats[what.id] = Hash.new
 			whats[what.id]['what'] = what.what
-			whats[what.id]['ctype'] = @categorymap[what.finance_category_id].ctype
-			whats[what.id]['category'] = @categorymap[what.finance_category_id].category
-			whats[what.id]['subcategory'] = @categorymap[what.finance_category_id].subcategory
-			whats[what.id]['tax'] = @categorymap[what.finance_category_id].tax
+			whats[what.id]['ctype'] = @categorymap[what.finance_expenses_category_id].ctype
+			whats[what.id]['category'] = @categorymap[what.finance_expenses_category_id].category
+			whats[what.id]['subcategory'] = @categorymap[what.finance_expenses_category_id].subcategory
+			whats[what.id]['tax'] = @categorymap[what.finance_expenses_category_id].tax
 		end
 		return whats
 	end
