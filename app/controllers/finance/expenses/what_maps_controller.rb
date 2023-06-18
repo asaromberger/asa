@@ -14,13 +14,13 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 
 	def new
 		@title = 'New WhatMap Map'
-		@whatmap = FinanceWhatMap.new
+		@whatmap = FinanceExpensesWhatMap.new
 		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def create
-		@whatmap = FinanceWhatMap.new(whatmap_params)
+		@whatmap = FinanceExpensesWhatMap.new(whatmap_params)
 		set_sort_filter(columnlist())
 		if @whatmap.save
 			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Added"
@@ -31,13 +31,13 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 
 	def edit
 		@title = 'Edit WhatMap Map'
-		@whatmap = FinanceWhatMap.find(params[:id])
+		@whatmap = FinanceExpensesWhatMap.find(params[:id])
 		set_sort_filter(columnlist())
 		@whats = FinanceWhat.all.order('what')
 	end
 
 	def update
-		@whatmap = FinanceWhatMap.find(params[:id])
+		@whatmap = FinanceExpensesWhatMap.find(params[:id])
 		set_sort_filter(columnlist())
 		if @whatmap.update(whatmap_params)
 			redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Updated"
@@ -47,7 +47,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 	end
 
 	def destroy
-		@whatmap = FinanceWhatMap.find(params[:id])
+		@whatmap = FinanceExpensesWhatMap.find(params[:id])
 		set_sort_filter(columnlist())
 		@whatmap.delete
 		redirect_to finance_expenses_what_maps_path(sort: @sort, filters: @filters), notice: "WhatMap #{@whatmap.whatmap} Deleted"
@@ -56,7 +56,7 @@ class Finance::Expenses::WhatMapsController < ApplicationController
 private
 	
 	def whatmap_params
-		params.require(:finance_what_map).permit(:whatmap, :finance_what_id)
+		params.require(:finance_expenses_what_map).permit(:whatmap, :finance_what_id)
 	end
 
 	def require_expenses
@@ -71,7 +71,7 @@ private
 
 	def get_whatmaps
 		whatmaps = Hash.new
-		FinanceWhatMap.all.order('whatmap').each do |whatmap|
+		FinanceExpensesWhatMap.all.order('whatmap').each do |whatmap|
 			whatmaps[whatmap.id] = Hash.new
 			whatmaps[whatmap.id]['what'] = whatmap.whatmap
 			whatmaps[whatmap.id]['map'] = whatmap.finance_what.what
