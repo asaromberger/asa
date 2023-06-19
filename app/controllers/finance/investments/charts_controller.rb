@@ -20,7 +20,7 @@ class Finance::Investments::ChartsController < ApplicationController
 			end
 			FinanceInvestmentMap.where("finance_summary_type_id = ?", summary.id).each do |map|
 				t = Hash.new
-				FinanceInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
+				FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
 					t[investment.date.year] = investment.value
 				end
 				@years.each do |year|

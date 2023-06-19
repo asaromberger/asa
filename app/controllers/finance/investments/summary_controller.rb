@@ -12,11 +12,11 @@ class Finance::Investments::SummaryController < ApplicationController
 		if params[:toyear]
 			@toyear = params[:toyear]
 		else
-			@toyear = FinanceInvestment.all.order('date DESC').first.date.year
+			@toyear = FinanceInvestmentsInvestment.all.order('date DESC').first.date.year
 		end
 		@title = "Investments Summary"
 		@pickyears = []
-		FinanceInvestment.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
+		FinanceInvestmentsInvestment.all.pluck(Arel.sql("DISTINCT EXTRACT(year FROM date)")).each do |year|
 			@pickyears.push(year.to_i)
 		end
 		@pickyears = @pickyears.sort
@@ -34,7 +34,7 @@ class Finance::Investments::SummaryController < ApplicationController
 			end
 			FinanceInvestmentMap.where("finance_summary_type_id = ?", summary.id).each do |map|
 				t = Hash.new
-				FinanceInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
+				FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
 					t[investment.date.year] = investment.value
 				end
 				@years.each do |year|
@@ -64,7 +64,7 @@ class Finance::Investments::SummaryController < ApplicationController
 			@years.each do |year|
 				@funds[map.finance_investments_fund_id][year] = 0
 			end
-			FinanceInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
+			FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
 				@funds[map.finance_investments_fund_id][investment.date.year] = investment.value
 			end
 			flag = 0

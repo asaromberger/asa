@@ -15,7 +15,7 @@ class Finance::Investments::RebalanceController < ApplicationController
 		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
 			@funds[map.finance_investments_fund_id] = Hash.new
 			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
-			investment = FinanceInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
+			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
 			if investment.count > 0
 				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
 			else
@@ -34,7 +34,7 @@ class Finance::Investments::RebalanceController < ApplicationController
 		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
 			@funds[map.finance_investments_fund_id] = Hash.new
 			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
-			investment = FinanceInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
+			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
 			if investment.count > 0
 				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
 			else

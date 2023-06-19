@@ -177,9 +177,9 @@ class Finance::Admin::ImportController < ApplicationController
 					finance_investment_map_ids["#{finance_investments_fund_ids[line[1]]}:#{finance_summary_type_ids[line[2]]}"] = fim.id
 				end
 			elsif line[0] == 'investment'
-				fi = FinanceInvestment.where("finance_investments_fund_id = ? AND date = ?", finance_investments_fund_ids[line[1]], line[2].to_date).first
+				fi = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND date = ?", finance_investments_fund_ids[line[1]], line[2].to_date).first
 				if !fi
-					fi = FinanceInvestment.new
+					fi = FinanceInvestmentsInvestment.new
 					fi.finance_investments_fund_id = finance_investments_fund_ids[line[1]]
 					fi.date = line[2].to_date
 					fi.value = line[3].to_f

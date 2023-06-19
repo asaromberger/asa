@@ -49,7 +49,7 @@ class Finance::Investments::FundsController < ApplicationController
 	def destroy
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:id])
-		FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).delete_all
+		FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		FinanceInvestmentMap.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		FinanceRebalanceMap.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		@fund.delete
@@ -59,11 +59,11 @@ class Finance::Investments::FundsController < ApplicationController
 	def close
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:id])
-		investment = FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC')
+		investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC')
 		if investment.count > 0
 			investment = investment.first
 			if investment.value != 0
-				newinvestment = FinanceInvestment.new
+				newinvestment = FinanceInvestmentsInvestment.new
 				newinvestment.finance_investments_fund_id = @fund.id
 				newinvestment.date = investment.date + 1.day
 				newinvestment.value = 0

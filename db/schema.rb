@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_19_015906) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_19_183941) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -87,21 +87,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_19_015906) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_investments", force: :cascade do |t|
+  create_table "finance_investments_funds", force: :cascade do |t|
+    t.string "fund"
+    t.string "atype"
+    t.boolean "closed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "finance_investments_investments", force: :cascade do |t|
     t.integer "finance_investments_fund_id"
     t.date "date"
     t.decimal "value"
     t.decimal "shares"
     t.decimal "pershare"
     t.decimal "guaranteed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "finance_investments_funds", force: :cascade do |t|
-    t.string "fund"
-    t.string "atype"
-    t.boolean "closed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -51,7 +51,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		end
 
 		# investments     fund
-		FinanceInvestment.all.order('id').each do |map|
+		FinanceInvestmentsInvestment.all.order('id').each do |map|
 			content += "\"investment\",\"#{funds[map.finance_investments_fund_id]}\",\"#{map.date}\",\"#{map.value}\",\"#{map.shares}\",\"#{map.pershare}\",\"#{map.guaranteed}\"\n"
 		end
 

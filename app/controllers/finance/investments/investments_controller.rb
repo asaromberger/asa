@@ -20,7 +20,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 			@funds[fund.id] = Hash.new
 			@funds[fund.id]['fund'] = fund.fund
 			@funds[fund.id]['type'] = fund.atype
-			investment = FinanceInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
+			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
 			if investment.count > 0
 				@funds[fund.id]['date'] = investment.first.date
 				@funds[fund.id]['value'] = investment.first.value
@@ -46,7 +46,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@errors = params[:errors]
 		@exists = params[:exists]
 		@investments = Hash.new
-		FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').each do |investment|
+		FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').each do |investment|
 			@investments[investment.id] = Hash.new
 			@investments[investment.id]['date'] = investment.date
 			@investments[investment.id]['value'] = investment.value
@@ -65,13 +65,13 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		@title = "New Entry for #{@fund.fund}"
-		@investment = FinanceInvestment.new
+		@investment = FinanceInvestmentsInvestment.new
 		if session['investmentdate'].blank?
 			@investment.date = (Time.now - 1.month).end_of_month.to_date
 		else
 			@investment.date = session['investmentdate']
 		end
-		lastinvestment = FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').first
+		lastinvestment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').first
 		if @fund.atype == 'cash'
 			@headers = ['value']
 			if lastinvestment.blank?
@@ -103,7 +103,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 	def create
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:fund])
-		@investment = FinanceInvestment.new(investment_params)
+		@investment = FinanceInvestmentsInvestment.new(investment_params)
 		@investment.finance_investments_fund_id = @fund.id
 		if @fund.atype == 'brokerage'
 			@investment.value = @investment.shares * @investment.pershare
@@ -120,7 +120,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@title = "Edit Entry for #{@fund.fund}"
-		@investment = FinanceInvestment.find(params[:id])
+		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		if @fund.atype == 'cash'
 			@headers = ['value']
 		elsif @fund.atype == 'brokerage'
@@ -133,7 +133,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 	def update
 		@status = params[:status]
 		@fund = FinanceInvestmentsFund.find(params[:fund])
-		@investment = FinanceInvestment.find(params[:id])
+		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		if @fund.atype == 'brokerage'
 			params[:finance_investment][:value] = params[:finance_investment][:shares].to_f * params[:finance_investment][:pershare].to_f
 		end
@@ -147,7 +147,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def destroy
 		@status = params[:status]
-		@investment = FinanceInvestment.find(params[:id])
+		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		@investment.delete
 		redirect_to finance_investments_investments_path(status: @status), notice: "Item Deleted"
 	end
@@ -155,7 +155,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 private
 	
 	def investment_params
-		params.require(:finance_investment).permit(:date, :value, :shares, :pershare, :guaranteed)
+		params.require(:finance_investments_investment).permit(:date, :value, :shares, :pershare, :guaranteed)
 	end
 
 	def require_investments
