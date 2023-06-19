@@ -17,11 +17,11 @@ class Finance::Admin::ExportsController < ApplicationController
 			content += "\"accountmap\",\"#{map.account}\",\"#{map.ctype}\"\n"
 		end
 
-		# accounts
-		accounts = Hash.new
-		FinanceAccount.all.order('id').each do |map|
-			content += "\"account\",\"#{map.account}\",\"#{map.atype}\",\"#{map.closed}\"\n"
-			accounts[map.id] = map.account
+		# funds
+		funds = Hash.new
+		FinanceInvestmentsFund.all.order('id').each do |map|
+			content += "\"fund\",\"#{map.fund}\",\"#{map.atype}\",\"#{map.closed}\"\n"
+			funds[map.id] = map.fund
 		end
 
 		# categories
@@ -45,19 +45,19 @@ class Finance::Admin::ExportsController < ApplicationController
 			summary_types[map.id] = map.stype
 		end
 
-		# investment_maps account summary_type
+		# investment_maps fund summary_type
 		FinanceInvestmentMap.all.order('id').each do |map|
-			content += "\"investment_map\",\"#{accounts[map.finance_account_id]}\",\"#{summary_types[map.finance_summary_type_id]}\"\n"
+			content += "\"investment_map\",\"#{funds[map.finance_investments_fund_id]}\",\"#{summary_types[map.finance_summary_type_id]}\"\n"
 		end
 
-		# investments     account
+		# investments     fund
 		FinanceInvestment.all.order('id').each do |map|
-			content += "\"investment\",\"#{accounts[map.finance_account_id]}\",\"#{map.date}\",\"#{map.value}\",\"#{map.shares}\",\"#{map.pershare}\",\"#{map.guaranteed}\"\n"
+			content += "\"investment\",\"#{funds[map.finance_investments_fund_id]}\",\"#{map.date}\",\"#{map.value}\",\"#{map.shares}\",\"#{map.pershare}\",\"#{map.guaranteed}\"\n"
 		end
 
-		# rebalance_maps  rebalance_type	account
+		# rebalance_maps  rebalance_type	fund
 		FinanceRebalanceMap.all.order('id').each do |map|
-			content += "\"rebalance_map\",\"#{rebalance_types[map.finance_rebalance_type_id]}\",\"#{accounts[map.finance_account_id]}\",\"#{map.target}\"\n"
+			content += "\"rebalance_map\",\"#{rebalance_types[map.finance_rebalance_type_id]}\",\"#{funds[map.finance_investments_fund_id]}\",\"#{map.target}\"\n"
 		end
 
 		# whats           categories

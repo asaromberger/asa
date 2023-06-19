@@ -1,0 +1,17 @@
+<%= form_for(@fund, url: url, html: {method: method}) do |form| %>
+
+	<%= hidden_field_tag :status, @status %>
+
+	<%= form.label :fund, class: 'col-md-2' %>
+	<%= form.text_field :fund, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label 'Type', class: 'col-md-2' %>
+	<%= form.select :atype, @atypes, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.submit "#{type} Fund", class: 'btn btn-primary col-md-3' %>
+<% end %>
+

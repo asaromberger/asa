@@ -5,56 +5,56 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def index
 		@status = params[:status]
-		@title = 'Accounts'
-		@accounts = Hash.new
+		@title = 'Funds'
+		@funds = Hash.new
 		@errors = params[:errors]
 		@exists = params[:exists]
 		if @status == 'open'
-			accounts = FinanceAccount.where('closed is NULL or closed = false').order('account')
+			funds = FinanceInvestmentsFund.where('closed is NULL or closed = false').order('fund')
 		elsif @status == 'closed'
-			accounts = FinanceAccount.where('closed = true').order('account')
+			funds = FinanceInvestmentsFund.where('closed = true').order('fund')
 		else
-			accounts = FinanceAccount.all.order('account')
+			funds = FinanceInvestmentsFund.all.order('fund')
 		end
-		accounts.each do |account|
-			@accounts[account.id] = Hash.new
-			@accounts[account.id]['account'] = account.account
-			@accounts[account.id]['type'] = account.atype
-			investment = FinanceInvestment.where("finance_account_id = ?", account.id).order('date DESC')
+		funds.each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['fund'] = fund.fund
+			@funds[fund.id]['type'] = fund.atype
+			investment = FinanceInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
 			if investment.count > 0
-				@accounts[account.id]['date'] = investment.first.date
-				@accounts[account.id]['value'] = investment.first.value
+				@funds[fund.id]['date'] = investment.first.date
+				@funds[fund.id]['value'] = investment.first.value
 			else
-				@accounts[account.id]['date'] = ''
-				@accounts[account.id]['value'] = 0
+				@funds[fund.id]['date'] = ''
+				@funds[fund.id]['value'] = 0
 			end
-			@accounts[account.id]['closed'] = account.closed
+			@funds[fund.id]['closed'] = fund.closed
 		end
 	end
 
 	def show
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:id])
-		@title = "#{@account.account}"
-		if @account.atype == 'cash'
+		@fund = FinanceInvestmentsFund.find(params[:id])
+		@title = "#{@fund.fund}"
+		if @fund.atype == 'cash'
 			@headers = []
-		elsif @account.atype == 'brokerage'
+		elsif @fund.atype == 'brokerage'
 			@headers = ['Shares', 'Per Share']
-		elsif @account.atype == 'annuity'
+		elsif @fund.atype == 'annuity'
 			@headers = ['Guaranteed', 'Yearly']
 		end
 		@errors = params[:errors]
 		@exists = params[:exists]
 		@investments = Hash.new
-		FinanceInvestment.where("finance_account_id = ?", @account.id).order('date DESC').each do |investment|
+		FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').each do |investment|
 			@investments[investment.id] = Hash.new
 			@investments[investment.id]['date'] = investment.date
 			@investments[investment.id]['value'] = investment.value
-			if @account.atype == 'cash'
-			elsif @account.atype == 'brokerage'
+			if @fund.atype == 'cash'
+			elsif @fund.atype == 'brokerage'
 				@investments[investment.id]['Shares'] = investment.shares
 				@investments[investment.id]['Per Share'] = investment.pershare
-			elsif @account.atype == 'annuity'
+			elsif @fund.atype == 'annuity'
 				@investments[investment.id]['Guaranteed'] = investment.guaranteed
 				@investments[investment.id]['Yearly'] = investment.guaranteed * 0.05
 			end
@@ -63,23 +63,23 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def new
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:id])
-		@title = "New Entry for #{@account.account}"
+		@fund = FinanceInvestmentsFund.find(params[:id])
+		@title = "New Entry for #{@fund.fund}"
 		@investment = FinanceInvestment.new
 		if session['investmentdate'].blank?
 			@investment.date = (Time.now - 1.month).end_of_month.to_date
 		else
 			@investment.date = session['investmentdate']
 		end
-		lastinvestment = FinanceInvestment.where("finance_account_id = ?", @account.id).order('date DESC').first
-		if @account.atype == 'cash'
+		lastinvestment = FinanceInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date DESC').first
+		if @fund.atype == 'cash'
 			@headers = ['value']
 			if lastinvestment.blank?
 				@investment.value = 0
 			else
 				@investment.value = lastinvestment.value
 			end
-		elsif @account.atype == 'brokerage'
+		elsif @fund.atype == 'brokerage'
 			@headers = ['shares', 'pershare']
 			if lastinvestment.blank?
 				@investment.shares = 0
@@ -88,7 +88,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 				@investment.shares = lastinvestment.shares
 				@investment.pershare = lastinvestment.pershare
 			end
-		elsif @account.atype == 'annuity'
+		elsif @fund.atype == 'annuity'
 			@headers = ['value', 'guaranteed']
 			if lastinvestment.blank?
 				@investment.value = 0
@@ -102,10 +102,10 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def create
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:account])
+		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestment.new(investment_params)
-		@investment.finance_account_id = @account.id
-		if @account.atype == 'brokerage'
+		@investment.finance_investments_fund_id = @fund.id
+		if @fund.atype == 'brokerage'
 			@investment.value = @investment.shares * @investment.pershare
 		end
 		session['investmentdate'] = @investment.date
@@ -118,23 +118,23 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def edit
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:account])
-		@title = "Edit Entry for #{@account.account}"
+		@fund = FinanceInvestmentsFund.find(params[:fund])
+		@title = "Edit Entry for #{@fund.fund}"
 		@investment = FinanceInvestment.find(params[:id])
-		if @account.atype == 'cash'
+		if @fund.atype == 'cash'
 			@headers = ['value']
-		elsif @account.atype == 'brokerage'
+		elsif @fund.atype == 'brokerage'
 			@headers = ['shares', 'pershare']
-		elsif @account.atype == 'annuity'
+		elsif @fund.atype == 'annuity'
 			@headers = ['value', 'guaranteed']
 		end
 	end
 
 	def update
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:account])
+		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestment.find(params[:id])
-		if @account.atype == 'brokerage'
+		if @fund.atype == 'brokerage'
 			params[:finance_investment][:value] = params[:finance_investment][:shares].to_f * params[:finance_investment][:pershare].to_f
 		end
 		session['investmentdate'] = @investment.date

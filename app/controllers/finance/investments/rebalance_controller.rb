@@ -4,59 +4,59 @@ class Finance::Investments::RebalanceController < ApplicationController
 	before_action :require_investments
 
 	def index
-		@title = 'Rebalance Account Groups'
+		@title = 'Rebalance Fund Groups'
 		@rebalances = FinanceRebalanceType.all.order('rtype')
 	end
 
 	def show
 		@rebalance = FinanceRebalanceType.find(params[:id])
 		@title = "Rebalance #{@rebalance.rtype}"
-		@accounts = Hash.new
-		FinanceRebalanceMap.joins(:finance_account).where("finance_rebalance_type_id = ?", @rebalance.id).order('account').each do |map|
-			@accounts[map.finance_account_id] = Hash.new
-			@accounts[map.finance_account_id]['name'] = map.finance_account.account
-			investment = FinanceInvestment.where("finance_account_id = ?", map.finance_account_id).order('date DESC')
+		@funds = Hash.new
+		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
+			@funds[map.finance_investments_fund_id] = Hash.new
+			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
+			investment = FinanceInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
 			if investment.count > 0
-				@accounts[map.finance_account_id]['value'] = investment.first.value
+				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
 			else
-				@accounts[map.finance_account_id]['value'] = 0
+				@funds[map.finance_investments_fund_id]['value'] = 0
 			end
-			@accounts[map.finance_account_id]['target'] = map.target
+			@funds[map.finance_investments_fund_id]['target'] = map.target
 		end
 	end
 
 	def showupdate
 		@rebalance = FinanceRebalanceType.find(params[:id])
 		@title = "Rebalance #{@rebalance.rtype}"
-		@accounts = Hash.new
+		@funds = Hash.new
 		@total = 0
-		# get account information
-		FinanceRebalanceMap.joins(:finance_account).where("finance_rebalance_type_id = ?", @rebalance.id).order('account').each do |map|
-			@accounts[map.finance_account_id] = Hash.new
-			@accounts[map.finance_account_id]['name'] = map.finance_account.account
-			investment = FinanceInvestment.where("finance_account_id = ?", map.finance_account_id).order('date DESC')
+		# get fund information
+		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
+			@funds[map.finance_investments_fund_id] = Hash.new
+			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
+			investment = FinanceInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
 			if investment.count > 0
-				@accounts[map.finance_account_id]['value'] = investment.first.value
+				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
 			else
-				@accounts[map.finance_account_id]['value'] = 0
+				@funds[map.finance_investments_fund_id]['value'] = 0
 			end
-			@accounts[map.finance_account_id]['target'] = map.target
-			@total = @total + @accounts[map.finance_account_id]['value']
+			@funds[map.finance_investments_fund_id]['target'] = map.target
+			@total = @total + @funds[map.finance_investments_fund_id]['value']
 		end
 		withdraw = params[:withdraw].to_f
 
 		@total = @total - withdraw
-		# calculate amount to move to/from each account
-		@accounts.each do |id, account|
-			t = @total * account['target']
-			@accounts[id]['target'] = t
-			@accounts[id]['move'] = t - account['value'];
-			if @accounts[id]['value'] > @accounts[id]['target']
-				@accounts[id]['sell'] = @accounts[id]['value'] - @accounts[id]['target']
-				@accounts[id]['buy'] = ''
+		# calculate amount to move to/from each fund
+		@funds.each do |id, fund|
+			t = @total * fund['target']
+			@funds[id]['target'] = t
+			@funds[id]['move'] = t - fund['value'];
+			if @funds[id]['value'] > @funds[id]['target']
+				@funds[id]['sell'] = @funds[id]['value'] - @funds[id]['target']
+				@funds[id]['buy'] = ''
 			else
-				@accounts[id]['sell'] = ''
-				@accounts[id]['buy'] = @accounts[id]['target'] - @accounts[id]['value']
+				@funds[id]['sell'] = ''
+				@funds[id]['buy'] = @funds[id]['target'] - @funds[id]['value']
 			end
 		end
 		@withdraws = []
@@ -65,15 +65,15 @@ class Finance::Investments::RebalanceController < ApplicationController
 			# withdrawals only
 			if withdraw > 0
 				excess = 0
-				@accounts.each do |id, account|
-					if account['move'] < 0
-						excess -= account['move']
+				@funds.each do |id, fund|
+					if fund['move'] < 0
+						excess -= fund['move']
 					end
 				end
-				@accounts.each do |id, account|
-					if account['move'] < 0
-						t = - (account['move'] * withdraw / excess);
-						@withdraws.push([t,account['name']])
+				@funds.each do |id, fund|
+					if fund['move'] < 0
+						t = - (fund['move'] * withdraw / excess);
+						@withdraws.push([t,fund['name']])
 					end
 				end
 			end
@@ -81,32 +81,32 @@ class Finance::Investments::RebalanceController < ApplicationController
 			# withdrawals and transfers
 			# withdraws
 			if withdraw > 0
-				@accounts.each do |id, account|
-					if withdraw > 0 && account['move'] < 0
-						if withdraw > -account['move']
-							t = -account['move']
+				@funds.each do |id, fund|
+					if withdraw > 0 && fund['move'] < 0
+						if withdraw > -fund['move']
+							t = -fund['move']
 						else
 							t = withdraw
 						end
-						@withdraws.push([t, account['name']])
-						@accounts[id]['move'] = @accounts[id]['move'] + t
+						@withdraws.push([t, fund['name']])
+						@funds[id]['move'] = @funds[id]['move'] + t
 						withdraw = withdraw - t
 					end
 				end
 			end
 			# transfers
-			@accounts.each do |fid, faccount|
-				@accounts.each do |tid, taccount|
-					if @accounts[fid]['move'] < 0
-						if taccount['move'] > 0
-							if -faccount['move'] > taccount['move']
-								t = taccount['move']
+			@funds.each do |fid, ffund|
+				@funds.each do |tid, tfund|
+					if @funds[fid]['move'] < 0
+						if tfund['move'] > 0
+							if -ffund['move'] > tfund['move']
+								t = tfund['move']
 							else
-								t = -faccount['move']
+								t = -ffund['move']
 							end
-							@transfers.push([t, faccount['name'], taccount['name']]);
-							@accounts[fid]['move'] = @accounts[fid]['move'] + t
-							@accounts[tid]['move'] = @accounts[tid]['move'] - t
+							@transfers.push([t, ffund['name'], tfund['name']]);
+							@funds[fid]['move'] = @funds[fid]['move'] + t
+							@funds[tid]['move'] = @funds[tid]['move'] - t
 						end
 					end
 				end

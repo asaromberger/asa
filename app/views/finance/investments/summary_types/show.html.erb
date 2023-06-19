@@ -12,13 +12,13 @@
 
 <thead>
 	<tr>
-	<th>Account</th>
+	<th>Fund</th>
 	<th>Included</th>
 	</tr>
 </thead>
 
 <tbody>
-<% @accounts.each do |id, values| %>
+<% @funds.each do |id, values| %>
 	<tr>
 	<td><%= values['name'] %></td>
 	<td><%= check_box_tag id, nil, values['included'] %></td>

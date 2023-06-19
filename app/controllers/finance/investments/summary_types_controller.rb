@@ -10,27 +10,27 @@ class Finance::Investments::SummaryTypesController < ApplicationController
 
 	def show
 		@summary_type = FinanceSummaryType.find(params[:id])
-		@title = "Accounts in #{@summary_type.stype}"
-		@accounts = Hash.new
-		FinanceAccount.all.order('account').each do |account|
-			@accounts[account.id] = Hash.new
-			@accounts[account.id]['name'] = account.account
-			@accounts[account.id]['included'] = false
+		@title = "Funds in #{@summary_type.stype}"
+		@funds = Hash.new
+		FinanceInvestmentsFund.all.order('fund').each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['name'] = fund.fund
+			@funds[fund.id]['included'] = false
 		end
-		FinanceInvestmentMap.where("finance_summary_type_id = ?", @summary_type.id).pluck('DISTINCT finance_account_id').each do |account_id|
-			@accounts[account_id]['included'] = true
+		FinanceInvestmentMap.where("finance_summary_type_id = ?", @summary_type.id).pluck('DISTINCT finance_investments_fund_id').each do |fund_id|
+			@funds[fund_id]['included'] = true
 		end
 	end
 
 	def showupdate
 		@summary_type = FinanceSummaryType.find(params[:summary_type])
-		FinanceAccount.all.each do |account|
-			investment_map = FinanceInvestmentMap.where("finance_summary_type_id = ? AND finance_account_id = ?", @summary_type.id, account.id)
-			if params[account.id.to_s] == 'on'
+		FinanceInvestmentsFund.all.each do |fund|
+			investment_map = FinanceInvestmentMap.where("finance_summary_type_id = ? AND finance_investments_fund_id = ?", @summary_type.id, fund.id)
+			if params[fund.id.to_s] == 'on'
 				if investment_map.count == 0
 					investment_map = FinanceInvestmentMap.new
 					investment_map.finance_summary_type_id = @summary_type.id
-					investment_map.finance_account_id = account.id
+					investment_map.finance_investments_fund_id = fund.id
 					investment_map.save
 				end
 			else

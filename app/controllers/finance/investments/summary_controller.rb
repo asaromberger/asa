@@ -34,7 +34,7 @@ class Finance::Investments::SummaryController < ApplicationController
 			end
 			FinanceInvestmentMap.where("finance_summary_type_id = ?", summary.id).each do |map|
 				t = Hash.new
-				FinanceInvestment.where("finance_account_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_account_id, @fromyear, @toyear).order('date').each do |investment|
+				FinanceInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
 					t[investment.date.year] = investment.value
 				end
 				@years.each do |year|
@@ -50,31 +50,31 @@ class Finance::Investments::SummaryController < ApplicationController
 
 	def show
 		@summarytype = FinanceSummaryType.find(params[:id])
-		@title = "Account contributions for #{@summarytype.stype}"
+		@title = "Fund contributions for #{@summarytype.stype}"
 		@fromyear = params[:fromyear]
 		@toyear = params[:toyear]
 		@years = []
 		(@fromyear..@toyear).each do |year|
 			@years.push(year.to_i)
 		end
-		@accounts = Hash.new
-		FinanceInvestmentMap.joins(:finance_account).where("finance_summary_type_id = ?", @summarytype.id).order('account').each do |map|
-			@accounts[map.finance_account_id] = Hash.new
-			@accounts[map.finance_account_id]['name'] = map.finance_account.account
+		@funds = Hash.new
+		FinanceInvestmentMap.joins(:finance_investments_fund).where("finance_summary_type_id = ?", @summarytype.id).order('fund').each do |map|
+			@funds[map.finance_investments_fund_id] = Hash.new
+			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
 			@years.each do |year|
-				@accounts[map.finance_account_id][year] = 0
+				@funds[map.finance_investments_fund_id][year] = 0
 			end
-			FinanceInvestment.where("finance_account_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_account_id, @fromyear, @toyear).order('date').each do |investment|
-				@accounts[map.finance_account_id][investment.date.year] = investment.value
+			FinanceInvestment.where("finance_investments_fund_id = ? AND EXTRACT(year FROM date) >= ? AND EXTRACT(year FROM date) <= ?", map.finance_investments_fund_id, @fromyear, @toyear).order('date').each do |investment|
+				@funds[map.finance_investments_fund_id][investment.date.year] = investment.value
 			end
 			flag = 0
 			@years.each do |year|
-				if @accounts[map.finance_account_id][year] != 0
+				if @funds[map.finance_investments_fund_id][year] != 0
 					flag = 1
 				end
 			end
 			if flag == 0
-				@accounts.delete(map.finance_account_id)
+				@funds.delete(map.finance_investments_fund_id)
 			end
 		end
 	end

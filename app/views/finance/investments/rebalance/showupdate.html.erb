@@ -4,7 +4,7 @@
 
 <thead>
 <tr>
-<th>Account</th>
+<th>Fund</th>
 <th class='text-right'>Value</th>
 <th class='text-right'>Target</th>
 <th class='text-right'>Sell</th>
@@ -13,13 +13,13 @@
 </thead>
 
 <tbody>
-<% @accounts.each do |id, account| %>
+<% @funds.each do |id, fund| %>
 	<tr>
-	<td><%= account['name'] %></td>
-	<td align='right'><%= number_with_precision(account['value'], precision:2) %></td>
-	<td align='right'><%= number_with_precision(account['target'], precision:2) %></td>
-	<td align='right'><%= number_with_precision(account['sell'], precision:2) %></td>
-	<td align='right'><%= number_with_precision(account['buy'], precision:2) %></td>
+	<td><%= fund['name'] %></td>
+	<td align='right'><%= number_with_precision(fund['value'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(fund['target'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(fund['sell'], precision:2) %></td>
+	<td align='right'><%= number_with_precision(fund['buy'], precision:2) %></td>
 	</tr>
 <% end %>
 </tbody>

@@ -10,17 +10,17 @@ class Finance::Investments::RebalanceTypesController < ApplicationController
 
 	def show
 		@rebalance_type = FinanceRebalanceType.find(params[:id])
-		@title = "Accounts in #{@rebalance_type.rtype}"
-		@accounts = Hash.new
-		FinanceAccount.where("closed IS NULL OR closed = false").order('account').each do |account|
-			@accounts[account.id] = Hash.new
-			@accounts[account.id]['name'] = account.account
-			@accounts[account.id]['included'] = false
+		@title = "Funds in #{@rebalance_type.rtype}"
+		@funds = Hash.new
+		FinanceInvestmentsFund.where("closed IS NULL OR closed = false").order('fund').each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['name'] = fund.fund
+			@funds[fund.id]['included'] = false
 		end
 		FinanceRebalanceMap.where("finance_rebalance_type_id = ?", @rebalance_type.id).each do |map|
-			if @accounts.key?(map.finance_account_id)
-				@accounts[map.finance_account_id]['included'] = true
-				@accounts[map.finance_account_id]['target'] = map.target
+			if @funds.key?(map.finance_investments_fund_id)
+				@funds[map.finance_investments_fund_id]['included'] = true
+				@funds[map.finance_investments_fund_id]['target'] = map.target
 			end
 		end
 	end
@@ -28,17 +28,17 @@ class Finance::Investments::RebalanceTypesController < ApplicationController
 	def showupdate
 		@rebalance_type = FinanceRebalanceType.find(params[:rebalance_type])
 		total = 0
-		FinanceAccount.all.each do |account|
-			rebalance_map = FinanceRebalanceMap.where("finance_rebalance_type_id = ? AND finance_account_id = ?", @rebalance_type.id, account.id)
+		FinanceInvestmentsFund.all.each do |fund|
+			rebalance_map = FinanceRebalanceMap.where("finance_rebalance_type_id = ? AND finance_investments_fund_id = ?", @rebalance_type.id, fund.id)
 			if rebalance_map.count > 0
 				rebalance_map.delete_all
 			end
-			if params[account.id.to_s] == 'on'
-				target = params["target#{account.id}"].to_f
+			if params[fund.id.to_s] == 'on'
+				target = params["target#{fund.id}"].to_f
 				total = total + target
 				rebalance_map = FinanceRebalanceMap.new
 				rebalance_map.finance_rebalance_type_id = @rebalance_type.id
-				rebalance_map.finance_account_id = account.id
+				rebalance_map.finance_investments_fund_id = fund.id
 				rebalance_map.target = target
 				rebalance_map.save
 			end
