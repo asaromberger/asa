@@ -89,6 +89,7 @@ Rails.application.routes.draw do
 			resources :whats
 		end
 		namespace :investments do
+			resources :accounts
 			resources :funds
 			resources :charts
 			resources :investments

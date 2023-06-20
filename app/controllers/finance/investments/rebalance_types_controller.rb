@@ -14,7 +14,8 @@ class Finance::Investments::RebalanceTypesController < ApplicationController
 		@funds = Hash.new
 		FinanceInvestmentsFund.where("closed IS NULL OR closed = false").order('fund').each do |fund|
 			@funds[fund.id] = Hash.new
-			@funds[fund.id]['name'] = fund.fund
+			fia = FinanceInvestmentsAccount.find(fund.finance_investments_account_id)
+			@funds[fund.id]['name'] = "#{fia.name}: #{fund.fund}"
 			@funds[fund.id]['included'] = false
 		end
 		FinanceRebalanceMap.where("finance_rebalance_type_id = ?", @rebalance_type.id).each do |map|
@@ -23,6 +24,7 @@ class Finance::Investments::RebalanceTypesController < ApplicationController
 				@funds[map.finance_investments_fund_id]['target'] = map.target
 			end
 		end
+		@funds = @funds.sort_by { |id, values| values['name'].downcase }
 	end
 
 	def showupdate

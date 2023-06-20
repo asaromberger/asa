@@ -1,0 +1,27 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Account', new_finance_investments_account_path %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Account</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @accounts.each do |account| %>
+	<tr>
+	<td><%= account.name %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_account_path(account.id) %></td>
+	<td><%= link_to 'Delete', finance_investments_account_path(account.id), method: :delete, data: {confirm: "Delete #{account.name}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

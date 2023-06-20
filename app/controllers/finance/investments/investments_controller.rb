@@ -6,6 +6,10 @@ class Finance::Investments::InvestmentsController < ApplicationController
 	def index
 		@status = params[:status]
 		@title = 'Funds'
+		accounts = Hash.new
+		FinanceInvestmentsAccount.all.each do |account|
+			accounts[account.id] = account.name
+		end
 		@funds = Hash.new
 		@errors = params[:errors]
 		@exists = params[:exists]
@@ -18,7 +22,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		end
 		funds.each do |fund|
 			@funds[fund.id] = Hash.new
-			@funds[fund.id]['fund'] = fund.fund
+			@funds[fund.id]['fund'] = "#{accounts[fund.finance_investments_account_id]}: #{fund.fund}"
 			@funds[fund.id]['type'] = fund.atype
 			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
 			if investment.count > 0
@@ -30,6 +34,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 			end
 			@funds[fund.id]['closed'] = fund.closed
 		end
+		@funds = @funds.sort_by { |id, values| values['fund'].downcase }
 	end
 
 	def show

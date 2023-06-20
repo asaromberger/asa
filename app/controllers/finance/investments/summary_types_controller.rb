@@ -14,12 +14,14 @@ class Finance::Investments::SummaryTypesController < ApplicationController
 		@funds = Hash.new
 		FinanceInvestmentsFund.all.order('fund').each do |fund|
 			@funds[fund.id] = Hash.new
-			@funds[fund.id]['name'] = fund.fund
+			fia = FinanceInvestmentsAccount.find(fund.finance_investments_account_id)
+			@funds[fund.id]['name'] = "#{fia.name}: #{fund.fund}"
 			@funds[fund.id]['included'] = false
 		end
 		FinanceInvestmentMap.where("finance_summary_type_id = ?", @summary_type.id).pluck('DISTINCT finance_investments_fund_id').each do |fund_id|
 			@funds[fund_id]['included'] = true
 		end
+		@funds = @funds.sort_by { |id, values| values['name'].downcase }
 	end
 
 	def showupdate

@@ -1,0 +1,12 @@
+<%= form_for(@account, url: url, html: {method: method}) do |form| %>
+
+	<%= hidden_field_tag :status, @status %>
+
+	<%= form.label :name, class: 'col-md-2' %>
+	<%= form.text_field :name, class: 'col-md-10' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.submit "#{type} Account", class: 'btn btn-primary col-md-3' %>
+<% end %>
+

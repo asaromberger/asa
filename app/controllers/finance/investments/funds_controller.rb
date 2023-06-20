@@ -8,11 +8,12 @@ class Finance::Investments::FundsController < ApplicationController
 		@title = 'New Fund'
 		@fund = FinanceInvestmentsFund.new
 		@atypes = [['cash'], ['brokerage'], ['annuity']]
+		@accounts = FinanceInvestmentsAccount.all.order('name')
 	end
 
 	def create
 		@status = params[:status]
-		if FinanceInvestmentsFund.where("fund = ?", params[:finance_investments_fund][:fund]).count > 0
+		if FinanceInvestmentsFund.where("fund = ? AND finance_investments_account_id = ?", params[:finance_investments_fund][:fund], params[:finance_investments_fund][:finance_investments_account_id].to_i).count > 0
 				redirect_to finance_investments_investments_path(status: @status), alert: 'Fund already exists'
 		else
 			@fund = FinanceInvestmentsFund.new(fund_params)
@@ -29,11 +30,12 @@ class Finance::Investments::FundsController < ApplicationController
 		@title = 'Edit Fund'
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		@atypes = [['cash'], ['brokerage'], ['annuity']]
+		@accounts = FinanceInvestmentsAccount.all.order('name')
 	end
 
 	def update
 		@status = params[:status]
-		fa = FinanceInvestmentsFund.where("fund = ?", params[:finance_investments_fund][:fund]).first
+		fa = FinanceInvestmentsFund.where("fund = ? AND finance_investments_account_id = ?", params[:finance_investments_fund][:fund], params[:finance_investments_fund][:finance_investments_account_id].to_i).first
 		if fa && fa.id != params[:id].to_i
 				redirect_to finance_investments_investments_path(status: @status), alert: 'Fund already exists'
 		else
@@ -81,7 +83,7 @@ class Finance::Investments::FundsController < ApplicationController
 private
 	
 	def fund_params
-		params.require(:finance_investments_fund).permit(:fund, :atype)
+		params.require(:finance_investments_fund).permit(:fund, :atype, :finance_investments_account_id)
 	end
 
 	def require_investments
