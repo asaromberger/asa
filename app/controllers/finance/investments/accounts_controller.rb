@@ -17,6 +17,15 @@ class Finance::Investments::AccountsController < ApplicationController
 			@accounts = FinanceInvestmentsAccount.all.order('name')
 			@title = 'All Accounts'
 		end
+		@totals = Hash.new
+		@total = 0
+		@accounts.each do |account|
+			@totals[account.id] = 0
+			FinanceInvestmentsFund.where("finance_investments_account_id = ?", account.id).each do |fund|
+				@totals[account.id] += FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first.value
+			end
+			@total += @totals[account.id]
+		end
 	end
 
 	def new

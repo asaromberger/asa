@@ -17,14 +17,17 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		else
 			funds = FinanceInvestmentsFund.where('finance_investments_account_id = ?', @account.id).order('fund')
 		end
+		@total = 0
 		funds.each do |fund|
 			@funds[fund.id] = Hash.new
 			@funds[fund.id]['fund'] = "#{@account.name}: #{fund.fund}"
 			@funds[fund.id]['type'] = fund.atype
 			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
 			if investment.count > 0
-				@funds[fund.id]['date'] = investment.first.date
-				@funds[fund.id]['value'] = investment.first.value
+				investment = investment.first
+				@funds[fund.id]['date'] = investment.date
+				@funds[fund.id]['value'] = investment.value
+				@total += investment.value
 			else
 				@funds[fund.id]['date'] = ''
 				@funds[fund.id]['value'] = 0
