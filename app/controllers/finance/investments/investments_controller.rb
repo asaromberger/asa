@@ -5,24 +5,21 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def index
 		@status = params[:status]
-		@title = 'Funds'
-		accounts = Hash.new
-		FinanceInvestmentsAccount.all.each do |account|
-			accounts[account.id] = account.name
-		end
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
+		@title = "#{@account.name} Funds"
 		@funds = Hash.new
 		@errors = params[:errors]
 		@exists = params[:exists]
 		if @status == 'open'
-			funds = FinanceInvestmentsFund.where('closed is NULL or closed = false').order('fund')
+			funds = FinanceInvestmentsFund.where('finance_investments_account_id = ? AND (closed IS NULL OR closed != true)', @account.id).order('fund')
 		elsif @status == 'closed'
-			funds = FinanceInvestmentsFund.where('closed = true').order('fund')
+			funds = FinanceInvestmentsFund.where('finance_investments_account_id = ? AND closed = true', @account.id).order('fund')
 		else
-			funds = FinanceInvestmentsFund.all.order('fund')
+			funds = FinanceInvestmentsFund.where('finance_investments_account_id = ?', @account.id).order('fund')
 		end
 		funds.each do |fund|
 			@funds[fund.id] = Hash.new
-			@funds[fund.id]['fund'] = "#{accounts[fund.finance_investments_account_id]}: #{fund.fund}"
+			@funds[fund.id]['fund'] = "#{@account.name}: #{fund.fund}"
 			@funds[fund.id]['type'] = fund.atype
 			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC')
 			if investment.count > 0
@@ -39,6 +36,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def show
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		@title = "#{@fund.fund}"
 		if @fund.atype == 'cash'
@@ -68,6 +66,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def new
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		@title = "New Entry for #{@fund.fund}"
 		@investment = FinanceInvestmentsInvestment.new
@@ -107,6 +106,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def create
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestmentsInvestment.new(investment_params)
 		@investment.finance_investments_fund_id = @fund.id
@@ -115,14 +115,15 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		end
 		session['investmentdate'] = @investment.date
 		if @investment.save
-			redirect_to finance_investments_investments_path(status: @status), notice: 'Item Added'
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: 'Item Added'
 		else
-			redirect_to finance_investments_investments_path(status: @status), alert: 'Failed to create Item'
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: 'Failed to create Item'
 		end
 	end
 
 	def edit
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@title = "Edit Entry for #{@fund.fund}"
 		@investment = FinanceInvestmentsInvestment.find(params[:id])
@@ -137,6 +138,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 
 	def update
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		if @fund.atype == 'brokerage'
@@ -144,17 +146,18 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		end
 		session['investmentdate'] = @investment.date
 		if @investment.update(investment_params)
-			redirect_to finance_investments_investments_path(status: @status), notice: 'Item Updated'
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: 'Item Updated'
 		else
-			redirect_to finance_investments_investments_path(status: @status), alert: 'Failed to update Item'
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: 'Failed to update Item'
 		end
 	end
 
 	def destroy
 		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		@investment.delete
-		redirect_to finance_investments_investments_path(status: @status), notice: "Item Deleted"
+		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Item Deleted"
 	end
 
 private

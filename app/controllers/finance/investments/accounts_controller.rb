@@ -4,7 +4,19 @@ class Finance::Investments::AccountsController < ApplicationController
 	before_action :require_investments
 
 	def index
-		@accounts = FinanceInvestmentsAccount.all.order('name')
+		@status = params[:status]
+		if @status == 'open'
+			fia_ids = FinanceInvestmentsFund.where("closed IS NULL OR closed != true").pluck('DISTINCT finance_investments_account_id')
+			@accounts = FinanceInvestmentsAccount.where("id IN (?)", fia_ids).order('name')
+			@title = 'Accounts with open funds'
+		elsif @status == 'closed'
+			fia_ids = FinanceInvestmentsFund.where("closed = true").pluck('DISTINCT finance_investments_account_id')
+			@accounts = FinanceInvestmentsAccount.where("id IN (?)", fia_ids).order('name')
+			@title = 'Accounts with closed funds'
+		else
+			@accounts = FinanceInvestmentsAccount.all.order('name')
+			@title = 'All Accounts'
+		end
 	end
 
 	def new
@@ -53,7 +65,6 @@ class Finance::Investments::AccountsController < ApplicationController
 		@account = FinanceInvestmentsAccount.find(params[:id])
 		if FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).count > 0
 			redirect_to finance_investments_accounts_path(status: @status), alert: "Account #{@account.name} is in use and was not deleted"
-			
 		else
 			@account.delete
 			redirect_to finance_investments_accounts_path(status: @status), notice: "Account #{@account.name} Deleted"

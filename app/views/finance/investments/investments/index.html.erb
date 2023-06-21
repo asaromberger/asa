@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Fund', new_finance_investments_fund_path(status: @status) %>
+<%= link_to 'New Fund', new_finance_investments_fund_path(status: @status, account_id: @account.id) %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -31,13 +31,13 @@
 		<td><%= values['date'] %></td>
 	<% end %>
 	<td align='right'><%= number_with_precision(values['value'], precision: 2) %></td>
-	<td><%= link_to 'Details', finance_investments_investment_path(id: id, status: @status) %></td>
-	<td><%= link_to 'Edit', edit_finance_investments_fund_path(id, status: @status) %></td>
-	<td><%= link_to 'Delete', finance_investments_fund_path(id, status: @status), method: :delete, data: {confirm: "Delete #{values['fund']} and all associated records?"} %></td>
+	<td><%= link_to 'Details', finance_investments_investment_path(id: id, status: @status, account_id: @account.id) %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_fund_path(id, status: @status, account_id: @account.id) %></td>
+	<td><%= link_to 'Delete', finance_investments_fund_path(id, status: @status, account_id: @account.id), method: :delete, data: {confirm: "Delete #{values['fund']} and all associated records?"} %></td>
 	<% if values['closed'] == true %>
 		<td>Closed</td>
 	<% else %>
-		<td><%= link_to 'Close', finance_investments_funds_close_path(id: id, status: @status), method: :get, data: {confirm: "Close #{values['fund']}?"} %></td>
+		<td><%= link_to 'Close', finance_investments_funds_close_path(id: id, status: @status, account_id: @account.id), method: :get, data: {confirm: "Close #{values['fund']}?"} %></td>
 	<% end %>
 	</tr>
 <% end %>

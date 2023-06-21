@@ -12,7 +12,7 @@
 	</ul>
 <% end %>
 
-<%= link_to 'New Entry', new_finance_investments_investment_path(id: @fund.id, status: @status), class: 'btn btn-primary col-md-2' %>
+<%= link_to 'New Entry', new_finance_investments_investment_path(id: @fund.id, status: @status, account_id: @account.id), class: 'btn btn-primary col-md-2' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 <div class='clearfix'><p>&nbsp;</p></div>
@@ -43,8 +43,8 @@
 			<td align='right'><%= number_with_precision(values[header], precision: 2) %></td>
 		<% end %>
 	<% end %>
-	<td><%= link_to 'Edit', edit_finance_investments_investment_path(id: id, fund: @fund.id, status: @status) %></td>
-	<td><%= link_to 'Delete', finance_investments_investment_path(id: id, fund: @fund.id, status: @status), method: :delete, data: {confirm: "Delete entry for #{values['date']}?"} %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_investment_path(id: id, fund: @fund.id, status: @status, account_id: @account.id) %></td>
+	<td><%= link_to 'Delete', finance_investments_investment_path(id: id, fund: @fund.id, status: @status, account_id: @account.id), method: :delete, data: {confirm: "Delete entry for #{values['date']}?"} %></td>
 	</tr>
 <% end %>
 </tbody>
