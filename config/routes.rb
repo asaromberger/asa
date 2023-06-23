@@ -71,7 +71,6 @@ Rails.application.routes.draw do
 
 	# OLD ?
 	match '/finance/investments/summary_types/showupdate', to: 'finance/investments/summary_types#showupdate', via: 'put', as: 'finance_investments_summary_types_showupdate'
-	match '/finance/investments/rebalance_types/showupdate', to: 'finance/investments/rebalance_types#showupdate', via: 'get', as: 'finance_investments_rebalance_types_showupdate'
 
 	namespace :finance do
 		namespace :expenses do
@@ -96,7 +95,6 @@ Rails.application.routes.draw do
 			resources :charts
 			resources :investments
 			resources :rebalance
-			resources :rebalance_types
 			resources :summary
 			resources :summary_types
 		end

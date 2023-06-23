@@ -59,7 +59,7 @@ class Finance::Investments::FundsController < ApplicationController
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		FinanceInvestmentMap.where("finance_investments_fund_id = ?", @fund.id).delete_all
-		FinanceRebalanceMap.where("finance_investments_fund_id = ?", @fund.id).delete_all
+		FinanceInvestmentsRebalance.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		@fund.delete
 		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Fund #{@fund.fund} Deleted"
 	end
