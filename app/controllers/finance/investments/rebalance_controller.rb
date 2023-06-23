@@ -4,59 +4,116 @@ class Finance::Investments::RebalanceController < ApplicationController
 	before_action :require_investments
 
 	def index
-		@title = 'Rebalance Fund Groups'
-		@rebalances = FinanceRebalanceType.all.order('rtype')
+		@title = 'Rebalance Accounts'
+		@accounts = FinanceInvestmentsAccount.all.order('name')
+	end
+
+	def edit
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		@title = "Rebalance #{@account}"
+		fund_ids = []
+		@funds = Hash.new
+		FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['name'] = "#{@account.name}: #{fund.fund}"
+			@funds[fund.id]['target'] = nil
+			fund_ids.push(fund.id)
+		end
+		FinanceInvestmentsRebalance.where("finance_investments_fund_id IN (?)", fund_ids).each do |rebalance|
+			@funds[rebalance.finance_investments_fund_id]['target'] = rebalance.target
+		end
+	end
+
+	def update
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		@title = "Rebalance #{@account}"
+		target = 0
+		FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).each do |fund|
+			rebalance = FinanceInvestmentsRebalance.where("finance_investments_fund_id = ?", fund.id).first
+			if params["target#{fund.id}"] && params["target#{fund.id}"] != ''
+				if ! rebalance
+					rebalance = FinanceInvestmentsRebalance.new
+					rebalance.finance_investments_fund_id = fund.id
+				end
+				rebalance.target = params["target#{fund.id}"].to_f
+				rebalance.save
+				target += rebalance.target
+			else
+				if rebalance
+					rebalance.delete
+				end
+			end
+		end
+		if target == 1
+			redirect_to finance_investments_rebalance_path(@account.id), notice: "Rebalance updated"
+		else
+			redirect_to edit_finance_investments_rebalance_path(@account.id), alert: "Rebalance does not total to 1"
+		end
 	end
 
 	def show
-		@rebalance = FinanceRebalanceType.find(params[:id])
-		@title = "Rebalance #{@rebalance.rtype}"
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		@title = "Rebalance #{@account.name}"
+		fund_ids = []
 		@funds = Hash.new
-		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
-			@funds[map.finance_investments_fund_id] = Hash.new
-			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
-			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
-			if investment.count > 0
-				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
+		FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['name'] = "#{@account.name}: #{fund.fund}"
+			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first
+			if investment
+				@funds[fund.id]['value'] = investment.value
 			else
-				@funds[map.finance_investments_fund_id]['value'] = 0
+				@funds[fund.id]['value'] = 0
 			end
-			@funds[map.finance_investments_fund_id]['target'] = map.target
+			@funds[fund.id]['target'] = nil
+			fund_ids.push(fund.id)
+		end
+		FinanceInvestmentsRebalance.where("finance_investments_fund_id IN (?)", fund_ids).each do |rebalance|
+			@funds[rebalance.finance_investments_fund_id]['target'] = rebalance.target
 		end
 	end
 
 	def showupdate
-		@rebalance = FinanceRebalanceType.find(params[:id])
-		@title = "Rebalance #{@rebalance.rtype}"
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		@title = "Rebalance #{@account.name}"
+		fund_ids = []
 		@funds = Hash.new
 		@total = 0
 		# get fund information
-		FinanceRebalanceMap.joins(:finance_investments_fund).where("finance_rebalance_type_id = ?", @rebalance.id).order('fund').each do |map|
-			@funds[map.finance_investments_fund_id] = Hash.new
-			@funds[map.finance_investments_fund_id]['name'] = map.finance_investments_fund.fund
-			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", map.finance_investments_fund_id).order('date DESC')
-			if investment.count > 0
-				@funds[map.finance_investments_fund_id]['value'] = investment.first.value
+		FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).each do |fund|
+			@funds[fund.id] = Hash.new
+			@funds[fund.id]['name'] = "#{@account.name}: #{fund.fund}"
+			investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first
+			if investment
+				@funds[fund.id]['value'] = investment.value
 			else
-				@funds[map.finance_investments_fund_id]['value'] = 0
+				@funds[fund.id]['value'] = 0
 			end
-			@funds[map.finance_investments_fund_id]['target'] = map.target
-			@total = @total + @funds[map.finance_investments_fund_id]['value']
+			@funds[fund.id]['target'] = nil
+			fund_ids.push(fund.id)
+		end
+		FinanceInvestmentsRebalance.where("finance_investments_fund_id IN (?)", fund_ids).each do |rebalance|
+			@funds[rebalance.finance_investments_fund_id]['target'] = rebalance.target
+			@total += @funds[rebalance.finance_investments_fund_id]['value']
 		end
 		withdraw = params[:withdraw].to_f
 
 		@total = @total - withdraw
 		# calculate amount to move to/from each fund
 		@funds.each do |id, fund|
-			t = @total * fund['target']
-			@funds[id]['target'] = t
-			@funds[id]['move'] = t - fund['value'];
-			if @funds[id]['value'] > @funds[id]['target']
-				@funds[id]['sell'] = @funds[id]['value'] - @funds[id]['target']
-				@funds[id]['buy'] = ''
+			if fund['target']
+				t = @total * fund['target']
+				@funds[id]['target'] = t
+				@funds[id]['move'] = t - fund['value'];
+				if @funds[id]['value'] > @funds[id]['target']
+					@funds[id]['sell'] = @funds[id]['value'] - @funds[id]['target']
+					@funds[id]['buy'] = ''
+				else
+					@funds[id]['sell'] = ''
+					@funds[id]['buy'] = @funds[id]['target'] - @funds[id]['value']
+				end
 			else
-				@funds[id]['sell'] = ''
-				@funds[id]['buy'] = @funds[id]['target'] - @funds[id]['value']
+				@funds.delete(id)
 			end
 		end
 		@withdraws = []

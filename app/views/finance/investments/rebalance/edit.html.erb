@@ -1,0 +1,29 @@
+<h1><%= @title %></h1>
+
+<%= form_tag finance_investments_rebalance_path(@account.id), :method => :put do %>
+
+<%= submit_tag 'Update', class: 'btn btn-large btn-primary col-xs-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table>
+
+<thead>
+	<tr>
+	<th>Fund</th>
+	<th>Target</th>
+	</tr>
+</thead>
+
+<tbody>
+<% @funds.each do |id, values| %>
+	<tr>
+	<td><%= values['name'] %></td>
+	<td><%= number_field_tag "target#{id}", values['target'], step: :any %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<% end %>
