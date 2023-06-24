@@ -6,6 +6,19 @@ class Finance::Investments::RebalanceController < ApplicationController
 	def index
 		@title = 'Rebalance Accounts'
 		@accounts = FinanceInvestmentsAccount.all.order('name')
+		@has_rebalance = Hash.new
+		@accounts.each do |account|
+			@has_rebalance[account.id] = ""
+			FinanceInvestmentsFund.where("finance_investments_account_id = ?", account.id).each do |fund|
+				if FinanceInvestmentsRebalance.where("finance_investments_fund_id = ?", fund.id).count > 0
+					@has_rebalance[account.id] = "yes"
+					break
+				end
+				if @has_rebalance[account.id] == "yes"
+					break
+				end
+			end
+		end
 	end
 
 	def edit
