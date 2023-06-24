@@ -30,81 +30,57 @@ class Finance::Admin::ImportController < ApplicationController
 
 		newcounts = Hash.new
 		dupcounts = Hash.new
-		newcounts['accountmap'] = 0
-		dupcounts['accountmap'] = 0
-		finance_accountmap_ids = Hash.new
-		newcounts['account'] = 0
-		dupcounts['account'] = 0
+
+		newcounts['expenses_accountmap'] = 0
+		dupcounts['expenses_accountmap'] = 0
+		finance_expenses_accountmap_ids = Hash.new
+		newcounts['expenses_category'] = 0
+		dupcounts['expenses_category'] = 0
+		finance_expenses_category_ids = Hash.new
+		newcounts['expenses_what'] = 0
+		dupcounts['expenses_what'] = 0
+		finance_expenses_what_ids = Hash.new
+		newcounts['expenses_item'] = 0
+		dupcounts['expenses_item'] = 0
+		finance_expenses_item_ids = Hash.new
+		newcounts['expenses_what_map'] = 0
+		dupcounts['expenses_what_map'] = 0
+		finance_expenses_what_map_ids = Hash.new
+
+		newcounts['investments_account'] = 0
+		dupcounts['investments_account'] = 0
+		finance_investments_account_ids = Hash.new
+		newcounts['investments_fund'] = 0
+		dupcounts['investments_fund'] = 0
 		finance_investments_fund_ids = Hash.new
-		newcounts['category'] = 0
-		dupcounts['category'] = 0
-		finance_category_ids = Hash.new
-		newcounts['rebalance_types'] = 0
-		dupcounts['rebalance_types'] = 0
-		finance_rebalance_types_ids = Hash.new
-		newcounts['summary_type'] = 0
-		dupcounts['summary_type'] = 0
-		finance_summary_type_ids = Hash.new
-		newcounts['investment_map'] = 0
-		dupcounts['investment_map'] = 0
-		finance_investment_map_ids = Hash.new
-		newcounts['investment'] = 0
-		dupcounts['investment'] = 0
-		finance_investment_ids = Hash.new
-		newcounts['rebalance_map'] = 0
-		dupcounts['rebalance_map'] = 0
-		finance_rebalance_map_ids = Hash.new
-		newcounts['what'] = 0
-		dupcounts['what'] = 0
-		finance_what_ids = Hash.new
-		newcounts['item'] = 0
-		dupcounts['item'] = 0
-		finance_item_ids = Hash.new
-		newcounts['what_map'] = 0
-		dupcounts['what_map'] = 0
-		finance_what_map_ids = Hash.new
+		newcounts['investments_investment'] = 0
+		dupcounts['investments_investment'] = 0
+		finance_investments_investment_ids = Hash.new
+		newcounts['investments_rebalance'] = 0
+		dupcounts['investments_rebalance'] = 0
+		finance_investments_rebalance_ids = Hash.new
+		# ADD SUMMARY STUFF HERE
+
 		data = CSV.open(document.tempfile, 'r')
 		data.each do |line|
-			if line[0] == 'accountmap'
+			if line[0] == 'expenses_accountmap'
 				fam = FinanceExpensesAccountmap.where("account = ? AND ctype = ?", line[1], line[2]).first
 				if ! fam
 					fam = FinanceExpensesAccountmap.new
 					fam.account = line[1]
 					fam.ctype = line[2]
 					fam.save
-					newcounts['accountmap'] += 1
+					newcounts['expenses_accountmap'] += 1
 				else
-					dupcounts['accountmap'] += 1
+					dupcounts['expenses_accountmap'] += 1
 					if finance_accountmap_ids[fam.account]
 						if @messages.count < max_message_count
-							@messages.push("DUP: accountmap: #{line[1]}: #{line[2]}")
+							@messages.push("DUP: expenses_accountmap: #{line[1]}: #{line[2]}")
 						end
 					end
 				end
-				finance_accountmap_ids[fam.account] = fam.id
-			elsif line[0] == 'fund'
-				fa = FinanceInvestmentsFund.where("fund = ? AND atype = ?", line[1], line[2]).first
-				if ! fa
-					fa = FinanceInvestmentsFund.new
-					fa.fund = line[1]
-					fa.atype = line[2]
-					if ! line[3].blank? && line[3] == 'true'
-						fa.closed = true
-					else
-						fa.closed = false
-					end
-					fa.save
-					newcounts['fund'] += 1
-				else
-					dupcounts['fund'] += 1
-					if finance_investments_fund_ids[fa.fund]
-						if @messages.count < max_message_count
-							@messages.push("DUP: fund: #{line[1]}: #{line[2]}: #{line[3]}")
-						end
-					end
-				end
-				finance_investments_fund_ids[fa.fund] = fa.id
-			elsif line[0] == 'category'
+				finance_expenses_accountmap_ids[fam.account] = fam.id
+			elsif line[0] == 'expenses_category'
 				if ! line[4]
 					line[4] = ''
 				end
@@ -116,123 +92,34 @@ class Finance::Admin::ImportController < ApplicationController
 					fc.subcategory = line[3]
 					fc.tax = line[4]
 					fc.save
-					newcounts['category'] += 1
+					newcounts['expenses_category'] += 1
 				else
-					dupcounts['category'] += 1
+					dupcounts['expenses_category'] += 1
 					if finance_category_ids["#{fc.ctype}:#{fc.category}:#{fc.subcategory}"]
 						if @messages.count < max_message_count
-							@messages.push("DUP: category: #{fc.ctype}: #{fc.category}: #{fc.subcategory}: #{fc.tax}")
+							@messages.push("DUP: expenses_category: #{fc.ctype}: #{fc.category}: #{fc.subcategory}: #{fc.tax}")
 						end
 					end
 				end
-				finance_category_ids["#{fc.ctype}:#{fc.category}:#{fc.subcategory}"] = fc.id
-			elsif line[0] == 'rebalance_types'
-				frt = FinanceRebalanceType.where("rtype = ?", line[1]).first
-				if ! frt
-					frt = FinanceRebalanceType.new
-					frt.rtype = line[1]
-					frt.save
-					newcounts['rebalance_types'] += 1
-				else
-					dupcounts['rebalance_types'] += 1
-					if finance_rebalance_types_ids[frt.rtype]
-						if @messages.count < max_message_count
-							@messages.push("DUP: rebalance_types: #{line[1]}")
-						end
-					end
-				end
-				finance_rebalance_types_ids[frt.rtype] = frt.id
-			elsif line[0] == 'summary_type'
-				fst = FinanceSummaryType.where("stype = ?", line[1]).first
-				if ! fst
-					fst = FinanceSummaryType.new
-					fst.stype = line[1]
-					fst.priority = line[2]
-					fst.save
-					newcounts['summary_type'] += 1
-				else
-					dupcounts['summary_type'] += 1
-					if finance_summary_type_ids[fst.stype]
-						if @messages.count < max_message_count
-							@messages.push("DUP: summary_type: #{line[1]}: #{line[2]}")
-						end
-					end
-				end
-				finance_summary_type_ids[fst.stype] = fst.id
-			elsif line[0] == 'investment_map'
-				fim = FinanceInvestmentMap.where("finance_investments_fund_id = ? AND finance_summary_type_id = ?", finance_investments_fund_ids[line[1]], finance_summary_type_ids[line[2]]).first
-				if ! fim
-					fim = FinanceInvestmentMap.new
-					fim.finance_investments_fund_id = finance_investments_fund_ids[line[1]]
-					fim.finance_summary_type_id = finance_summary_type_ids[line[2]]
-					fim.save
-					newcounts['investment_map'] += 1
-				else
-					dupcounts['investment_map'] += 1
-					if finance_investment_map_ids["#{finance_investments_fund_ids[line[1]]}:#{finance_summary_type_ids[line[2]]}"]
-						if @messages.count < max_message_count
-							@messages.push("DUP: investment_map: #{line[1]}: #{line[2]}")
-						end
-					end
-					finance_investment_map_ids["#{finance_investments_fund_ids[line[1]]}:#{finance_summary_type_ids[line[2]]}"] = fim.id
-				end
-			elsif line[0] == 'investment'
-				fi = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND date = ?", finance_investments_fund_ids[line[1]], line[2].to_date).first
-				if !fi
-					fi = FinanceInvestmentsInvestment.new
-					fi.finance_investments_fund_id = finance_investments_fund_ids[line[1]]
-					fi.date = line[2].to_date
-					fi.value = line[3].to_f
-					fi.shares = line[4].to_f
-					fi.pershare = line[5].to_f
-					fi.guaranteed = line[6].to_f
-					fi.save
-					newcounts['investment'] += 1
-				else
-					dupcounts['investment'] += 1
-					if finance_investment_ids["#{fi.finance_investments_fund_id}:#{fi.date}"]
-						if @messages.count < max_message_count
-							@messages.push("DUP: investment; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}; #{line[5]}; #{line[6]}")
-						end
-					end
-				end
-				finance_investment_ids["#{fi.finance_investments_fund_id}:#{fi.date}"] = fi.id
-			elsif line[0] == 'rebalance_map'
-				frm = FinanceRebalanceMap.where("finance_rebalance_type_id = ? AND finance_investments_fund_id = ?", finance_rebalance_types_ids[line[1]], finance_investments_fund_ids[line[2]]).first
-				if ! frm
-					frm = FinanceRebalanceMap.new
-					frm.finance_rebalance_type_id = finance_rebalance_types_ids[line[1]]
-					frm.finance_investments_fund_id = finance_investments_fund_ids[line[2]]
-					frm.target = line[3]
-					frm.save
-					newcounts['rebalance_map'] += 1
-				else
-					dupcounts['rebalance_map'] += 1
-					if finance_rebalance_map_ids["#{finance_rebalance_types_ids[line[1]]}:#{finance_investments_fund_ids[line[2]]}"]
-						if @messages.count < max_message_count
-							@messages.push("DUP: rebalance_map: #{line[1]}: #{line[2]}")
-						end
-					end
-				end
-				finance_rebalance_map_ids["#{finance_rebalance_types_ids[line[1]]}:#{finance_investments_fund_ids[line[2]]}"] = frm.id
-			elsif line[0] == 'what'
+				finance_expenses_category_ids["#{fc.ctype}:#{fc.category}:#{fc.subcategory}"] = fc.id
+			elsif line[0] == 'expenses_what'
 				fw = FinanceExpensesWhat.where("what = ? and finance_expenses_category_id = ?", line[1], finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]).first
 				if ! fw
 					fw = FinanceExpensesWhat.new
 					fw.what = line[1]
 					fw.finance_expenses_category_id = finance_category_ids["#{line[2]}:#{line[3]}:#{line[4]}"]
 					fw.save
-					newcounts['what'] += 1
+					newcounts['expenses_what'] += 1
 				else
-					dupcounts['what'] += 1
+					dupcounts['expenses_what'] += 1
 					if finance_what_ids[fw.what]
 						if @messages.count < max_message_count
-							@messages.push("DUP: what; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}")
+							@messages.push("DUP: expenses_what; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}")
 						end
 					end
 				end
-				finance_what_ids[fw.what] = fw.id
-			elsif line[0] == 'item'
+				finance_expenses_what_ids[fw.what] = fw.id
+			elsif line[0] == 'expenses_item'
 				fi = FinanceExpensesItem.where("date = ? AND pm = ? AND finance_expenses_what_id = ? AND amount = ?", line[1], line[2], finance_what_ids[line[4]], line[5]).first
 				if ! fi
 					fi = FinanceItem.new
@@ -242,33 +129,147 @@ class Finance::Admin::ImportController < ApplicationController
 					fi.finance_expenses_what_id = finance_what_ids[line[4]]
 					fi.amount = line[5]
 					fi.save
-					newcounts['item'] += 1
+					newcounts['expenses_item'] += 1
 				else
-					dupcounts['item'] += 1
+					dupcounts['expenses_item'] += 1
 					if finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_expenses_what_id}:#{fi.amount}"]
 						if @messages.count < max_message_count
-							@messages.push("DUP: item; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}; #{line[5]}")
+							@messages.push("DUP: expenses_item; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}; #{line[5]}")
 						end
 					end
 				end
-				finance_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_expenses_what_id}:#{fi.amount}"] = fi.id
-			elsif line[0] == 'what_map'
+				finance_expenses_item_ids["#{fi.date}:#{fi.pm}:#{fi.finance_expenses_what_id}:#{fi.amount}"] = fi.id
+			elsif line[0] == 'expenses_what_map'
 				fwm = FinanceExpensesWhatMap.where("whatmap = ? AND finance_expenses_what_id = ?", line[1], finance_what_ids[line[2]]).first
 				if ! fwm
 					fwm = FinanceExpensesWhatMap.new
 					fwm.whatmap = line[1]
 					fwm.finance_expenses_what_id = finance_what_ids[line[2]]
 					fwm.save
-					newcounts['what_map'] += 1
+					newcounts['expenses_what_map'] += 1
 				else
-					dupcounts['what_map'] += 1
+					dupcounts['expenses_what_map'] += 1
 					if finance_what_map_ids["#{line[1]}:#{line[2]}"]
 						if @messages.count < max_message_count
-							@messages.push("DUP: what_map: #{line[1]}: #{line[2]}")
+							@messages.push("DUP: expenses_what_map: #{line[1]}: #{line[2]}")
 						end
 					end
 				end
-				finance_what_map_ids["#{line[1]}:#{line[2]}"] = fwm.id
+				finance_expenses_what_map_ids["#{line[1]}:#{line[2]}"] = fwm.id
+
+			elsif line[0] == 'investments_account'
+				fa = FinanceInvestmentsAccount.where("name = ?", line[1]).first
+				if ! fa
+					fa = FinanceInvestmentsAccount.new
+					fa.name = line[1]
+					fa.save
+					newcounts['investments_account'] += 1
+				else
+					dupcounts['investments_account'] += 1
+					if finance_investments_account_ids[fa.name]
+						if @messages.count < max_message_count
+							@messages.push("DUP: investments_account: #{line[1]}")
+						end
+					end
+				end
+				finance_investments_account_ids[fa.name] = fa.id
+			elsif line[0] == 'investments_fund'
+				ff = FinanceInvestmentsFund.where("finance_investments_account_id = ? AND fund = ? AND atype = ?", finance_investments_account_ids[line[1]], line[2], line[3]).first
+				if ! ff
+					ff = FinanceInvestmentsFund.new
+					ff.finance_investments_account_id = finance_investments_account_ids[line[1]]
+					ff.fund = line[2]
+					ff.atype = line[3]
+					if ! line[4].blank? && line[4] == 'true'
+						ff.closed = true
+					else
+						ff.closed = false
+					end
+					ff.save
+					newcounts['investments_fund'] += 1
+				else
+					dupcounts['investments_fund'] += 1
+					if finance_investments_fund_ids[ff.fund]
+						if @messages.count < max_message_count
+							@messages.push("DUP: investments_fund: #{line[1]}: #{line[2]}: #{line[3]}")
+						end
+					end
+				end
+				finance_investments_fund_ids["#{line[1]}:#{ff.fund}"] = [ff.finance_investments_account_id, ff.id]
+			elsif line[0] == 'investments_investment'
+				fi = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ? AND date = ?", finance_investments_fund_ids["#{line[1]}:#{line[2]}"], line[3].to_date).first
+				if !fi
+					fi = FinanceInvestmentsInvestment.new
+					fi.finance_investments_fund_id = finance_investments_fund_ids["#{line[1]}:#{line[2]}"][1]
+					fi.date = line[3].to_date
+					fi.value = line[4].to_f
+					fi.shares = line[5].to_f
+					fi.pershare = line[6].to_f
+					fi.guaranteed = line[7].to_f
+					fi.save
+					newcounts['investments_investment'] += 1
+				else
+					dupcounts['investments_investment'] += 1
+					if finance_investments_investment_ids["#{fi.finance_investments_fund_id}:#{fi.date}"]
+						if @messages.count < max_message_count
+							@messages.push("DUP: investments_investment; #{line[1]}; #{line[2]}; #{line[3]}; #{line[4]}; #{line[5]}; #{line[6]}")
+						end
+					end
+				end
+				finance_investments_investment_ids["#{fi.finance_investments_fund_id}:#{fi.date}"] = fi.id
+			elsif line[0] == 'investments_rebalance'
+				fr = FinanceInvestmentsRebalance.where("finance_investments_fund_id = ?", finance_investments_fund_ids["#{line[1]}:#{line[2]}"]).first
+				if ! fr
+					fr = FinanceInvestmentsRebalance.new
+					fr.finance_investments_fund_id = finance_investments_fund_ids["#{line[1]}:#{line[2]}"]
+					fr.target = line[3].to_f
+					fr.save
+					newcounts['investments_rebalance'] += 1
+				else
+					dupcounts['investments_rebalance'] += 1
+					if finance_investments_rebalance_ids[rt.rtype]
+						if @messages.count < max_message_count
+							@messages.push("DUP: investments_rebalance: #{line[1]} #{line[2]}")
+						end
+					end
+				end
+				finance_investments_rebalance_ids[finance_investments_fund_ids["#{line[1]}:#{line[2]}"]] = fr.id
+#	NEEDS NEW SUMMARY STUFF
+#			elsif line[0] == 'summary_type'
+#				fst = FinanceSummaryType.where("stype = ?", line[1]).first
+#				if ! fst
+#					fst = FinanceSummaryType.new
+#					fst.stype = line[1]
+#					fst.priority = line[2]
+#					fst.save
+#					newcounts['summary_type'] += 1
+#				else
+#					dupcounts['summary_type'] += 1
+#					if finance_summary_type_ids[fst.stype]
+#						if @messages.count < max_message_count
+#							@messages.push("DUP: summary_type: #{line[1]}: #{line[2]}")
+#						end
+#					end
+#				end
+#				finance_summary_type_ids[fst.stype] = fst.id
+#			elsif line[0] == 'investment_map'
+#				fim = FinanceInvestmentMap.where("finance_investments_fund_id = ? AND finance_summary_type_id = ?", finance_investments_fund_ids[line[1]], finance_summary_type_ids[line[2]]).first
+#				if ! fim
+#					fim = FinanceInvestmentMap.new
+#					fim.finance_investments_fund_id = finance_investments_fund_ids[line[1]]
+#					fim.finance_summary_type_id = finance_summary_type_ids[line[2]]
+#					fim.save
+#					newcounts['investment_map'] += 1
+#				else
+#					dupcounts['investment_map'] += 1
+#					if finance_investment_map_ids["#{finance_investments_fund_ids[line[1]]}:#{finance_summary_type_ids[line[2]]}"]
+#						if @messages.count < max_message_count
+#							@messages.push("DUP: investment_map: #{line[1]}: #{line[2]}")
+#						end
+#					end
+#					finance_investment_map_ids["#{finance_investments_fund_ids[line[1]]}:#{finance_summary_type_ids[line[2]]}"] = fim.id
+#				end
+
 			else
 				if badtables[line[0]]
 					badtables[line[0]] += 1
