@@ -1,0 +1,31 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Summary', new_finance_investments_summary_management_path %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Summary</th>
+<th>Priority</th>
+<th>Show</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @summaries.each do |summary| %>
+	<tr>
+	<td><%= summary.stype %></td>
+	<td><%= summary.priority %></td>
+	<td><%= link_to 'Show', finance_investments_summary_management_path(summary.id) %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_summary_management_path(summary.id) %></td>
+	<td><%= link_to 'Delete', finance_investments_summary_management_path(summary.id), method: :delete, data: {confirm: "Delete #{summary.stype}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

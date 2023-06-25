@@ -1,0 +1,38 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Account', new_finance_investments_account_path %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Account</th>
+<th>Value</th>
+<th>Funds</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @accounts.each do |account| %>
+	<tr>
+	<td><%= account.name %></td>
+	<td><%= number_with_precision(@totals[account.id], precision: 2) %></td>
+	<td><%= link_to 'Funds', finance_investments_investments_path(account_id: account.id, status: @status) %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_account_path(account.id, status: @status) %></td>
+	<td><%= link_to 'Delete', finance_investments_account_path(account.id, status: @status), method: :delete, data: {confirm: "Delete #{account.name}?"} %></td>
+	</tr>
+<% end %>
+<tr>
+<td class='total'>Total</td>
+<td class='total'><%= number_with_precision(@total, precision: 2) %></td>
+<td class='total'></td>
+<td class='total'></td>
+<td class='total'></td>
+</tr>
+</tbody>
+
+</table>

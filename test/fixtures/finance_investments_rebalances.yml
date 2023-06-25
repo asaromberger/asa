@@ -1,11 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  finance_rebalance_type_id: 1
-  finance_account_id: 1
+  finance_investments_fund_id: 1
   target: 9.99
 
 two:
-  finance_rebalance_type_id: 1
-  finance_account_id: 1
+  finance_investments_fund_id: 1
   target: 9.99

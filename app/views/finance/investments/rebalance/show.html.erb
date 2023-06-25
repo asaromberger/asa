@@ -1,21 +1,25 @@
 <h1><%= @title %></h1>
 
+<%= link_to 'Edit Rebalance', edit_finance_investments_rebalance_path(@account.id) %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
 <table>
 
 <thead>
 <tr>
-<th>Account</th>
+<th>Fund</th>
 <th>Value</th>
 <th>Target</th>
 </tr>
 </thead>
 
 <tbody>
-<% @accounts.each do |id, account| %>
+<% @funds.each do |id, fund| %>
 	<tr>
-	<td><%= account['name'] %></td>
-	<td><%= account['value'] %></td>
-	<td><%= account['target'] %></td>
+	<td><%= fund['name'] %></td>
+	<td><%= fund['value'] %></td>
+	<td><%= fund['target'] %></td>
 	</tr>
 <% end %>
 </tbody>
@@ -24,7 +28,7 @@
 
 <%= form_tag finance_investments_rebalance_showupdate_path, method: :get do %>
 
-	<%= hidden_field_tag :id, @rebalance.id %>
+	<%= hidden_field_tag :id, @account.id %>
 
 	<%= label_tag 'Amount to be withdrawn' %>
 	<%= number_field_tag :withdraw, 0, step: :any %>

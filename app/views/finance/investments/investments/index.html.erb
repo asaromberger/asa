@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to 'New Account', new_finance_investments_account_path(status: @status) %>
+<%= link_to 'New Fund', new_finance_investments_fund_path(status: @status, account_id: @account.id) %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
@@ -8,7 +8,7 @@
 
 <thead>
 <tr>
-<th>Account</th>
+<th>Fund</th>
 <th>Type</th>
 <th>Date</th>
 <th>Value</th>
@@ -21,9 +21,9 @@
 
 <tbody>
 <% date = Time.now.to_date - 30.days %>
-<% @accounts.each do |id, values| %>
+<% @funds.each do |id, values| %>
 	<tr>
-	<td><%= values['account'] %></td>
+	<td><%= values['fund'] %></td>
 	<td><%= values['type'] %></td>
 	<% if values['date'] != '' && values['date'] < date %>
 		<td style='background-color:#ffff00;'><%= values['date'] %></td>
@@ -31,16 +31,26 @@
 		<td><%= values['date'] %></td>
 	<% end %>
 	<td align='right'><%= number_with_precision(values['value'], precision: 2) %></td>
-	<td><%= link_to 'Details', finance_investments_investment_path(id: id, status: @status) %></td>
-	<td><%= link_to 'Edit', edit_finance_investments_account_path(id, status: @status) %></td>
-	<td><%= link_to 'Delete', finance_investments_account_path(id, status: @status), method: :delete, data: {confirm: "Delete #{values['account']} and all associated records?"} %></td>
+	<td><%= link_to 'Details', finance_investments_investment_path(id: id, status: @status, account_id: @account.id) %></td>
+	<td><%= link_to 'Edit', edit_finance_investments_fund_path(id, status: @status, account_id: @account.id) %></td>
+	<td><%= link_to 'Delete', finance_investments_fund_path(id, status: @status, account_id: @account.id), method: :delete, data: {confirm: "Delete #{values['fund']} and all associated records?"} %></td>
 	<% if values['closed'] == true %>
 		<td>Closed</td>
 	<% else %>
-		<td><%= link_to 'Close', finance_investments_accounts_close_path(id: id, status: @status), method: :put, data: {confirm: "Close #{values['account']}?"} %></td>
+		<td><%= link_to 'Close', finance_investments_funds_close_path(id: id, status: @status, account_id: @account.id), method: :get, data: {confirm: "Close #{values['fund']}?"} %></td>
 	<% end %>
 	</tr>
 <% end %>
+<tr>
+<td class='total'>Total</td>
+<td class='total'></td>
+<td class='total'></td>
+<td class='total'><%= number_with_precision(@total, precision: 2) %></td>
+<td class='total'></td>
+<td class='total'></td>
+<td class='total'></td>
+<td class='total'></td>
+</tr>
 </tbody>
 
 </table>

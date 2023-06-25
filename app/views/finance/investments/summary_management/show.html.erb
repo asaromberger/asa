@@ -1,10 +1,12 @@
 <h1><%= @title %></h1>
 
-<%= form_tag finance_investments_summary_types_showupdate_path, :method => :put do %>
+<p><%= link_to 'Back', finance_investments_summary_management_index_path, class: 'btn btn-xs btn-primary' %></p>
+
+<%= form_tag finance_investments_summary_management_showupdate_path, :method => :put do %>
 
 <%= submit_tag 'Update', class: 'btn btn-large btn-primary col-xs-2' %>
 
-<%= hidden_field_tag :summary_type, @summary_type.id %>
+<%= hidden_field_tag :summary, @summary.id %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 

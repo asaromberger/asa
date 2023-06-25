@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_18_181155) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_25_015623) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -28,14 +28,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_18_181155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pair"
-  end
-
-  create_table "finance_accounts", force: :cascade do |t|
-    t.string "account"
-    t.string "atype"
-    t.boolean "closed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "finance_expenses_accountmaps", force: :cascade do |t|
@@ -88,15 +80,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_18_181155) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_investment_maps", force: :cascade do |t|
-    t.integer "finance_account_id"
-    t.integer "finance_summary_type_id"
+  create_table "finance_investments_accounts", force: :cascade do |t|
+    t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_investments", force: :cascade do |t|
-    t.integer "finance_account_id"
+  create_table "finance_investments_funds", force: :cascade do |t|
+    t.string "fund"
+    t.string "atype"
+    t.boolean "closed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "finance_investments_account_id"
+  end
+
+  create_table "finance_investments_investments", force: :cascade do |t|
+    t.integer "finance_investments_fund_id"
     t.date "date"
     t.decimal "value"
     t.decimal "shares"
@@ -106,23 +106,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_18_181155) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_rebalance_maps", force: :cascade do |t|
-    t.integer "finance_rebalance_type_id"
-    t.integer "finance_account_id"
+  create_table "finance_investments_rebalances", force: :cascade do |t|
+    t.integer "finance_investments_fund_id"
     t.decimal "target"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_rebalance_types", force: :cascade do |t|
-    t.string "rtype"
+  create_table "finance_investments_summaries", force: :cascade do |t|
+    t.string "stype"
+    t.integer "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "finance_summary_types", force: :cascade do |t|
-    t.string "stype"
-    t.integer "priority"
+  create_table "finance_investments_summary_contents", force: :cascade do |t|
+    t.integer "finance_investments_account_id"
+    t.integer "finance_investments_summary_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

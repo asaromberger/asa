@@ -1,6 +1,6 @@
-<%= form_for(@summary_type, url: url, html: {method: method}) do |form| %>
+<%= form_for(@summary, url: url, html: {method: method}) do |form| %>
 
-	<%= form.label 'Summary Type', class: 'col-md-2' %>
+	<%= form.label 'Summary', class: 'col-md-2' %>
 	<%= form.text_field :stype, class: 'col-md-10' %>
 
 	<div class='clearfix'></div>
@@ -10,6 +10,6 @@
 
 	<div class='clearfix'></div>
 
-	<%= form.submit "#{type} Summary Type", class: 'btn btn-primary col-md-3' %>
+	<%= form.submit "#{type} Summary", class: 'btn btn-primary col-md-3' %>
 <% end %>
 

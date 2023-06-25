@@ -3,23 +3,47 @@ class Finance::Investments::AccountsController < ApplicationController
 	before_action :require_signed_in
 	before_action :require_investments
 
+	def index
+		@status = params[:status]
+		if @status == 'open'
+			fia_ids = FinanceInvestmentsFund.where("closed IS NULL OR closed != true").pluck('DISTINCT finance_investments_account_id')
+			@accounts = FinanceInvestmentsAccount.where("id IN (?)", fia_ids).order('name')
+			@title = 'Accounts with open funds'
+		elsif @status == 'closed'
+			fia_ids = FinanceInvestmentsFund.where("closed = true").pluck('DISTINCT finance_investments_account_id')
+			@accounts = FinanceInvestmentsAccount.where("id IN (?)", fia_ids).order('name')
+			@title = 'Accounts with closed funds'
+		else
+			@accounts = FinanceInvestmentsAccount.all.order('name')
+			@title = 'All Accounts'
+		end
+		@totals = Hash.new
+		@total = 0
+		@accounts.each do |account|
+			@totals[account.id] = 0
+			FinanceInvestmentsFund.where("finance_investments_account_id = ?", account.id).each do |fund|
+				@totals[account.id] += FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first.value
+			end
+			@total += @totals[account.id]
+		end
+	end
+
 	def new
 		@status = params[:status]
 		@title = 'New Account'
-		@account = FinanceAccount.new
-		@atypes = [['cash'], ['brokerage'], ['annuity']]
+		@account = FinanceInvestmentsAccount.new
 	end
 
 	def create
 		@status = params[:status]
-		if FinanceAccount.where("account = ?", params[:finance_account][:account]).count > 0
-				redirect_to finance_investments_investments_path(status: @status), alert: 'Account already exists'
+		if FinanceInvestmentsAccount.where("name = ?", params[:finance_investments_account][:name]).count > 0
+				redirect_to finance_investments_accounts_path(status: @status), alert: 'Account already exists'
 		else
-			@account = FinanceAccount.new(account_params)
+			@account = FinanceInvestmentsAccount.new(account_params)
 			if @account.save
-				redirect_to finance_investments_investments_path(status: @status), notice: 'Account Added'
+				redirect_to finance_investments_accounts_path(status: @status), notice: 'Account Added'
 			else
-				redirect_to finance_investments_investments_path(status: @status), alert: 'Failed to create Account'
+				redirect_to finance_investments_accounts_path(status: @status), alert: 'Failed to create Account'
 			end
 		end
 	end
@@ -27,61 +51,39 @@ class Finance::Investments::AccountsController < ApplicationController
 	def edit
 		@status = params[:status]
 		@title = 'Edit Account'
-		@account = FinanceAccount.find(params[:id])
-		@atypes = [['cash'], ['brokerage'], ['annuity']]
+		@account = FinanceInvestmentsAccount.find(params[:id])
 	end
 
 	def update
 		@status = params[:status]
-		fa = FinanceAccount.where("account = ?", params[:finance_account][:account]).first
+		fa = FinanceInvestmentsAccount.where("name = ?", params[:finance_investments_account][:name]).first
 		if fa && fa.id != params[:id].to_i
-				redirect_to finance_investments_investments_path(status: @status), alert: 'Account already exists'
+				redirect_to finance_investments_accounts_path(status: @status), alert: 'Account already exists'
 		else
-			@account = FinanceAccount.find(params[:id])
+			@account = FinanceInvestmentsAccount.find(params[:id])
 			if @account.update(account_params)
-				redirect_to finance_investments_investments_path(status: @status), notice: 'Account Updated'
+				redirect_to finance_investments_accounts_path(status: @status), notice: 'Account Updated'
 			else
-				redirect_to finance_investments_investments_path(status: @status), alert: 'Failed to update Account'
+				redirect_to finance_investments_accounts_path(status: @status), alert: 'Failed to update Account'
 			end
 		end
 	end
 
 	def destroy
 		@status = params[:status]
-		@account = FinanceAccount.find(params[:id])
-		FinanceInvestment.where("finance_account_id = ?", @account.id).delete_all
-		FinanceInvestmentMap.where("finance_account_id = ?", @account.id).delete_all
-		FinanceRebalanceMap.where("finance_account_id = ?", @account.id).delete_all
-		@account.delete
-		redirect_to finance_investments_investments_path(status: @status), notice: "Account #{@account.account} Deleted"
-	end
-
-	def close
-		@status = params[:status]
-		@account = FinanceAccount.find(params[:id])
-		investment = FinanceInvestment.where("finance_account_id = ?", @account.id).order('date DESC')
-		if investment.count > 0
-			investment = investment.first
-			if investment.value != 0
-				newinvestment = FinanceInvestment.new
-				newinvestment.finance_account_id = @account.id
-				newinvestment.date = investment.date + 1.day
-				newinvestment.value = 0
-				newinvestment.shares = 0
-				newinvestment.pershare = 0
-				newinvestment.guaranteed = 0
-				newinvestment.save
-			end
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		if FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).count > 0
+			redirect_to finance_investments_accounts_path(status: @status), alert: "Account #{@account.name} is in use and was not deleted"
+		else
+			@account.delete
+			redirect_to finance_investments_accounts_path(status: @status), notice: "Account #{@account.name} Deleted"
 		end
-		@account.closed = true
-		@account.save
-		redirect_to finance_investments_investments_path(status: @status), notice: "Account #{@account.account} Closed"
 	end
 
 private
 	
 	def account_params
-		params.require(:finance_account).permit(:account, :atype)
+		params.require(:finance_investments_account).permit(:name)
 	end
 
 	def require_investments

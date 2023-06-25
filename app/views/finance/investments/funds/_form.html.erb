@@ -1,0 +1,23 @@
+<%= form_for(@fund, url: url, html: {method: method}) do |form| %>
+
+	<%= hidden_field_tag :status, @status %>
+	<%= hidden_field_tag :account_id, @account.id %>
+
+	<%= form.label "Account",  class: 'col-md-1' %>
+	<%= form.select :finance_investments_account_id,  @accounts.collect { |account| [account.name, account.id] }, { include_blank: true, default: nil}, class: 'col-md-4' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label :fund, class: 'col-md-1' %>
+	<%= form.text_field :fund, class: 'col-md-4' %>
+
+	<div class='clearfix'></div>
+
+	<%= form.label 'Type', class: 'col-md-1' %>
+	<%= form.select :atype, @atypes, {}, class: 'col-md-4' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.submit "#{type} Fund", class: 'btn btn-primary col-md-3' %>
+<% end %>
+
