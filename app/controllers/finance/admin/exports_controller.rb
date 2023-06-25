@@ -76,18 +76,17 @@ class Finance::Admin::ExportsController < ApplicationController
 			content += "\"investment_rebalance\",\"#{taccount}\",\"#{tfund}\",\"#{map.target}\"\n"
 		end
 
-		# OLD: summary_types
-		summary_types = Hash.new
-		FinanceSummaryType.all.order('id').each do |map|
-			content += "\"summary_type\",\"#{map.stype}\",\"#{map.priority}\"\n"
-			summary_types[map.id] = map.stype
+		# investments_summary
+		investments_summaries = Hash.new
+		FinanceInvestmentsSummary.all.order('id').each do |map|
+			content += "\"investments_summary\",\"#{map.stype}\",\"#{map.priority}\"\n"
+			investments_summaries[map.id] = map.stype
 		end
 
-		# OLD: investment_maps account fund summary_type
-		FinanceInvestmentMap.all.order('id').each do |map|
-			taccount = investments_funds[map.finance_investments_fund_id][0]
-			tfund = investments_funds[map.finance_investments_fund_id][1]
-			content += "\"investment_map\",\"#{taccount}\",\"#{tfund}\",\"#{summary_types[map.finance_summary_type_id]}\"\n"
+		FinanceInvestmentsSummaryContent.all.order('id').each do |map|
+			taccount = investments_accounts[map.finance_investments_account_id]
+			tsummary = investments_summaries[map.finance_investments_summary_id]
+			content += "\"investment_map\",\"#{taccount}\",\"#{tsummary}\"\n"
 		end
 
 		send_data(content, type: 'application/csv', filename: 'Financials.csv', disposition: :inline)
