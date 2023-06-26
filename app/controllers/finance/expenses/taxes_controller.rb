@@ -67,7 +67,7 @@ class Finance::Expenses::TaxesController < ApplicationController
 	def show
 		@title = "Taxes for #{params[:year]} for #{params[:ctype]}/#{params[:cat]}/#{params[:subcat]}/#{params[:tax]}"
 		categoryids = FinanceExpensesCategory.where("ctype = ? AND category = ? AND subcategory = ? AND tax = ?", params[:ctype], params[:cat], params[:subcat], params[:tax]).pluck('DISTINCT id')
-		@items = FinanceExpensesItem.joins(:finance_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", params[:year], categoryids).order('date')
+		@items = FinanceExpensesItem.joins(:finance_expenses_what).where("EXTRACT(year FROM date) = ? AND finance_expenses_category_id in (?)", params[:year], categoryids).order('date')
 		@summary = Hash.new
 		@items.each do |item|
 			amount = item.amount
