@@ -1,5 +1,7 @@
 <h1><%= @title %></h1>
 
+<p><%= link_to 'Back', :back, class: 'btn btn-xs btn-primary' %></p>
+
 <%= form_tag finance_investments_rebalance_path(@account.id), :method => :put do %>
 
 <%= submit_tag 'Update', class: 'btn btn-large btn-primary col-xs-2' %>
