@@ -1,3 +1,5 @@
 <h1><%= @title %></h1>
 
+<p><%= link_to 'Cancel', :back, class: 'btn btn-xs btn-primary' %></p>
+
 <%= render 'form', url: finance_expenses_what_map_path, method: :put, type: 'Update' %>

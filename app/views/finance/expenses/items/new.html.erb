@@ -1,3 +1,5 @@
 <h1><%= @title %></h1>
 
+<p><%= link_to 'Cancel', finance_expenses_items_path(year: @year, sort: @sort, filters: @filters), class: 'btn btn-xs btn-primary' %></p>
+
 <%= render 'form', url: finance_expenses_items_path, method: :post, type: 'Create' %>

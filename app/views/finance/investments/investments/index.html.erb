@@ -1,5 +1,7 @@
 <h1><%= @title %></h1>
 
+<p><%= link_to 'Back', :back, class: 'btn btn-xs btn-primary' %></p>
+
 <%= link_to 'New Fund', new_finance_investments_fund_path(status: @status, account_id: @account.id) %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
