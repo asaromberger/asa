@@ -132,7 +132,7 @@ class Bridge::ScoresController < ApplicationController
 				end
 			end
 		end
-		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date), notice: "Scores updated for #{@date}"
+		redirect_to bridge_score_date_path(date: @date, start_date: @start_date, end_date: @end_date), notice: "Scores updated for #{@date}"
 	end
 
 	def date
