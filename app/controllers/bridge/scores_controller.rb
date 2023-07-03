@@ -110,19 +110,20 @@ class Bridge::ScoresController < ApplicationController
 	end
 
 	def create
+		@orig_date = params[:orig_date].to_date
 		@date = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
 		start_end_date()
 		scores = Hash.new
-		BridgeScore.where("date = ?", @date).each do |score|
+		BridgeScore.where("date = ?", @orig_date).each do |score|
 			scores[score.bridge_player_id] = score
 		end
 		BridgePlayer.all.each do |player|
 			if params[:score][player.id.to_s] && params[:score][player.id.to_s].to_f > 0.0
 				if ! scores[player.id]
 					scores[player.id] = BridgeScore.new
-					scores[player.id].date = @date
 					scores[player.id].bridge_player_id = player.id
 				end
+				scores[player.id].date = @date
 				scores[player.id].score = params[:score][player.id.to_s].to_f
 				scores[player.id].pair = params[:pair][player.id.to_s].to_i
 				scores[player.id].save
