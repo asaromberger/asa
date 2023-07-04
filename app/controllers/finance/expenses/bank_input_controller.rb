@@ -229,7 +229,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 					whatmap = FinanceExpensesWhat.where("what = ?", newwhat).first.id
 				end
 				if ! mapto.blank?
-					twhatmap = FinanceExpensesWhatMap.joins(:finance_what).where("whatmap = ? AND finance_whats.what = ?", what, mapto)
+					twhatmap = FinanceExpensesWhatMap.joins(:finance_expenses_what).where("whatmap = ? AND finance_expenses_whats.what = ?", what, mapto)
 					if twhatmap.count == 0
 						# need to create a new map
 						twhat = FinanceExpensesWhat.where("what = ?", mapto)
@@ -245,7 +245,7 @@ class Finance::Expenses::BankInputController < ApplicationController
 				else
 					newwhat = what
 				end
-				item = FinanceExpensesItem.joins(:finance_what).where("date = ? AND pm = ? AND checkno = ? AND what = ? AND amount = ?", date, pm, check, newwhat, amount)
+				item = FinanceExpensesItem.joins(:finance_expenses_what).where("date = ? AND pm = ? AND checkno = ? AND what = ? AND amount = ?", date, pm, check, newwhat, amount)
 				if whatmap > 0
 					if item.count > 0
 						item = item.first
