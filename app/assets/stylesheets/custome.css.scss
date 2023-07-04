@@ -285,7 +285,7 @@ aside {
 }
 
 
-/* HAL changes */
+/* LOCAL */
 
 /* borders that stay fixed rather than growing/shrinking with window size */
 .container {
@@ -438,72 +438,12 @@ input[type=radio] {
 	display: block;
 }
 
-/* devel home hilites */
-.devel-hilite-attendance .btn-primary {
-	background-color: red;
-	border-color: red;
-}
-.devel-hilite-current-wchf .btn-primary {
-	background-color: green;
-	border-color: green;
-}
-.devel-hilite-past-wchf .btn-primary {
-	background-color: mediumseagreen;
-	border-color: mediumseagreen;
-}
-.devel-hilite-registration .btn-primary {
-	background-color: orange;
-	border-color: orange;
-}
-/* devel report hilites */
-.devel-teamleader {
-	background-color: #ffff00 !important;
-}
-.devel-coursepartner {
-	background-color: #00ffff !important;
-}
-.hilite-home .btn-primary {
-	background-color: darkturquoise;
-	border-color: darkcyan;
-}
-/* devel printable wchf */
-.wchf-head {
-	font-weight: 700;
-}
-.wchf-boxed {
-	border: 1px solid black;
-	min-height: 0.95in;
-	overflow: auto;
-}
-
-/* devel guest page */
-.csg-return {
-	color: inherit;
-}
-.csg-date {
-	color: inherit;
-	margin-bottom: 15px;
-}
-
-/* pert report indent */
-.pert-report-indent {
-	padding-left: 20px;
-	padding-bottom: 4px;
-}
-
-/* Comments/Requests */
-.contact {
-	font-size: 125%;
-	color: red;
-	margin-right: 10px;
-}
-
 /* printable pages */
 .pagebreak {
 	page-break-after: always;
 }
 
-/* graphing box (for devel charts) */
+/* graphing box */
 .graph {
 	margin: 0px;
 	border: 0px;
@@ -524,17 +464,6 @@ input[type=radio] {
 .border-box {
 	border: 1px solid black;
 	padding: 0.5em;
-}
-
-/* for Apprentices */
-.apprentice-title {
-	background-color: Aquamarine !important;
-}
-.apprentice-hilite {
-	background-color: Khaki !important;
-}
-.apprentice-vsep {
-	height: 5px;
 }
 
 /* Help: question mark in a circle */
@@ -690,5 +619,8 @@ td.numeric {
 /* classes for tracking current */
 .tracking-hilite {
 	background-color: yellow !important;
+}
+.tracking-alert {
+	background-color: red !important;
 }
 
