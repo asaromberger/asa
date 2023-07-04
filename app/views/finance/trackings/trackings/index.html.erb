@@ -16,7 +16,9 @@
 
 <tbody>
 <% @trackings.each do |tracking| %>
-	<% if tracking.date < @today + 7.day %>
+	<% if tracking.date < @today %>
+		<% hilite = 'tracking-alert' %>
+	<% elsif tracking.date < @today + 7.day %>
 		<% hilite = 'tracking-hilite' %>
 	<% else %>
 		<% hilite = '' %>
