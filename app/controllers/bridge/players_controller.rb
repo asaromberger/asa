@@ -7,11 +7,13 @@ class Bridge::PlayersController < ApplicationController
 	def index
 		@title = 'Players'
 		@players = BridgePlayer.all.order('name')
+		@times = params[:times]
 	end
 
 	# create a new player
 	def new
 		@player = BridgePlayer.new
+		@times = params[:times]
 		@date = params[:date]
 		start_end_date()
 	end
@@ -20,19 +22,21 @@ class Bridge::PlayersController < ApplicationController
 		start_end_date()
 		name = params[:bridge_player][:name]
 		@player = BridgePlayer.where("name = ?", name)
+		@times = params[:times]
 		if @player.count > 0
-			redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date), alert: "Player #{name} Already Exists"
+			redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), alert: "Player #{name} Already Exists"
 		else
 			@player = BridgePlayer.new
 			@player.name = name
 			@player.save
-				redirect_to new_bridge_score_path(date: params[:date], back: 'back', start_date: @start_date, end_date: @end_date), notice: "Player #{name} Added"
+				redirect_to new_bridge_score_path(date: params[:date], back: 'back', start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Added"
 		end
 	end
 
 	# edit player
 	def edit
 		@player = BridgePlayer.find(params[:id])
+		@times = params[:times]
 		start_end_date()
 	end
 
@@ -40,9 +44,10 @@ class Bridge::PlayersController < ApplicationController
 		start_end_date()
 		name = params[:bridge_player][:name]
 		@player = BridgePlayer.find(params[:id])
+		@times = params[:times]
 		@player.name = name
 		@player.save
-		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date), notice: "Player #{name} Updated"
+		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Updated"
 	end
 
 private

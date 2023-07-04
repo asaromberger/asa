@@ -8,6 +8,7 @@ class Bridge::ScoresController < ApplicationController
 		@title = 'Scores'
 		@scores = Hash.new
 		start_end_date()
+		@timeslist = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 		if params[:times]
 			@times = params[:times].to_i
 		else
@@ -78,16 +79,17 @@ class Bridge::ScoresController < ApplicationController
 				@rating[pid] = @right[pid]['percent']
 			end
 		end
+		@scores.each do |pid, values|
+			if @right[pid]['times'] < @times
+				@scores.delete(pid)
+				@rating.delete(pid)
+			end
+		end
 		@rating = @rating.sort_by { |pid, score| -score }
 		i = 0
 		@rating.each do |pid, score|
 			i += 1
 			@right[pid]['rank'] = i
-		end
-		@scores.each do |pid, values|
-			if @right[pid]['times'] < @times
-				@scores.delete(pid)
-			end
 		end
 	end
 
@@ -100,6 +102,7 @@ class Bridge::ScoresController < ApplicationController
 		else
 			@date = Time.now.to_date
 		end
+		@times = params[:times]
 		@title = "Session #{@date}"
 		@scores = Hash.new
 		@pairs = Hash.new
@@ -111,6 +114,7 @@ class Bridge::ScoresController < ApplicationController
 
 	def create
 		@orig_date = params[:orig_date].to_date
+		@times = params[:times]
 		@date = Date.new(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
 		start_end_date()
 		scores = Hash.new
@@ -133,11 +137,12 @@ class Bridge::ScoresController < ApplicationController
 				end
 			end
 		end
-		redirect_to bridge_score_date_path(date: @date, start_date: @start_date, end_date: @end_date), notice: "Scores updated for #{@date}"
+		redirect_to bridge_score_date_path(date: @date, start_date: @start_date, end_date: @end_date, times: @times), notice: "Scores updated for #{@date}"
 	end
 
 	def date
 		@date = params[:date].to_date
+		@times = params[:times]
 		start_end_date()
 		@title = "Scores for #{@date}"
 		@scores = Hash.new
@@ -168,6 +173,7 @@ class Bridge::ScoresController < ApplicationController
 
 	def player
 		@player = BridgePlayer.find(params[:id].to_i)
+		@times = params[:times]
 		@title = "Scores for #{@player.name}"
 		start_end_date()
 		@scores = Hash.new

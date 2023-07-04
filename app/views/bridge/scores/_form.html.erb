@@ -1,4 +1,4 @@
-<%= link_to "Add a Player", new_bridge_player_path(date: @date, start_date: @start_date, end_date: @end_date), class: 'btn btn-xs btn-primary' %>
+<%= link_to "Add a Player", new_bridge_player_path(date: @date, start_date: @start_date, end_date: @end_date, times: @times), class: 'btn btn-xs btn-primary' %>
 
 <p>&nbsp;</p>
 
@@ -7,6 +7,7 @@
 	<%= hidden_field_tag :start_date, @start_date %>
 	<%= hidden_field_tag :end_date, @end_date %>
 	<%= hidden_field_tag :orig_date, @date %>
+	<%= hidden_field_tag :times, @times %>
 
 	<%= select_date(@date, {prefix: :date, start_year: 2017}, {:class => 'date_select col-sm-2 col-xs-3'}) %>
 	<p>&nbsp;</p>
