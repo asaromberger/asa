@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 	match '/finance/expenses/whats/remap', to: 'finance/expenses/whats#remap', via: 'get', as: 'finance_expenses_whats_remap'
 	match '/finance/expenses/whats/remapupdate', to: 'finance/expenses/whats#remapupdate', via: 'get', as: 'finance_expenses_whats_remapupdate'
 	match '/finance/investments/funds/close', to: 'finance/investments/funds#close', via: 'get', as: 'finance_investments_funds_close'
+	match '/finance/investments/funds/reopen', to: 'finance/investments/funds#reopen', via: 'get', as: 'finance_investments_funds_reopen'
 	match '/finance/investments/rebalance/showupdate', to: 'finance/investments/rebalance#showupdate', via: 'get', as: 'finance_investments_rebalance_showupdate'
 
 	# OLD ?

@@ -72,19 +72,21 @@ class Finance::Investments::FundsController < ApplicationController
 		if investment.count > 0
 			investment = investment.first
 			if investment.value != 0
-				newinvestment = FinanceInvestmentsInvestment.new
-				newinvestment.finance_investments_fund_id = @fund.id
-				newinvestment.date = investment.date + 1.day
-				newinvestment.value = 0
-				newinvestment.shares = 0
-				newinvestment.pershare = 0
-				newinvestment.guaranteed = 0
-				newinvestment.save
+				redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: "Fund #{@account.name} #{@fund.fund} has a non-zero value and cannot be closed"
+				return
 			end
 		end
 		@fund.closed = true
 		@fund.save
-		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Fund #{@fund.fund} Closed"
+		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Fund #{@account.name} #{@fund.fund} Closed"
+	end
+
+	def reopen
+		@fund = FinanceInvestmentsFund.find(params[:id])
+		@account = FinanceInvestmentsAccount.find(params[:account_id])
+		@fund.closed = false
+		@fund.save
+		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Fund #{@account.name} #{@fund.fund} Reopened"
 	end
 
 private
