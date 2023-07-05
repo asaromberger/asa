@@ -37,7 +37,7 @@
 	<td><%= link_to 'Edit', edit_finance_investments_fund_path(id, status: @status, account_id: @account.id) %></td>
 	<td><%= link_to 'Delete', finance_investments_fund_path(id, status: @status, account_id: @account.id), method: :delete, data: {confirm: "Delete #{values['fund']} and all associated records?"} %></td>
 	<% if values['closed'] == true %>
-		<td>Closed</td>
+		<td><%= link_to 'Reopen', finance_investments_funds_reopen_path(id: id, status: @status, account_id: @account.id), method: :get, data: {confirm: "Reopen #{values['fund']}?"} %></td>
 	<% else %>
 		<td><%= link_to 'Close', finance_investments_funds_close_path(id: id, status: @status, account_id: @account.id), method: :get, data: {confirm: "Close #{values['fund']}?"} %></td>
 	<% end %>
