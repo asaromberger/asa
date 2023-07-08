@@ -18,11 +18,18 @@ class Finance::Investments::AccountsController < ApplicationController
 			@title = 'All Accounts'
 		end
 		@totals = Hash.new
+		@current = Hash.new
 		@total = 0
+		date = Time.new.to_date - 28.days
 		@accounts.each do |account|
 			@totals[account.id] = 0
-			FinanceInvestmentsFund.where("finance_investments_account_id = ?", account.id).each do |fund|
-				@totals[account.id] += FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first.value
+			@current[account.id] = true
+			FinanceInvestmentsFund.where("finance_investments_account_id = ? AND (closed IS NULL OR closed = false)", account.id).each do |fund|
+				investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", fund.id).order('date DESC').first
+				@totals[account.id] += investment.value
+				if investment.date < date
+					@current[account.id] = false
+				end
 			end
 			@total += @totals[account.id]
 		end

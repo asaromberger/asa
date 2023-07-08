@@ -145,7 +145,7 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestmentsInvestment.find(params[:id])
 		if @fund.atype == 'brokerage'
-			params[:finance_investment][:value] = params[:finance_investment][:shares].to_f * params[:finance_investment][:pershare].to_f
+			params[:finance_investments_investment][:value] = params[:finance_investments_investment][:shares].to_f * params[:finance_investments_investment][:pershare].to_f
 		end
 		session['investmentdate'] = @investment.date
 		if @investment.update(investment_params)
