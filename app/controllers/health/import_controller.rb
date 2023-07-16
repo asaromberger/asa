@@ -32,6 +32,9 @@ class Health::ImportController < ApplicationController
 				if line.match(/creationDate/)
 					t = line.sub(/.*creationDate="/, '')
 					date = t.sub(/ .*/, '').to_date
+					if date.blank? || date == ''
+						next
+					end
 					if ! @values[date]
 						@values[date] = Hash.new
 					end
