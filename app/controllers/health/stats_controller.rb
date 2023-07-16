@@ -336,6 +336,9 @@ class Health::StatsController < ApplicationController
 		@stats['By Resistance'] = Hash.new
 		@data.each do |data|
 			res = data.resistance
+			if ! res || res == 0
+				next
+			end
 			if ! @stats['By Resistance'][res]
 				@stats['By Resistance'][res] = Hash.new
 				@stats['By Resistance'][res]['aerobic_calories_avg'] = 0.0
