@@ -44,11 +44,11 @@ class Health::ImportController < ApplicationController
 						@values[date]['steps'] += value
 					elsif line.match(/Distance/)
 						t = line.sub(/.*value="/, '')
-						value = t.sub(/".*/, '').to_i
+						value = t.sub(/".*/, '').to_f
 						if ! @values[date]['miles']
 							@values[date]['miles'] = 0
 						end
-						@values[date]['miles'] += value
+						@values[date]['miles'] += value * 100
 					elsif line.match(/Flights/)
 						t = line.sub(/.*value="/, '')
 						value = t.sub(/".*/, '').to_i
@@ -56,6 +56,20 @@ class Health::ImportController < ApplicationController
 							@values[date]['flights'] = 0
 						end
 						@values[date]['flights'] += value
+					elsif line.match(/ActiveEnergyBurned/)
+						t = line.sub(/.*value="/, '')
+						value = t.sub(/".*/, '').to_f
+						if ! @values[date]['active_calories']
+							@values[date]['active_calories'] = 0
+						end
+						@values[date]['active_calories'] += value * 1000
+					elsif line.match(/BasalEnergyBurned/)
+						t = line.sub(/.*value="/, '')
+						value = t.sub(/".*/, '').to_f
+						if ! @values[date]['resting_calories']
+							@values[date]['resting_calories'] = 0
+						end
+						@values[date]['resting_calories'] += value * 1000
 					end
 				end
 			end
@@ -78,6 +92,12 @@ class Health::ImportController < ApplicationController
 				if values['flights']
 					data.flights = values['flights']
 				end
+				if values['active_calories']
+					data.active_calories = values['active_calories']
+				end
+				if values['resting_calories']
+					data.resting_calories = values['resting_calories']
+				end
 				data.save
 			end
 		else
@@ -91,8 +111,8 @@ class Health::ImportController < ApplicationController
 							@headers['Date'] = i
 						elsif line[i].match('Resistance')
 							@headers['Resistance'] = i
-						elsif line[i].match('Calories')
-							@headers['Calories'] = i
+						elsif line[i].match('Aerobic Calories')
+							@headers['Aerobic Calories'] = i
 						elsif line[i].match('Weight')
 							@headers['Weight'] = i
 						elsif line[i].match('Steps')
@@ -101,6 +121,10 @@ class Health::ImportController < ApplicationController
 							@headers['Flights'] = i
 						elsif line[i].match('Miles')
 							@headers['Miles'] = i
+						elsif line[i].match('Active Calories')
+							@headers['Active Calories'] = i
+						elsif line[i].match('Resting Calories')
+							@headers['Resting Calories'] = i
 						end
 					end
 					if ! @headers['Date']
@@ -114,8 +138,8 @@ class Health::ImportController < ApplicationController
 					else
 						resistance = nil
 					end
-					if @headers['Calories'] && line[@headers['Calories']]
-						calories = line[@headers['Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
+					if @headers['Aerobic Calories'] && line[@headers['Aerobic Calories']]
+						aerobic_calories = line[@headers['Aerobic Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
 					else
 						calories = nil
 					end
@@ -139,6 +163,16 @@ class Health::ImportController < ApplicationController
 					else
 						miles = nil
 					end
+					if @headers['Active Calories']
+						active_calories = line[@headers['Active Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
+					else
+						active_calories = nil
+					end
+					if @headers['Resting Calories']
+						resting_calories = line[@headers['Resting Calories']].gsub(/^\s*/,'').gsub(/\s*/,'').to_i
+					else
+						miles = nil
+					end
 					if ! date.blank?
 						data = HealthDatum.where("user_id = ? AND date = ?", current_user.id, date).first
 						if ! data
@@ -152,8 +186,8 @@ class Health::ImportController < ApplicationController
 						if resistance
 							data.resistance = resistance
 						end
-						if calories
-							data.calories = calories
+						if aerobic_calories
+							data.aerobic_calories = aerobic_calories
 						end
 						if weight
 							data.weight = weight
@@ -166,6 +200,12 @@ class Health::ImportController < ApplicationController
 						end
 						if miles
 							data.miles = miles
+						end
+						if active_calories
+							data.active_calories = active_calories
+						end
+						if resting_calories
+							data.resting_calories = resting_calories
 						end
 						data.save
 					end

@@ -9,8 +9,14 @@
 	<thead>
 	<tr>
 	<th>What</th>
-	<th>Calories<br/>Average</th>
-	<th>Calories<br/>Std</th>
+	<th>Aerobic<br/>Calories<br/>Average</th>
+	<th>Aerobic<br/>Calories<br/>Std</th>
+	<th>Active<br/>Calories<br/>Average</th>
+	<th>Active<br/>Calories<br/>Std</th>
+	<th>Resting<br/>Calories<br/>Average</th>
+	<th>Resting<br/>Calories<br/>Std</th>
+	<th>Total<br/>Calories<br/>Average</th>
+	<th>Total<br/>Calories<br/>Std</th>
 	<th>Weight<br/>Average</th>
 	<th>Weight<br/>Std</th>
 	<th>Steps<br/>Average</th>
@@ -26,16 +32,22 @@
 	<% entries.each do |id, values| %>
 		<tr>
 		<td><%= id %></td>
-		<td class='numeric col1b'><%= number_with_precision(values[0], precision: 2) %></td>
-		<td class='numeric col1c'><%= number_with_precision(values[1], precision: 2) %></td>
-		<td class='numeric col2b'><%= number_with_precision(values[3], precision: 2) %></td>
-		<td class='numeric col2c'><%= number_with_precision(values[4], precision: 2) %></td>
-		<td class='numeric col3b'><%= number_with_precision(values[6], precision: 2) %></td>
-		<td class='numeric col3c'><%= number_with_precision(values[7], precision: 2) %></td>
-		<td class='numeric col4b'><%= number_with_precision(values[9], precision: 2) %></td>
-		<td class='numeric col4c'><%= number_with_precision(values[10], precision: 2) %></td>
-		<td class='numeric col5b'><%= number_with_precision(values[12], precision: 2) %></td>
-		<td class='numeric col5c'><%= number_with_precision(values[13], precision: 2) %></td>
+		<td class='numeric col1b'><%= number_with_precision(values['aerobic_calories_avg'], precision: 2) %></td>
+		<td class='numeric col1c'><%= number_with_precision(values['aerobic_calories_std'], precision: 2) %></td>
+		<td class='numeric col6b'><%= number_with_precision(values['active_calories_avg'], precision: 2) %></td>
+		<td class='numeric col6c'><%= number_with_precision(values['active_calories_std'], precision: 2) %></td>
+		<td class='numeric col7b'><%= number_with_precision(values['resting_calories_avg'], precision: 2) %></td>
+		<td class='numeric col7c'><%= number_with_precision(values['resting_calories_std'], precision: 2) %></td>
+		<td class='numeric col7b'><%= number_with_precision(values['total_calories_avg'], precision: 2) %></td>
+		<td class='numeric col7c'><%= number_with_precision(values['total_calories_std'], precision: 2) %></td>
+		<td class='numeric col2b'><%= number_with_precision(values['weight_avg'], precision: 2) %></td>
+		<td class='numeric col2c'><%= number_with_precision(values['weight_std'], precision: 2) %></td>
+		<td class='numeric col3b'><%= number_with_precision(values['steps_avg'], precision: 2) %></td>
+		<td class='numeric col3c'><%= number_with_precision(values['steps_std'], precision: 2) %></td>
+		<td class='numeric col4b'><%= number_with_precision(values['flights_avg'], precision: 2) %></td>
+		<td class='numeric col4c'><%= number_with_precision(values['flights_std'], precision: 2) %></td>
+		<td class='numeric col5b'><%= number_with_precision(values['miles_avg'], precision: 2) %></td>
+		<td class='numeric col5c'><%= number_with_precision(values['miles_std'], precision: 2) %></td>
 		</tr>
 	<% end %>
 	</tbody>

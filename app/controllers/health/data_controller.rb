@@ -7,10 +7,10 @@ class Health::DataController < ApplicationController
 		@title = "Data"
 		@data = HealthDatum.where("user_id = ?", current_user.id).order('date DESC')
 		if params[:export]
-			content = "Date,Resistance,Calories (x 10),Weight (x 10),Steps,Flights,Miles (x100)\n"
+			content = "Date,Resistance,Aerobic Calories (x10),Weight (x10),Steps,Flights,Miles (x100), Active Calories (x1000), Resting Calories (x1000)\n"
 			@data = @data.sort_by { |data| data.date}
 			@data.each do |data|
-				content = "#{content}#{data.date},#{data.resistance},#{data.calories},#{data.weight},#{data.steps},#{data.flights},#{data.miles}\n"
+				content = "#{content}#{data.date},#{data.resistance},#{data.aerobic_calories},#{data.weight},#{data.steps},#{data.flights},#{data.miles},#{data.active_calories},#{data.resting_calories}\n"
 			end
 			send_data(content, type: 'application/csv', filename: 'HealthData.csv', disposition: :inline)
 		end
@@ -79,7 +79,7 @@ class Health::DataController < ApplicationController
 	end
 
 	def data_params
-		params.require(:health_datum).permit(:date, :resistance, :calories, :weight, :steps, :flights, :miles)
+		params.require(:health_datum).permit(:date, :resistance, :aerobic_calories, :weight, :steps, :flights, :miles, :active_calories, :resting_calories)
 	end
 
 	def checknull
