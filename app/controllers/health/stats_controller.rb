@@ -10,8 +10,12 @@ class Health::StatsController < ApplicationController
 
 		# overall
 		@stats['Overall'] = Hash.new
-		calories = 0
-		caloriescount = 0
+		aerobic_calories = 0
+		aerobic_caloriescount = 0
+		active_calories = 0
+		active_caloriescount = 0
+		resting_calories = 0
+		resting_caloriescount = 0
 		weight = 0
 		weightcount = 0
 		steps = 0
@@ -21,9 +25,17 @@ class Health::StatsController < ApplicationController
 		miles = 0
 		milescount = 0
 		@data.each do |data|
-			if data.calories && data.calories > 0
-				calories += data.calories
-				caloriescount += 1
+			if data.aerobic_calories && data.aerobic_calories > 0
+				aerobic_calories += data.aerobic_calories
+				aerobic_caloriescount += 1
+			end
+			if data.active_calories && data.active_calories > 0
+				active_calories += data.active_calories
+				active_caloriescount += 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				resting_calories += data.resting_calories
+				resting_caloriescount += 1
 			end
 			if data.weight && data.weight > 0
 				weight += data.weight
@@ -42,87 +54,159 @@ class Health::StatsController < ApplicationController
 				milescount += 1
 			end
 		end
-		@stats['Overall']['All'] = []
-		cavg = calories.to_f / caloriescount / 10.0
+		aerobic_cavg = aerobic_calories.to_f / aerobic_caloriescount / 10.0
+		active_cavg = active_calories.to_f / active_caloriescount / 1000.0
+		resting_cavg = resting_calories.to_f / resting_caloriescount / 1000.0
+		total_cavg = aerobic_cavg + active_cavg + resting_cavg
 		wavg = weight.to_f / weightcount / 10.0
 		savg = steps.to_f / stepscount
 		favg = flights.to_f / flightscount
 		mavg = miles.to_f / milescount / 100.0
-		@stats['Overall']['All'].push(cavg, '', '', wavg, '', '', savg, '', '', favg, '', '', mavg, '', '')
+		@stats['Overall']['All'] = Hash.new
+		@stats['Overall']['All']['aerobic_calories_avg'] = aerobic_cavg
+		@stats['Overall']['All']['aerobic_calories_std'] = ''
+		@stats['Overall']['All']['aerobic_calories_count'] = ''
+		@stats['Overall']['All']['active_calories_avg'] = active_cavg
+		@stats['Overall']['All']['active_calories_std'] = ''
+		@stats['Overall']['All']['active_calories_cnt'] = ''
+		@stats['Overall']['All']['resting_calories_avg'] = resting_cavg
+		@stats['Overall']['All']['resting_calories_std'] = ''
+		@stats['Overall']['All']['resting_calories_count'] = ''
+		@stats['Overall']['All']['total_calories_avg'] = resting_cavg
+		@stats['Overall']['All']['total_calories_std'] = ''
+		@stats['Overall']['All']['total_calories_count'] = ''
+		@stats['Overall']['All']['weight_avg'] = wavg
+		@stats['Overall']['All']['weight_std'] = ''
+		@stats['Overall']['All']['weight_count'] = ''
+		@stats['Overall']['All']['steps_avg'] = savg
+		@stats['Overall']['All']['steps_std'] = ''
+		@stats['Overall']['All']['steps_count'] = ''
+		@stats['Overall']['All']['flights_avg'] = favg
+		@stats['Overall']['All']['flights_std'] = ''
+		@stats['Overall']['All']['flights_count'] = ''
+		@stats['Overall']['All']['miles_avg'] = mavg
+		@stats['Overall']['All']['miles_std'] = ''
+		@stats['Overall']['All']['miles_count'] = ''
 
 		# by week
 		@stats['By Week'] = Hash.new
 		@data.each do |data|
 			week = monday(data.date)
 			if ! @stats['By Week'][week]
-				@stats['By Week'][week] = []
-				@stats['By Week'][week][0] = 0.0	# calories avg
-				@stats['By Week'][week][1] = 0.0	# calories std
-				@stats['By Week'][week][2] = 0		# calories count
-				@stats['By Week'][week][3] = 0.0	# weight avg
-				@stats['By Week'][week][4] = 0.0	# weight std
-				@stats['By Week'][week][5] = 0		# weight count
-				@stats['By Week'][week][6] = 0.0	# steps avg
-				@stats['By Week'][week][7] = 0.0	# steps std
-				@stats['By Week'][week][8] = 0		# steps count
-				@stats['By Week'][week][9] = 0.0	# flights avg
-				@stats['By Week'][week][10] = 0.0	# flights std
-				@stats['By Week'][week][11] = 0		# flights count
-				@stats['By Week'][week][12] = 0.0	# miles avg
-				@stats['By Week'][week][13] = 0.0	# miles std
-				@stats['By Week'][week][14] = 0		# miles count
+				@stats['By Week'][week] = Hash.new
+				@stats['By Week'][week]['aerobic_calories_avg'] = 0.0
+				@stats['By Week'][week]['aerobic_calories_std'] = 0.0
+				@stats['By Week'][week]['aerobic_calories_count'] = 0
+				@stats['By Week'][week]['active_calories_avg'] = 0.0
+				@stats['By Week'][week]['active_calories_std'] = 0.0
+				@stats['By Week'][week]['active_calories_cnt'] = 0
+				@stats['By Week'][week]['resting_calories_avg'] = 0.0
+				@stats['By Week'][week]['resting_calories_std'] = 0.0
+				@stats['By Week'][week]['resting_calories_count'] = 0
+				@stats['By Week'][week]['total_calories_avg'] = 0.0
+				@stats['By Week'][week]['total_calories_std'] = 0.0
+				@stats['By Week'][week]['total_calories_count'] = 0
+				@stats['By Week'][week]['weight_avg'] = 0.0
+				@stats['By Week'][week]['weight_std'] = 0.0
+				@stats['By Week'][week]['weight_count'] = 0
+				@stats['By Week'][week]['steps_avg'] = 0.0
+				@stats['By Week'][week]['steps_std'] = 0.0
+				@stats['By Week'][week]['steps_count'] = 0
+				@stats['By Week'][week]['flights_avg'] = 0.0
+				@stats['By Week'][week]['flights_std'] = 0.0
+				@stats['By Week'][week]['flights_count'] = 0
+				@stats['By Week'][week]['miles_avg'] = 0.0
+				@stats['By Week'][week]['miles_std'] = 0.0
+				@stats['By Week'][week]['miles_count'] = 0
 			end
-			if data.calories && data.calories > 0
-				t = data.calories.to_f / 10.0
-				@stats['By Week'][week][0] += t
-				@stats['By Week'][week][1] += t * t
-				@stats['By Week'][week][2] += 1
+			tcalcnt = 0
+			tcalv = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				t = data.aerobic_calories.to_f / 10.0
+				@stats['By Week'][week]['aerobic_calories_avg'] += t
+				@stats['By Week'][week]['aerobic_calories_std'] += t * t
+				@stats['By Week'][week]['aerobic_calories_count'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if data.active_calories && data.active_calories > 0
+				t = data.active_calories.to_f / 1000.0
+				@stats['By Week'][week]['active_calories_avg'] += t
+				@stats['By Week'][week]['active_calories_std'] += t * t
+				@stats['By Week'][week]['active_calories_cnt'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				t = data.resting_calories.to_f / 1000.0
+				@stats['By Week'][week]['resting_calories_avg'] += t
+				@stats['By Week'][week]['resting_calories_std'] += t * t
+				@stats['By Week'][week]['resting_calories_count'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if tcalcnt > 0
+				@stats['By Week'][week]['total_calories_avg'] += tcalv
+				@stats['By Week'][week]['total_calories_std'] += tcalv * tcalv
+				@stats['By Week'][week]['total_calories_count'] += 1
 			end
 			if data.weight && data.weight > 0
 				t = data.weight.to_f / 10.0
-				@stats['By Week'][week][3] += t
-				@stats['By Week'][week][4] += t * t
-				@stats['By Week'][week][5] += 1
+				@stats['By Week'][week]['weight_avg'] += t
+				@stats['By Week'][week]['weight_std'] += t * t
+				@stats['By Week'][week]['weight_count'] += 1
 			end
 			if data.steps && data.steps > 0
 				t = data.steps.to_f
-				@stats['By Week'][week][6] += t
-				@stats['By Week'][week][7] += t * t
-				@stats['By Week'][week][8] += 1
+				@stats['By Week'][week]['steps_avg'] += t
+				@stats['By Week'][week]['steps_std'] += t * t
+				@stats['By Week'][week]['steps_count'] += 1
 			end
 			if data.flights && data.flights > 0
 				t = data.flights
-				@stats['By Week'][week][9] += t
-				@stats['By Week'][week][10] += t * t
-				@stats['By Week'][week][11] += 1
+				@stats['By Week'][week]['flights_avg'] += t
+				@stats['By Week'][week]['flights_std'] += t * t
+				@stats['By Week'][week]['flights_count'] += 1
 			end
 			if data.miles && data.miles > 0
 				t = data.miles.to_f / 100.0
-				@stats['By Week'][week][12] += t
-				@stats['By Week'][week][13] += t * t
-				@stats['By Week'][week][14] += 1
+				@stats['By Week'][week]['miles_avg'] += t
+				@stats['By Week'][week]['miles_std'] += t * t
+				@stats['By Week'][week]['miles_count'] += 1
 			end
 		end
 		@stats['By Week'].each do |week, values|
-			if values[2] != 0
-				values[0] = values[0] / values[2]
-				values[1] = Math.sqrt( (values[1] / values[2]) - (values[0] * values[0]))
+			if values['aerobic_calories_count'] != 0
+				values['aerobic_calories_avg'] = values['aerobic_calories_avg'] / values['aerobic_calories_count']
+				values['aerobic_calories_std'] = Math.sqrt( (values['aerobic_calories_std'] / values['aerobic_calories_count']) - (values['aerobic_calories_avg'] * values['aerobic_calories_avg']))
 			end
-			if values[5] != 0
-				values[3] = values[3] / values[5]
-				values[4] = Math.sqrt( (values[4] / values[5]) - (values[3] * values[3]))
+			if values['active_calories_cnt'] != 0
+				values['active_calories_avg'] = values['active_calories_avg'] / values['active_calories_cnt']
+				values['active_calories_std'] = Math.sqrt( (values['active_calories_std'] / values['active_calories_cnt']) - (values['active_calories_avg'] * values['active_calories_avg']))
 			end
-			if values[8] != 0
-				values[6] = values[6] / values[8]
-				values[7] = Math.sqrt( (values[7] / values[8]) - (values[6] * values[6]))
+			if values['resting_calories_count'] != 0
+				values['resting_calories_avg'] = values['resting_calories_avg'] / values['resting_calories_count']
+				values['resting_calories_std'] = Math.sqrt( (values['resting_calories_std'] / values['resting_calories_count']) - (values['resting_calories_avg'] * values['resting_calories_avg']))
 			end
-			if values[11] != 0
-				values[9] = values[9] / values[11]
-				values[10] = Math.sqrt( (values[10] / values[11]) - (values[9] * values[9]))
+			if values['total_calories_count'] != 0
+				values['total_calories_avg'] = values['total_calories_avg'] / values['total_calories_count']
+				values['total_calories_std'] = Math.sqrt( (values['total_calories_std'] / values['total_calories_count']) - (values['total_calories_avg'] * values['total_calories_avg']))
 			end
-			if values[14] != 0
-				values[12] = values[12] / values[14]
-				values[13] = Math.sqrt( (values[13] / values[14]) - (values[12] * values[12]))
+			if values['weight_count'] != 0
+				values['weight_avg'] = values['weight_avg'] / values['weight_count']
+				values['weight_std'] = Math.sqrt( (values['weight_std'] / values['weight_count']) - (values['weight_avg'] * values['weight_avg']))
+			end
+			if values['steps_count'] != 0
+				values['steps_avg'] = values['steps_avg'] / values['steps_count']
+				values['steps_std'] = Math.sqrt( (values['steps_std'] / values['steps_count']) - (values['steps_avg'] * values['steps_avg']))
+			end
+			if values['flights_count'] != 0
+				values['flights_avg'] = values['flights_avg'] / values['flights_count']
+				values['flights_std'] = Math.sqrt( (values['flights_std'] / values['flights_count']) - (values['flights_avg'] * values['flights_avg']))
+			end
+			if values['miles_count'] != 0
+				values['miles_avg'] = values['miles_avg'] / values['miles_count']
+				values['miles_std'] = Math.sqrt( (values['miles_std'] / values['miles_count']) - (values['miles_avg'] * values['miles_avg']))
 			end
 		end
 
@@ -131,74 +215,120 @@ class Health::StatsController < ApplicationController
 		@data.each do |data|
 			wday = dow(data.date)
 			if ! @stats['By Day Of Week'][wday]
-				@stats['By Day Of Week'][wday] = []
-				@stats['By Day Of Week'][wday][0] = 0.0		# calories avg
-				@stats['By Day Of Week'][wday][1] = 0.0		# calories std
-				@stats['By Day Of Week'][wday][2] = 0		# calories count
-				@stats['By Day Of Week'][wday][3] = 0.0		# weight avg
-				@stats['By Day Of Week'][wday][4] = 0.0		# weight std
-				@stats['By Day Of Week'][wday][5] = 0		# weight count
-				@stats['By Day Of Week'][wday][6] = 0.0		# steps avg
-				@stats['By Day Of Week'][wday][7] = 0.0		# steps std
-				@stats['By Day Of Week'][wday][8] = 0		# steps count
-				@stats['By Day Of Week'][wday][9] = 0.0		# flights avg
-				@stats['By Day Of Week'][wday][10] = 0.0	# flights std
-				@stats['By Day Of Week'][wday][11] = 0		# flights count
-				@stats['By Day Of Week'][wday][12] = 0.0	# miles avg
-				@stats['By Day Of Week'][wday][13] = 0.0	# miles std
-				@stats['By Day Of Week'][wday][14] = 0		# miles count
+				@stats['By Day Of Week'][wday] = Hash.new
+				@stats['By Day Of Week'][wday]['aerobic_calories_avg'] = 0.0	
+				@stats['By Day Of Week'][wday]['aerobic_calories_std'] = 0.0
+				@stats['By Day Of Week'][wday]['aerobic_calories_count'] = 0
+				@stats['By Day Of Week'][wday]['active_calories_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['active_calories_std'] = 0.0
+				@stats['By Day Of Week'][wday]['active_calories_cnt'] = 0
+				@stats['By Day Of Week'][wday]['resting_calories_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['resting_calories_std'] = 0.0
+				@stats['By Day Of Week'][wday]['resting_calories_count'] = 0
+				@stats['By Day Of Week'][wday]['total_calories_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['total_calories_std'] = 0.0
+				@stats['By Day Of Week'][wday]['total_calories_count'] = 0
+				@stats['By Day Of Week'][wday]['weight_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['weight_std'] = 0.0
+				@stats['By Day Of Week'][wday]['weight_count'] = 0
+				@stats['By Day Of Week'][wday]['steps_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['steps_std'] = 0.0
+				@stats['By Day Of Week'][wday]['steps_count'] = 0
+				@stats['By Day Of Week'][wday]['flights_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['flights_std'] = 0.0
+				@stats['By Day Of Week'][wday]['flights_count'] = 0
+				@stats['By Day Of Week'][wday]['miles_avg'] = 0.0
+				@stats['By Day Of Week'][wday]['miles_std'] = 0.0
+				@stats['By Day Of Week'][wday]['miles_count'] = 0
 			end
-			if data.calories && data.calories > 0
-				t = data.calories.to_f / 10.0
-				@stats['By Day Of Week'][wday][0] += t
-				@stats['By Day Of Week'][wday][1] += t * t
-				@stats['By Day Of Week'][wday][2] += 1
+			tcalcnt = 0
+			tcalv = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				t = data.aerobic_calories.to_f / 10.0
+				@stats['By Day Of Week'][wday]['aerobic_calories_avg'] += t
+				@stats['By Day Of Week'][wday]['aerobic_calories_std'] += t * t
+				@stats['By Day Of Week'][wday]['aerobic_calories_count'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if data.active_calories && data.active_calories > 0
+				t = data.active_calories.to_f / 1000.0
+				@stats['By Day Of Week'][wday]['active_calories_avg'] += t
+				@stats['By Day Of Week'][wday]['active_calories_std'] += t * t
+				@stats['By Day Of Week'][wday]['active_calories_cnt'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				t = data.resting_calories.to_f / 1000.0
+				@stats['By Day Of Week'][wday]['resting_calories_avg'] += t
+				@stats['By Day Of Week'][wday]['resting_calories_std'] += t * t
+				@stats['By Day Of Week'][wday]['resting_calories_count'] += 1
+				tcalv += t
+				tcalcnt = 1
+			end
+			if tcalcnt > 0
+				@stats['By Day Of Week'][wday]['total_calories_avg'] += tcalv
+				@stats['By Day Of Week'][wday]['total_calories_std'] += tcalv * tcalv
+				@stats['By Day Of Week'][wday]['total_calories_count'] += 1
 			end
 			if data.weight && data.weight > 0
 				t = data.weight.to_f / 10.0
-				@stats['By Day Of Week'][wday][3] += t
-				@stats['By Day Of Week'][wday][4] += t * t
-				@stats['By Day Of Week'][wday][5] += 1
+				@stats['By Day Of Week'][wday]['weight_avg'] += t
+				@stats['By Day Of Week'][wday]['weight_std'] += t * t
+				@stats['By Day Of Week'][wday]['weight_count'] += 1
 			end
 			if data.steps && data.steps > 0
 				t = data.steps.to_f
-				@stats['By Day Of Week'][wday][6] += t
-				@stats['By Day Of Week'][wday][7] += t * t
-				@stats['By Day Of Week'][wday][8] += 1
+				@stats['By Day Of Week'][wday]['steps_avg'] += t
+				@stats['By Day Of Week'][wday]['steps_std'] += t * t
+				@stats['By Day Of Week'][wday]['steps_count'] += 1
 			end
 			if data.flights && data.flights > 0
 				t = data.flights.to_f
-				@stats['By Day Of Week'][wday][9] += t
-				@stats['By Day Of Week'][wday][10] += t * t
-				@stats['By Day Of Week'][wday][11] += 1
+				@stats['By Day Of Week'][wday]['flights_avg'] += t
+				@stats['By Day Of Week'][wday]['flights_std'] += t * t
+				@stats['By Day Of Week'][wday]['flights_count'] += 1
 			end
 			if data.miles && data.miles > 0
 				t = data.miles.to_f / 100.0
-				@stats['By Day Of Week'][wday][12] += t
-				@stats['By Day Of Week'][wday][13] += t * t
-				@stats['By Day Of Week'][wday][14] += 1
+				@stats['By Day Of Week'][wday]['miles_avg'] += t
+				@stats['By Day Of Week'][wday]['miles_std'] += t * t
+				@stats['By Day Of Week'][wday]['miles_count'] += 1
 			end
 		end
 		@stats['By Day Of Week'].each do |wday, values|
-			if values[2] != 0
-				values[0] = values[0] / values[2]
-				values[1] = Math.sqrt( (values[1] / values[2]) - (values[0] * values[0]))
+			if values['aerobic_calories_count'] != 0
+				values['aerobic_calories_avg'] = values['aerobic_calories_avg'] / values['aerobic_calories_count']
+				values['aerobic_calories_std'] = Math.sqrt( (values['aerobic_calories_std'] / values['aerobic_calories_count']) - (values['aerobic_calories_avg'] * values['aerobic_calories_avg']))
 			end
-			if values[5] != 0
-				values[3] = values[3] / values[5]
-				values[4] = Math.sqrt( (values[4] / values[5]) - (values[3] * values[3]))
+			if values['active_calories_cnt'] != 0
+				values['active_calories_avg'] = values['active_calories_avg'] / values['active_calories_cnt']
+				values['active_calories_std'] = Math.sqrt( (values['active_calories_std'] / values['active_calories_cnt']) - (values['active_calories_avg'] * values['active_calories_avg']))
 			end
-			if values[8] != 0
-				values[6] = values[6] / values[8]
-				values[7] = Math.sqrt( (values[7] / values[8]) - (values[6] * values[6]))
+			if values['resting_calories_count'] != 0
+				values['resting_calories_avg'] = values['resting_calories_avg'] / values['resting_calories_count']
+				values['resting_calories_std'] = Math.sqrt( (values['resting_calories_std'] / values['resting_calories_count']) - (values['resting_calories_avg'] * values['resting_calories_avg']))
 			end
-			if values[11] != 0
-				values[9] = values[9] / values[11]
-				values[10] = Math.sqrt( (values[10] / values[11]) - (values[9] * values[9]))
+			if values['total_calories_count'] != 0
+				values['total_calories_avg'] = values['total_calories_avg'] / values['total_calories_count']
+				values['total_calories_std'] = Math.sqrt( (values['total_calories_std'] / values['total_calories_count']) - (values['total_calories_avg'] * values['total_calories_avg']))
 			end
-			if values[14] != 0
-				values[12] = values[12] / values[14]
-				values[13] = Math.sqrt( (values[13] / values[14]) - (values[12] * values[12]))
+			if values['weight_count'] != 0
+				values['weight_avg'] = values['weight_avg'] / values['weight_count']
+				values['weight_std'] = Math.sqrt( (values['weight_std'] / values['weight_count']) - (values['weight_avg'] * values['weight_avg']))
+			end
+			if values['steps_count'] != 0
+				values['steps_avg'] = values['steps_avg'] / values['steps_count']
+				values['steps_std'] = Math.sqrt( (values['steps_std'] / values['steps_count']) - (values['steps_avg'] * values['steps_avg']))
+			end
+			if values['flights_count'] != 0
+				values['flights_avg'] = values['flights_avg'] / values['flights_count']
+				values['flights_std'] = Math.sqrt( (values['flights_std'] / values['flights_count']) - (values['flights_avg'] * values['flights_avg']))
+			end
+			if values['miles_count'] != 0
+				values['miles_avg'] = values['miles_avg'] / values['miles_count']
+				values['miles_std'] = Math.sqrt( (values['miles_std'] / values['miles_count']) - (values['miles_avg'] * values['miles_avg']))
 			end
 		end
 
@@ -206,75 +336,124 @@ class Health::StatsController < ApplicationController
 		@stats['By Resistance'] = Hash.new
 		@data.each do |data|
 			res = data.resistance
-			if ! @stats['By Resistance'][res]
-				@stats['By Resistance'][res] = []
-				@stats['By Resistance'][res][0] = 0.0	# calories avg
-				@stats['By Resistance'][res][1] = 0.0	# calories std
-				@stats['By Resistance'][res][2] = 0		# calories count
-				@stats['By Resistance'][res][3] = 0.0	# weight avg
-				@stats['By Resistance'][res][4] = 0.0	# weight std
-				@stats['By Resistance'][res][5] = 0		# weight count
-				@stats['By Resistance'][res][6] = 0.0	# steps avg
-				@stats['By Resistance'][res][7] = 0.0	# steps std
-				@stats['By Resistance'][res][8] = 0		# steps count
-				@stats['By Resistance'][res][9] = 0.0	# flights avg
-				@stats['By Resistance'][res][10] = 0.0	# flights std
-				@stats['By Resistance'][res][11] = 0	# flights count
-				@stats['By Resistance'][res][12] = 0.0	# miles avg
-				@stats['By Resistance'][res][13] = 0.0	# miles std
-				@stats['By Resistance'][res][14] = 0	# miles count
+			if ! res || res == 0
+				next
 			end
-			if data.calories && data.calories > 0
-				t = data.calories.to_f / 10.0
-				@stats['By Resistance'][res][0] += t
-				@stats['By Resistance'][res][1] += t * t
-				@stats['By Resistance'][res][2] += 1
+			if ! @stats['By Resistance'][res]
+				@stats['By Resistance'][res] = Hash.new
+				@stats['By Resistance'][res]['aerobic_calories_avg'] = 0.0
+				@stats['By Resistance'][res]['aerobic_calories_std'] = 0.0
+				@stats['By Resistance'][res]['aerobic_calories_count'] = 0
+				@stats['By Resistance'][res]['active_calories_avg'] = 0.0
+				@stats['By Resistance'][res]['active_calories_std'] = 0.0
+				@stats['By Resistance'][res]['active_calories_cnt'] = 0
+				@stats['By Resistance'][res]['resting_calories_avg'] = 0.0
+				@stats['By Resistance'][res]['resting_calories_std'] = 0.0
+				@stats['By Resistance'][res]['resting_calories_count'] = 0
+				@stats['By Resistance'][res]['total_calories_avg'] = 0.0
+				@stats['By Resistance'][res]['total_calories_std'] = 0.0
+				@stats['By Resistance'][res]['total_calories_count'] = 0
+				@stats['By Resistance'][res]['weight_avg'] = 0.0
+				@stats['By Resistance'][res]['weight_std'] = 0.0
+				@stats['By Resistance'][res]['weight_count'] = 0
+				@stats['By Resistance'][res]['steps_avg'] = 0.0
+				@stats['By Resistance'][res]['steps_std'] = 0.0
+				@stats['By Resistance'][res]['steps_count'] = 0
+				@stats['By Resistance'][res]['flights_avg'] = 0.0
+				@stats['By Resistance'][res]['flights_std'] = 0.0
+				@stats['By Resistance'][res]['flights_count'] = 0
+				@stats['By Resistance'][res]['miles_avg'] = 0.0
+				@stats['By Resistance'][res]['miles_std'] = 0.0
+				@stats['By Resistance'][res]['miles_count'] = 0
+			end
+			tcalcnt = 0
+			tcalv = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				t = data.aerobic_calories.to_f / 10.0
+				@stats['By Resistance'][res]['aerobic_calories_avg'] += t
+				@stats['By Resistance'][res]['aerobic_calories_std'] += t * t
+				@stats['By Resistance'][res]['aerobic_calories_count'] += 1
+				tcalv += t
+				tcalcnt += 1
+			end
+			if data.active_calories && data.active_calories > 0
+				t = data.active_calories.to_f / 1000.0
+				@stats['By Resistance'][res]['active_calories_avg'] += t
+				@stats['By Resistance'][res]['active_calories_std'] += t * t
+				@stats['By Resistance'][res]['active_calories_cnt'] += 1
+				tcalv += t
+				tcalcnt += 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				t = data.resting_calories.to_f / 1000.0
+				@stats['By Resistance'][res]['resting_calories_avg'] += t
+				@stats['By Resistance'][res]['resting_calories_std'] += t * t
+				@stats['By Resistance'][res]['resting_calories_count'] += 1
+				tcalv += t
+				tcalcnt += 1
+			end
+			if tcalcnt > 0
+				@stats['By Resistance'][res]['total_calories_avg'] += tcalv
+				@stats['By Resistance'][res]['total_calories_std'] += tcalv * tcalv
+				@stats['By Resistance'][res]['total_calories_count'] += 1
 			end
 			if data.weight && data.weight > 0
 				t = data.weight.to_f / 10.0
-				@stats['By Resistance'][res][3] += t
-				@stats['By Resistance'][res][4] += t * t
-				@stats['By Resistance'][res][5] += 1
+				@stats['By Resistance'][res]['weight_avg'] += t
+				@stats['By Resistance'][res]['weight_std'] += t * t
+				@stats['By Resistance'][res]['weight_count'] += 1
 			end
 			if data.steps && data.steps > 0
 				t = data.steps.to_f
-				@stats['By Resistance'][res][6] += t
-				@stats['By Resistance'][res][7] += t * t
-				@stats['By Resistance'][res][8] += 1
+				@stats['By Resistance'][res]['steps_avg'] += t
+				@stats['By Resistance'][res]['steps_std'] += t * t
+				@stats['By Resistance'][res]['steps_count'] += 1
 			end
 			if data.flights && data.flights > 0
 				t = data.flights.to_f
-				@stats['By Resistance'][res][9] += t
-				@stats['By Resistance'][res][10] += t * t
-				@stats['By Resistance'][res][11] += 1
+				@stats['By Resistance'][res]['flights_avg'] += t
+				@stats['By Resistance'][res]['flights_std'] += t * t
+				@stats['By Resistance'][res]['flights_count'] += 1
 			end
 			if data.miles && data.miles > 0
 				t = data.miles.to_f / 100.0
-				@stats['By Resistance'][res][12] += t
-				@stats['By Resistance'][res][13] += t * t
-				@stats['By Resistance'][res][14] += 1
+				@stats['By Resistance'][res]['miles_avg'] += t
+				@stats['By Resistance'][res]['miles_std'] += t * t
+				@stats['By Resistance'][res]['miles_count'] += 1
 			end
 		end
 		@stats['By Resistance'].each do |res, values|
-			if values[2] != 0
-				values[0] = values[0] / values[2]
-				values[1] = Math.sqrt( (values[1] / values[2]) - (values[0] * values[0]))
+			if values['aerobic_calories_count'] != 0
+				values['aerobic_calories_avg'] = values['aerobic_calories_avg'] / values['aerobic_calories_count']
+				values['aerobic_calories_std'] = Math.sqrt( (values['aerobic_calories_std'] / values['aerobic_calories_count']) - (values['aerobic_calories_avg'] * values['aerobic_calories_avg']))
 			end
-			if values[5] != 0
-				values[3] = values[3] / values[5]
-				values[4] = Math.sqrt( (values[4] / values[5]) - (values[3] * values[3]))
+			if values['active_calories_cnt'] != 0
+				values['active_calories_avg'] = values['active_calories_avg'] / values['active_calories_cnt']
+				values['active_calories_std'] = Math.sqrt( (values['active_calories_std'] / values['active_calories_cnt']) - (values['active_calories_avg'] * values['active_calories_avg']))
 			end
-			if values[8] != 0
-				values[6] = values[6] / values[8]
-				values[7] = Math.sqrt( (values[7] / values[8]) - (values[6] * values[6]))
+			if values['resting_calories_count'] != 0
+				values['resting_calories_avg'] = values['resting_calories_avg'] / values['resting_calories_count']
+				values['resting_calories_std'] = Math.sqrt( (values['resting_calories_std'] / values['resting_calories_count']) - (values['resting_calories_avg'] * values['resting_calories_avg']))
 			end
-			if values[11] != 0
-				values[9] = values[9] / values[11]
-				values[10] = Math.sqrt( (values[10] / values[11]) - (values[9] * values[9]))
+			if values['total_calories_count'] != 0
+				values['total_calories_avg'] = values['total_calories_avg'] / values['total_calories_count']
+				values['total_calories_std'] = Math.sqrt( (values['total_calories_std'] / values['total_calories_count']) - (values['total_calories_avg'] * values['total_calories_avg']))
 			end
-			if values[14] != 0
-				values[12] = values[12] / values[14]
-				values[13] = Math.sqrt( (values[13] / values[14]) - (values[12] * values[12]))
+			if values['weight_count'] != 0
+				values['weight_avg'] = values['weight_avg'] / values['weight_count']
+				values['weight_std'] = Math.sqrt( (values['weight_std'] / values['weight_count']) - (values['weight_avg'] * values['weight_avg']))
+			end
+			if values['steps_count'] != 0
+				values['steps_avg'] = values['steps_avg'] / values['steps_count']
+				values['steps_std'] = Math.sqrt( (values['steps_std'] / values['steps_count']) - (values['steps_avg'] * values['steps_avg']))
+			end
+			if values['flights_count'] != 0
+				values['flights_avg'] = values['flights_avg'] / values['flights_count']
+				values['flights_std'] = Math.sqrt( (values['flights_std'] / values['flights_count']) - (values['flights_avg'] * values['flights_avg']))
+			end
+			if values['miles_count'] != 0
+				values['miles_avg'] = values['miles_avg'] / values['miles_count']
+				values['miles_std'] = Math.sqrt( (values['miles_std'] / values['miles_count']) - (values['miles_avg'] * values['miles_avg']))
 			end
 		end
 

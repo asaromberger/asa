@@ -11,17 +11,23 @@ class Health::PlotsController < ApplicationController
 
 		# Daily and weekly average
 		# @charts['Daily'][measure]
-		#		measure = ['Calories', 'Weight', 'Steps', 'Flights', 'Miles']
+		#		measure = ['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Weight', 'Steps', 'Flights', 'Miles']
 		#	['dates'][date] = [list of line values]
 		#	['lines'] = ['Daily', 'Weekly Average']
 		@charts['Daily'] = Hash.new
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			@charts['Daily'][type] = Hash.new
 			@charts['Daily'][type]['dates'] = Hash.new
 			@charts['Daily'][type]['lines'] = ['Daily', '7 Day Average', '30 Day Average']
 		end
-		cal = Hash.new
-		ical = 0
+		aerobic_cal = Hash.new
+		aerobic_ical = 0
+		active_cal = Hash.new
+		active_ical = 0
+		resting_cal = Hash.new
+		resting_ical = 0
+		total_cal = Hash.new
+		total_ical = 0
 		wgt = Hash.new
 		iwgt = 0
 		steps = Hash.new
@@ -31,24 +37,90 @@ class Health::PlotsController < ApplicationController
 		miles = Hash.new
 		imiles = 0
 		@data.each do |data|
-			if data.calories && data.calories > 0
-				cal[ical] = data.calories.to_f / 10.0
-				@charts['Daily']['Calories']['dates'][data.date] = [cal[ical], 0, 0]
-				if ical >= 6
+			calflag = 0
+			tcal = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				aerobic_cal[aerobic_ical] = data.aerobic_calories.to_f / 10.0
+				tcal += aerobic_cal[aerobic_ical]
+				calflag += 1
+				@charts['Daily']['Aerobic Calories']['dates'][data.date] = [aerobic_cal[aerobic_ical], 0, 0]
+				if aerobic_ical >= 6
 					t = 0
-					(ical-6..ical).each do |i|
-						t += cal[i]
+					(aerobic_ical-6..aerobic_ical).each do |i|
+						t += aerobic_cal[i]
 					end
-					@charts['Daily']['Calories']['dates'][data.date][1] = t.to_f / 7.0
+					@charts['Daily']['Aerobic Calories']['dates'][data.date][1] = t.to_f / 7.0
 				end
-				if ical >= 29
+				if aerobic_ical >= 29
 					t = 0
-					(ical-29..ical).each do |i|
-						t += cal[i]
+					(aerobic_ical-29..aerobic_ical).each do |i|
+						t += aerobic_cal[i]
 					end
-					@charts['Daily']['Calories']['dates'][data.date][2] = t.to_f / 30.0
+					@charts['Daily']['Aerobic Calories']['dates'][data.date][2] = t.to_f / 30.0
 				end
-				ical += 1
+				aerobic_ical += 1
+			end
+			if data.active_calories && data.active_calories > 0
+				active_cal[active_ical] = data.active_calories.to_f / 1000.0
+				tcal += active_cal[active_ical]
+				calflag += 1
+				@charts['Daily']['Active Calories']['dates'][data.date] = [active_cal[active_ical], 0, 0]
+				if active_ical >= 6
+					t = 0
+					(active_ical-6..active_ical).each do |i|
+						t += active_cal[i]
+					end
+					@charts['Daily']['Active Calories']['dates'][data.date][1] = t.to_f / 7.0
+				end
+				if active_ical >= 29
+					t = 0
+					(active_ical-29..active_ical).each do |i|
+						t += active_cal[i]
+					end
+					@charts['Daily']['Active Calories']['dates'][data.date][2] = t.to_f / 30.0
+				end
+				active_ical += 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				resting_cal[resting_ical] = data.resting_calories.to_f / 1000.0
+				tcal += resting_cal[resting_ical]
+				calflag += 1
+				@charts['Daily']['Resting Calories']['dates'][data.date] = [resting_cal[resting_ical], 0, 0]
+				if resting_ical >= 6
+					t = 0
+					(resting_ical-6..resting_ical).each do |i|
+						t += resting_cal[i]
+					end
+					@charts['Daily']['Resting Calories']['dates'][data.date][1] = t.to_f / 7.0
+				end
+				if resting_ical >= 29
+					t = 0
+					(resting_ical-29..resting_ical).each do |i|
+						t += resting_cal[i]
+					end
+					@charts['Daily']['Resting Calories']['dates'][data.date][2] = t.to_f / 30.0
+				end
+				resting_ical += 1
+				calflag += 1
+			end
+			if calflag > 0
+				total_cal[total_ical] = tcal
+				@charts['Daily']['Total Calories']['dates'][data.date] = [total_cal[total_ical], 0, 0]
+				if total_ical >= 6
+					t = 0
+					(total_ical-6..total_ical).each do |i|
+						t += total_cal[i]
+					end
+					@charts['Daily']['Total Calories']['dates'][data.date][1] = t.to_f / 7.0
+				end
+				if total_ical >= 29
+					t = 0
+					(total_ical-29..total_ical).each do |i|
+						t += total_cal[i]
+					end
+					@charts['Daily']['Total Calories']['dates'][data.date][2] = t.to_f / 30.0
+				end
+				total_ical += 1
 			end
 			if data.weight && data.weight > 0
 				wgt[iwgt] = data.weight.to_f / 10.0
@@ -127,7 +199,7 @@ class Health::PlotsController < ApplicationController
 				imiles += 1
 			end
 		end
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			if @charts['Daily'][type]['dates'].count == 0
 				@charts['Daily'].delete(type)
 			end
@@ -135,33 +207,61 @@ class Health::PlotsController < ApplicationController
 
 		# by weekly average
 		# @charts['By Weekly Average][measure]
-		#		measure = ['Calories', 'Weight', 'Steps', 'Flights', 'Miles']
+		#		measure = ['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles']
 		#	['dates'][date] = [list of line values]
 		#	['lines'] = [list of line names]
 		@charts['By Weekly Average'] = Hash.new
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			@charts['By Weekly Average'][type] = Hash.new
 			@charts['By Weekly Average'][type]['dates'] = Hash.new
 			@charts['By Weekly Average'][type]['lines'] = [type]
 		end
 		@counts = Hash.new
-		@counts['Calories'] = Hash.new
+		@counts['Aerobic Calories'] = Hash.new
+		@counts['Active Calories'] = Hash.new
+		@counts['Resting Calories'] = Hash.new
+		@counts['Total Calories'] = Hash.new
 		@counts['Weight'] = Hash.new
 		@counts['Steps'] = Hash.new
 		@counts['Flights'] = Hash.new
 		@counts['Miles'] = Hash.new
 		@data.each do |data|
 			week = monday(data.date)
-			['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 				if ! @charts['By Weekly Average'][type]['dates'][week]
 					@charts['By Weekly Average'][type]['dates'][week] = [0]
 					@counts[type][week] = 0
 				end
 			end
-			if data.calories && data.calories > 0
-				t = data.calories.to_f / 10.0
-				@charts['By Weekly Average']['Calories']['dates'][week][0] += t
-				@counts['Calories'][week] += 1
+			calflag = 0
+			tcal = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				t = data.aerobic_calories.to_f / 10.0
+				tcal += t
+				calflag += 1
+				@charts['By Weekly Average']['Aerobic Calories']['dates'][week][0] += t
+				@counts['Aerobic Calories'][week] += 1
+			end
+			if data.active_calories && data.active_calories > 0
+				t = data.active_calories.to_f / 1000.0
+				tcal += t
+				calflag += 1
+				@charts['By Weekly Average']['Active Calories']['dates'][week][0] += t
+				@counts['Active Calories'][week] += 1
+				calflag += 1
+			end
+			if calflag > 0
+				t = tcal
+				@charts['By Weekly Average']['Total Calories']['dates'][week][0] += t
+				@counts['Total Calories'][week] += 1
+			end
+			if data.resting_calories && data.resting_calories > 0
+				t = data.resting_calories.to_f / 1000.0
+				tcal += t
+				calflag += 1
+				@charts['By Weekly Average']['Resting Calories']['dates'][week][0] += t
+				@counts['Resting Calories'][week] += 1
+				calflag += 1
 			end
 			if data.weight && data.weight > 0
 				t = data.weight.to_f / 10.0
@@ -184,14 +284,19 @@ class Health::PlotsController < ApplicationController
 				@counts['Miles'][week] += 1
 			end
 		end
+		@charts['By Weekly Average']['Total Calories']['dates'].each do |week, values|
+				t = @charts['By Weekly Average']['Aerobic Calories']['dates'][week][0] + @charts['By Weekly Average']['Active Calories']['dates'][week][0] + @charts['By Weekly Average']['Resting Calories']['dates'][week][0]
+				@charts['By Weekly Average']['Total Calories']['dates'][week][0] = t
+				@counts['Total Calories'][week] += 7
+		end
 		@charts['By Weekly Average'].each do |type, values|
-			values['dates'].each do |date, values|
+			values['dates'].each do |date, value|
 				if @counts[type][date] > 0
 					@charts['By Weekly Average'][type]['dates'][date][0] /= @counts[type][date]
 				end
 			end
 		end
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			flag = false
 			@charts['By Weekly Average'][type]['dates'].each do |date, values|
 				if values[0] != 0
@@ -206,11 +311,11 @@ class Health::PlotsController < ApplicationController
 
 		# By Day of Week
 		# @charts['By Day of Week'][measure]
-		#		measure = ['Calories', 'Weight', 'Steps', 'Flights', 'Miles']
+		#		measure = ['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles']
 		#	['dates'][date] = [list of line values]
 		#	['lines'] = [list of line names]
 		@charts['By Day of Week'] = Hash.new
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			@charts['By Day of Week'][type] = Hash.new
 			@charts['By Day of Week'][type]['dates'] = Hash.new
 			@charts['By Day of Week'][type]['lines'] = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
@@ -219,7 +324,7 @@ class Health::PlotsController < ApplicationController
 		@data.each do |data|
 			week = monday(data.date)
 			if week != lweek
-				['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+				['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 					@charts['By Day of Week'][type]['dates'][week] = [0,0,0,0,0,0,0]
 				end
 				lweek = week
@@ -228,9 +333,29 @@ class Health::PlotsController < ApplicationController
 			if wday < 0
 				wday = 6
 			end
-			if data.calories && data.calories > 0
-				t = data.calories.to_f / 10.0
-				@charts['By Day of Week']['Calories']['dates'][week][wday] += t
+			calflag = 0
+			tcal = 0
+			if data.aerobic_calories && data.aerobic_calories > 0
+				t = data.aerobic_calories.to_f / 10.0
+				tcal += t
+				calflag += 1
+				@charts['By Day of Week']['Aerobic Calories']['dates'][week][wday] += t
+			end
+			if data.active_calories && data.active_calories > 0
+				t = data.active_calories.to_f / 1000.0
+				tcal += t
+				calflag += 1
+				@charts['By Day of Week']['Active Calories']['dates'][week][wday] += t
+			end
+			if data.resting_calories && data.resting_calories > 0
+				t = data.resting_calories.to_f / 1000.0
+				tcal += t
+				calflag += 1
+				@charts['By Day of Week']['Resting Calories']['dates'][week][wday] += t
+			end
+			if calflag > 0
+				t = tcal
+				@charts['By Day of Week']['Total Calories']['dates'][week][wday] += t
 			end
 			if data.weight && data.weight > 0
 				t = data.weight.to_f / 10.0
@@ -249,7 +374,7 @@ class Health::PlotsController < ApplicationController
 				@charts['By Day of Week']['Miles']['dates'][week][wday] += t
 			end
 		end
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			flag = false
 			@charts['By Day of Week'][type]['dates'].each do |date, values|
 				values.each do |value|
@@ -269,7 +394,7 @@ class Health::PlotsController < ApplicationController
 
 		# by resistance
 		# @charts['By Resistance'][measure]
-		#		measure = ['Calories', 'Weight', 'Steps', 'Flights', 'Miles']
+		#		measure = ['Aerobic Calories', 'Active Calories', 'Total Calories', 'Resting Calories', 'Weight', 'Steps', 'Flights', 'Miles']
 		#	['dates'][date] = [list of line values]
 		#	['lines'] = [list of line names]
 		@resistances = Hash.new
@@ -285,7 +410,7 @@ class Health::PlotsController < ApplicationController
 			i += 1
 		end
 		@charts['By Resistance'] = Hash.new
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			@charts['By Resistance'][type] = Hash.new
 			@charts['By Resistance'][type]['dates'] = Hash.new
 			@charts['By Resistance'][type]['lines'] = []
@@ -294,13 +419,22 @@ class Health::PlotsController < ApplicationController
 			end
 		end
 		@data.each do |data|
-			['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+			['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 				@charts['By Resistance'][type]['dates'][data.date] = []
 				@resistances.each do |resistance, value|
 					@charts['By Resistance'][type]['dates'][data.date].push(0)
 				end
-				if type == 'Calories'
-					v = data.calories.to_f / 10.0
+				if type == 'Aerobic Calories'
+					v = data.aerobic_calories.to_f / 10.0
+				end
+				if type == 'Active Calories'
+					v = data.active_calories.to_f / 1000.0
+				end
+				if type == 'Resting Calories'
+					v = data.resting_calories.to_f / 1000.0
+				end
+				if type == 'Total Calories'
+					v = data.aerobic_calories.to_f / 10.0 + data.active_calories.to_f / 1000.0 + data.resting_calories.to_f / 1000.0
 				end
 				if type == 'Weight'
 					v = data.weight.to_f / 10.0
@@ -319,7 +453,7 @@ class Health::PlotsController < ApplicationController
 				end
 			end
 		end
-		['Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Total Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			flag = false
 			@charts['By Resistance'][type]['dates'].each do |date, values|
 				values.each do |value|

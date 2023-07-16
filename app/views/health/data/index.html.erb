@@ -10,7 +10,9 @@
 <tr>
 <th>Date</th>
 <th>Resistance</th>
-<th>Calories</th>
+<th>Aerobic<br/>Calories</th>
+<th>Active<br/>Calories</th>
+<th>Resting<br/>Calories</th>
 <th>Weight</th>
 <th>Steps</th>
 <th>Flights</th>
@@ -24,36 +26,55 @@
 <% @data.each do |data| %>
 	<tr>
 	<td><%= data.date %></td>
+
 	<% if data.resistance %>
 		<td><%= data.resistance %></td>
 	<% else %>
 		<td></td>
 	<% end %>
-	<% if data.calories %>
-		<td><%= data.calories / 10.0 %></td>
+
+	<% if data.aerobic_calories %>
+		<td><%= data.aerobic_calories / 10.0 %></td>
 	<% else %>
 		<td></td>
 	<% end %>
+
+	<% if data.active_calories %>
+		<td><%= data.active_calories / 1000.0 %></td>
+	<% else %>
+		<td></td>
+	<% end %>
+
+	<% if data.resting_calories %>
+		<td><%= data.resting_calories / 1000.0 %></td>
+	<% else %>
+		<td></td>
+	<% end %>
+
 	<% if data.weight %>
 		<td><%= data.weight / 10.0 %></td>
 	<% else %>
 		<td></td>
 	<% end %>
+
 	<% if data.steps %>
 		<td><%= data.steps %></td>
 	<% else %>
 		<td></td>
 	<% end %>
+
 	<% if data.flights %>
 		<td><%= data.flights %></td>
 	<% else %>
 		<td></td>
 	<% end %>
+
 	<% if data.miles %>
 		<td><%= data.miles / 100.0 %></td>
 	<% else %>
 		<td></td>
 	<% end %>
+
 	<td><%= link_to 'Edit', edit_health_datum_path(id: data.id) %></td>
 	<td><%= link_to 'Delete', health_datum_path(id: data.id), method: :delete, data: {confirm: "Delete #{data.date}?"} %></td>
 	</tr>

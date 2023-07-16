@@ -10,8 +10,18 @@
 
 	<div class='clearfix'></div>
 
-	<%= data.label :calories, "Calories times 10", class: 'col-xs-2' %>
-	<%= data.number_field :calories, class: 'col-xs-2' %>
+	<%= data.label :aerobic_calories, "Aerobic Calories times 10", class: 'col-xs-2' %>
+	<%= data.number_field :aerobic_calories, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :active_calories, "Active Calories times 1000", class: 'col-xs-2' %>
+	<%= data.number_field :active_calories, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= data.label :resting_calories, "Resting Calories times 1000", class: 'col-xs-2' %>
+	<%= data.number_field :resting_calories, class: 'col-xs-2' %>
 
 	<div class='clearfix'></div>
 
