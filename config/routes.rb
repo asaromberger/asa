@@ -106,6 +106,7 @@ Rails.application.routes.draw do
 			resources :bills
 		end
 		namespace :admin do
+			resources :duplicates
 			resources :exports
 			resources :import
 		end
