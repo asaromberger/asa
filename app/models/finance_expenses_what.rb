@@ -5,4 +5,6 @@ class FinanceExpensesWhat < ApplicationRecord
 	has_many :finance_expenses_items
 	has_many :finance_expenses_what_maps
 
+	validates :what, uniqueness: true
+
 end

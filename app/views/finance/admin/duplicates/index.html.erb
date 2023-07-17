@@ -1,0 +1,12 @@
+<h1><%= @title %></h1>
+
+<% @duplicates.each do |table, messages| %>
+	<% if messages.count > 0 %>]
+		<h3><%= table %></h3>
+		<ul>
+		<% messages.each do |message| %>
+			<li><%= message %></li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>

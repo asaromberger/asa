@@ -24,7 +24,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		if @what.save
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What Map Added'
 		else
-			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: 'Failed to create What Map'
+			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: 'Failed to create What Map - may be duplicate'
 		end
 	end
 
@@ -41,7 +41,7 @@ class Finance::Expenses::WhatsController < ApplicationController
 		if @what.update(what_params)
 			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), notice: 'What map Updated'
 		else
-			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: 'Failed to create What map'
+			redirect_to finance_expenses_whats_path(sort: @sort, filters: @filters), alert: 'Failed to create What map - may be duplicate'
 		end
 	end
 

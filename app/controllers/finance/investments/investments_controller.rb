@@ -113,6 +113,10 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestmentsInvestment.new(investment_params)
 		@investment.finance_investments_fund_id = @fund.id
+		if FinanceInvestmentsInvestment.where("date = ? AND finance_investments_fund_id = ?", @investment.date, @investment.finance_investments_fund_id).count > 0
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: "Previous entry exists for #{@investment.date} #{@investment.finance_investments_fund.finance_investments_account.name} #{@investment.finance_investments_fund.fund}"
+			return
+		end
 		if @fund.atype == 'brokerage'
 			@investment.value = @investment.shares * @investment.pershare
 		end
@@ -144,6 +148,10 @@ class Finance::Investments::InvestmentsController < ApplicationController
 		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:fund])
 		@investment = FinanceInvestmentsInvestment.find(params[:id])
+		if FinanceInvestmentsInvestment.where("id != ? AND date = ? AND finance_investments_fund_id = ?", @investment.id, @investment.date, @investment.finance_investments_fund_id).count > 0
+			redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: "Previous entry exists for #{@investment.date} #{@investment.finance_investments_fund.finance_investments_account.name} #{@investment.finance_investments_fund.fund}"
+			return
+		end
 		if @fund.atype == 'brokerage'
 			params[:finance_investments_investment][:value] = params[:finance_investments_investment][:shares].to_f * params[:finance_investments_investment][:pershare].to_f
 		end
