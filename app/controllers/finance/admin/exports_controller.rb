@@ -86,7 +86,7 @@ class Finance::Admin::ExportsController < ApplicationController
 		FinanceInvestmentsSummaryContent.all.order('id').each do |map|
 			taccount = investments_accounts[map.finance_investments_account_id]
 			tsummary = investments_summaries[map.finance_investments_summary_id]
-			content += "\"investment_map\",\"#{taccount}\",\"#{tsummary}\"\n"
+			content += "\"investment_summary_content\",\"#{taccount}\",\"#{tsummary}\"\n"
 		end
 
 		send_data(content, type: 'application/csv', filename: 'Financials.csv', disposition: :inline)
