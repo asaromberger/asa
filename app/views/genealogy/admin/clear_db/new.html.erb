@@ -1,5 +1,11 @@
 <h1><%= @title %></h1>
 
+<ul>
+<% @messages.each do |message| %>
+	<li><%= message %></li>
+<% end %>
+</ul>
+
 <%= form_tag genealogy_admin_clear_db_index_path, method: :post do %>
 
 	<%= submit_tag 'Clear DB', class: 'btn btn-primary col-xs-2' %>

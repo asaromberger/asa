@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<% @dups.each do |list| %>
+	<div class='border-box'>
+	<%= form_tag new_genealogy_duplicate_path, method: :get do %>
+		<div class='col-xs-1'>Primary</div>
+		<div class='col-xs-1'>Secondary</div>
+		<br/>
+		<% list.each do |id, values| %>
+			<div class='col-xs-1'><%= radio_button_tag :primary, id, checked = false %></div>
+			<div class='col-xs-1'><%= radio_button_tag :secondary, id, checked = false %></div>
+			ID: <%= values['id'] %>
+			:: NAME: <%= values['given'] %> <%= values['surname'] %> <%= values['suffix'] %>
+			:: SEX: <%= values['sex'] %>
+			:: BIRTH: <%= values['birth'] %>
+			<div class='clearfix'></div>
+		<% end %>
+		<div class='clearfix'></div>
+		<%= submit_tag "Select", class: "btn btn-primary col-xs-1" %>
+		<div class='clearfix'><p>&nbsp;</p></div>
+	<% end %>
+	</div>
+<% end %>

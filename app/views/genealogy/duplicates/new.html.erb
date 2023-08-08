@@ -1,0 +1,29 @@
+<h1><%= @title %></h1>
+
+<%= form_tag genealogy_duplicates_path, method: :post do %>
+	<% @individuals.each do |id, values| %>
+		<div class='border-box'>
+		ID: <%= id %>
+		<br/>
+		<% if values['primary'] %>
+			<%= hidden_field_tag :primary, id %>
+			PRIMARY
+			<br/>
+		<% else %>
+			<%= hidden_field_tag :secondary, id %>
+			SECONDARY
+			<br/>
+		<% end %>
+		<% values['names'].each do |id, name| %>
+			<%= name %>
+			<br/>
+		<% end %>
+		SEX: <%= values['sex'] %>
+		<br/>
+		BIRTH: <%= values['birth'] %>
+		<br/>
+		</div>
+	<% end %>
+	<div class='clearfix'><p>&nbsp;</p></div>
+	<%= submit_tag "Merge", class: "btn btn-primary col-xs-1" %>
+<% end %>
