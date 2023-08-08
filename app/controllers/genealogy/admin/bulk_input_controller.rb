@@ -229,7 +229,7 @@ class Genealogy::Admin::BulkInputController < ApplicationController
 				repo.save
 			end
 		end
-		redirect_to new_health_import_path(messages: @messages.to_json)
+		redirect_to new_genealogy_admin_bulk_input_path(messages: @messages.to_json)
 	end
 
 	private

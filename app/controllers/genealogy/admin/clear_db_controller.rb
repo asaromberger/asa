@@ -4,6 +4,14 @@ class Genealogy::Admin::ClearDbController < ApplicationController
 
 	def new
 		@title = "Clear Genealogy DB"
+		@messages = []
+		@messages.push("#{GenealogyChild.all.count} Children")
+		@messages.push("#{GenealogyFamily.all.count} Families")
+		@messages.push("#{GenealogyIndividual.all.count} Individuals")
+		@messages.push("#{GenealogyInfo.all.count} Infos")
+		@messages.push("#{GenealogyInfoSource.all.count} Info Sources")
+		@messages.push("#{GenealogyRepo.all.count} Repos")
+		@messages.push("#{GenealogySource.all.count} Sources")
 	end
 
 	def create
@@ -14,7 +22,7 @@ class Genealogy::Admin::ClearDbController < ApplicationController
 		GenealogyInfoSource.all.delete_all
 		GenealogyRepo.all.delete_all
 		GenealogySource.all.delete_all
-		redirect_to genealogy_admin_clear_db_index_path, notice: "Genealogy Database Cleared"
+		redirect_to genealogy_admin_display_index_path, notice: "Genealogy Database Cleared"
 	end
 
 	private
