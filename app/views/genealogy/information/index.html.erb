@@ -14,6 +14,10 @@ div {
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
+<%= link_to 'Remove this person', genealogy_information_path(id: @individual.id), method: :delete, data: { confirm: "Remove this person? (Includes all information and relationships!)" }, class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
 <% if @names.count > 0 %>
 	<h5>Name</h5>
 	<% @names.each do |name| %>

@@ -34,22 +34,26 @@ class Genealogy::InformationController < ApplicationController
 		GenealogyFamily.where("genealogy_husband_id = ? OR genealogy_wife_id = ?", @individual.id, @individual.id).each do |family|
 			family_ids.push(family.id)
 			if !family.genealogy_husband_id.blank? && family.genealogy_husband_id != @individual.id
-				individual = GenealogyIndividual.find(family.genealogy_husband_id)
-				GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", individual.id).each do |name|
-					if @marrieds[family.genealogy_husband_id].blank?
-						@marrieds[family.genealogy_husband_id] = "#{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
-					else
-						@marrieds[family.genealogy_husband_id] = "#{@marrieds[family.genealogy_husband_id]} OR #{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+				individual = GenealogyIndividual.where("id = ?", family.genealogy_husband_id).first
+				if individual
+					GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", individual.id).each do |name|
+						if @marrieds[family.genealogy_husband_id].blank?
+							@marrieds[family.genealogy_husband_id] = "#{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+						else
+							@marrieds[family.genealogy_husband_id] = "#{@marrieds[family.genealogy_husband_id]} OR #{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+						end
 					end
 				end
 			end
 			if !family.genealogy_wife_id.blank? && family.genealogy_wife_id != @individual.id
-				individual = GenealogyIndividual.find(family.genealogy_wife_id)
-				GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", individual.id).each do |name|
-					if @marrieds[family.genealogy_wife_id].blank?
-						@marrieds[family.genealogy_wife_id] = "#{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
-					else
-						@marrieds[family.genealogy_wife_id] = "#{@marrieds[family.genealogy_wife_id]} OR #{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+				individual = GenealogyIndividual.where("id = ?", family.genealogy_wife_id).first
+				if individual
+					GenealogyInfo.where("genealogy_individual_id = ? AND itype = 'name'", individual.id).each do |name|
+						if @marrieds[family.genealogy_wife_id].blank?
+							@marrieds[family.genealogy_wife_id] = "#{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+						else
+							@marrieds[family.genealogy_wife_id] = "#{@marrieds[family.genealogy_wife_id]} OR #{name.data['given']} #{name.data['surname']} #{name.data['suffix']}"
+						end
 					end
 				end
 			end
@@ -83,6 +87,33 @@ class Genealogy::InformationController < ApplicationController
 
 		@census = information(@individual, 'census')
 
+	end
+
+	def destroy
+		@individual = GenealogyIndividual.find(params[:id].to_i)
+		GenealogyInfo.where("genealogy_individual_id = ?", @individual.id).delete_all
+		GenealogyFamily.where("genealogy_husband_id = ? OR genealogy_wife_id = ?", @individual.id, @individual.id).each do |family|
+			if family.genealogy_husband_id == @individual.id
+				if family.genealogy_wife_id && family.genealogy_wife_id > 0
+					family.genealogy_husband_id = 0
+					family.save
+				else
+					GenealogyChild.where("genealogy_family_id = ?", family.id).delete_all
+					family.delete
+				end
+			else
+				if family.genealogy_husband_id && family.genealogy_husband_id > 0
+					family.genealogy_wife_id = 0
+					family.save
+				else
+					GenealogyChild.where("genealogy_family_id = ?", family.id).delete_all
+					family.delete
+				end
+			end
+		end
+		GenealogyChild.where("genealogy_individual_id = ?", @individual.id).delete_all
+		@individual.delete
+		redirect_to genealogy_search_index_path, notice: "Individual Removed"
 	end
 
 	private
