@@ -1,0 +1,12 @@
+<h1><%= @title %></h1>
+
+<ul>
+<% @trees.each do |id, list| %>
+	<li><%= id %></li>
+	<ul>
+	<% list.each do |lid| %>
+		<li><%= lid %></li>
+	<% end %>
+	</ul>
+<% end %>
+</ul>
