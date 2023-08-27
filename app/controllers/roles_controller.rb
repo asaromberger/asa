@@ -31,13 +31,14 @@ class RolesController < ApplicationController
 				end
 			end
 		end
+		# UserMailer.trace_mail("Permissions Updated for #{@user.email}").deliver
 		redirect_to roles_path, notice: "Permissions Updated for #{@user.email}"
 	end
 
 	private
 
 	def all_roles
-		return(['siteadmin', 'health', 'bridge', 'music', 'genealogy', 'genealogy_admin', 'finance_trackings', 'finance_expenses', 'finance_investments', 'finance_admin'])
+		return(['siteadmin', 'health', 'bridge', 'music', 'genealogy', 'genealogy_admin', 'finance_trackings', 'finance_expenses', 'finance_investments', 'finance_admin', 'trace_mail'])
 	end
 
 	def require_siteadmin
