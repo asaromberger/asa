@@ -31,7 +31,7 @@ class RolesController < ApplicationController
 				end
 			end
 		end
-		# UserMailer.trace_mail("Permissions Updated for #{@user.email}").deliver
+		UserMailer.trace_mail("Permissions Updated for #{@user.email}").deliver
 		redirect_to roles_path, notice: "Permissions Updated for #{@user.email}"
 	end
 

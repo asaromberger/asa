@@ -75,13 +75,13 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true # Set false for production environment
   config.action_mailer.default :charset => "utf-8"
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "smtpauth.earthlink.net",
     port: 587,
-    domain: "gmail.com", #This is the sending domain ?
+    domain: "earthlink.net", #This is the sending domain ?
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: "wolzrombergerweb@gmail.com",
-    password: "qfD+9mNDZUI6"
+    user_name: "asa.romberger@earthlink.net",
+    password: "h984k3i7B@"
   }
 
 end
