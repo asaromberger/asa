@@ -5,7 +5,7 @@ class Finance::Trackings::CdsController < ApplicationController
 
 	def index
 		@title = "CDs"
-		@cds = FinanceTracking.where("ptype = 'cd'").order('date')
+		@cds = FinanceTracking.where("ptype = 'cd'").order('date, what')
 	end
 
 	def new

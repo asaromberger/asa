@@ -5,7 +5,7 @@ class Finance::Trackings::TrackingsController < ApplicationController
 
 	def index
 		@title = "Tracking Actions"
-		@trackings = FinanceTracking.all.order('date')
+		@trackings = FinanceTracking.all.order('date, what')
 		@today = Time.now.to_date
 	end
 
