@@ -27,7 +27,11 @@
 	<td class="<%= hilite %>"><%= tracking.date %></td>
 	<td><%= tracking.ptype %></td>
 	<td><%= link_to tracking.what, finance_trackings_tracking_path(id: tracking.id) %></td>
-	<td><%= number_with_precision(tracking.amount, precision: 2) %></td>
+	<% if tracking.ptype == 'transfer' && tracking.remaining < tracking.amount %>
+		<td><%= number_with_precision(tracking.remaining, precision: 2) %></td>
+	<% else %>
+		<td><%= number_with_precision(tracking.amount, precision: 2) %></td>
+	<% end %>
 	<% if tracking.from.blank? || tracking.from == 0 %>
 		<td><%= tracking.to %></td>
 	<% else %>
