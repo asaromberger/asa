@@ -33,15 +33,15 @@
 	<% else %>
 		<td><%= number_with_precision(tracking.amount, precision: 2) %></td>
 	<% end %>
-	<% if tracking.from.blank? || tracking.from == 0 %>
-		<td><%= tracking.to %></td>
-	<% else %>
-		<td><%= tracking.from %></td>
-	<% end %>
 	<% if tracking.remaining.blank? %>
 		<td></td>
 	<% else %>
 		<td><%= number_with_precision(tracking.remaining, precision: 2) %></td>
+	<% end %>
+	<% if tracking.from.blank? || tracking.from == 0 %>
+		<td><%= tracking.to %></td>
+	<% else %>
+		<td><%= tracking.from %></td>
 	<% end %>
 	<td><%= tracking.note %></td>
 	<td><%= link_to 'Action', finance_trackings_tracking_path(id: tracking.id), method: :delete, data: {confirm: "Take Action on #{tracking.what}" } %></td>
