@@ -1,0 +1,12 @@
+<%= form_for @type do |type| %>
+
+	<%= type.label :name, "Type", class: 'col-xs-2' %>
+	<%= type.text_field :btype, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= type.submit 'Update Type', class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>

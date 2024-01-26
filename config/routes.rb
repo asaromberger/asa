@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 		resources :players
 		resources :scores
 		resources :pairs_scores
+		resources :bbo_types
+		resources :bbos
 	end
 
 	namespace :music do

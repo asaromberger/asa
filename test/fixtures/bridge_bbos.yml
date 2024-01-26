@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2024-01-20
+  btype: MyString
+  id: MyString
+  score: 9.99
+  rank: 9.99
+  points: 9.99
+
+two:
+  date: 2024-01-20
+  btype: MyString
+  id: MyString
+  score: 9.99
+  rank: 9.99
+  points: 9.99
