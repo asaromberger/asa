@@ -1,0 +1,150 @@
+<h1><%= @title %></h1>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<p><%= link_to "Add a Game", new_bridge_bbo_path(type: @type), class: 'btn btn-primary btn-xs' %></p>
+
+<div class="dropdown col-sx-2 on-top">
+	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Types (<%= @typename %>) <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<% @types.each do |type| %>
+			<li><%= link_to type.btype, bridge_bbos_path(id: 0, type: type.id) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+
+<table>
+<tbody>
+<tr>
+<td class='bold'>Score</td>
+<td class='numeric'><%= number_with_precision(@results['score'], precision: 2) %>%</td>
+</tr>
+<tr>
+<td class='bold'>Points</td>
+<td class='numeric'><%= number_with_precision(@results['points'], precision: 2) %></td>
+</tr>
+<% (1..6).each do |rank| %>
+	<tr>
+	<td class='bold'>Rank<%= rank %></td>
+	<td><%= number_with_precision(@ranks[rank].to_f, precision: 0) %></td>
+	<td><%= number_with_precision(@ranks[rank].to_f/@games.count, precision: 2) %>%</td>
+	</tr>
+<% end %>
+</tbody>
+</table>
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>ID</th>
+<th>Score</th>
+<th>Rank</th>
+<th>Points</th>
+<th>Edit</th>
+<th>Remove</th>
+</tr>
+</thead>
+
+<tbody>
+<% @games.each do |game| %>
+	<tr>
+	<td><%= game.date %></td>
+	<td><%= game.bbo_id %></td>
+	<td class='numeric'><%= number_with_precision(game.score, precision: 2) %>%</td>
+	<td class='numeric'><%= number_with_precision(game.rank, precision: 0) %></td>
+	<td class='numeric'><%= number_with_precision(game.points, precision: 2) %></td>
+	<td><%= link_to 'Edit' , edit_bridge_bbo_path(id: game.id, type: @type) %></td>
+	<td><%= link_to 'Remove' , bridge_bbo_path(id: game.id, type: @type), method: :delete, data: {Confirm: "Remove #{game.date}"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data, options, chart;
+
+		data = google.visualization.arrayToDataTable([
+			[ 'Score', 'Rank', ],
+			<% @games.each do |game| %>
+				[ <%= game.score %>, <%= game.rank %> ],
+			<% end %>
+		]);
+
+		options = {
+			title: 'Score vs Rank',
+			curveType: 'function',
+			legend: {position: 'right' }
+		};
+
+		chart = new google.visualization.ScatterChart(document.getElementById('scorevsrank'));
+
+		chart.draw(data, options);
+	}
+</script>
+<div id='scorevsrank' style='width: 1100px; height: 600px'></div>
+
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data, options, chart;
+
+		data = google.visualization.arrayToDataTable([
+			[ 'Score', 'Points', ],
+			<% @games.each do |game| %>
+				<% if game.points %>
+					[ <%= game.score %>, <%= game.points %> ],
+				<% end %>
+			<% end %>
+		]);
+
+		options = {
+			title: 'Score vs Points',
+			curveType: 'function',
+			legend: {position: 'right' }
+		};
+
+		chart = new google.visualization.ScatterChart(document.getElementById('scorevspoints'));
+
+		chart.draw(data, options);
+	}
+</script>
+<div id='scorevspoints' style='width: 1100px; height: 600px'></div>
+
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data, options, chart;
+
+		data = google.visualization.arrayToDataTable([
+			[ 'Date', 'Score', ],
+			<% @games.each do |game| %>
+				[ new Date('<%= game.date.strftime("%Y-%m-%d") %>'), <%= game.score %> ],
+			<% end %>
+		]);
+
+		options = {
+			title: 'Date vs Score',
+			curveType: 'function',
+			legend: {position: 'right' }
+		};
+
+		chart = new google.visualization.LineChart(document.getElementById('datevsscore'));
+
+		chart.draw(data, options);
+	}
+</script>
+<div id='datevsscore' style='width: 1100px; height: 600px'></div>
+

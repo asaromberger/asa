@@ -1,0 +1,23 @@
+<h1><%= @title %></h1>
+
+<%= link_to "New Type", new_bridge_bbo_type_path, class: 'btn btn-xs btn-primary' %>
+
+<table>
+
+<thead>
+<tr>
+<th>Type</th>
+<th>Edit</th>
+</tr>
+</thead>
+
+<tbody>
+<% @types.each do |type| %>
+	<tr>
+	<td><%= type.btype %></td>
+	<td><%= link_to 'Edit', edit_bridge_bbo_type_path(id: type.id) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_14_201353) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_24_213125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
+
+  create_table "bridge_bbo_types", force: :cascade do |t|
+    t.string "btype"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "bridge_bbos", force: :cascade do |t|
+    t.date "date"
+    t.string "bbo_id"
+    t.decimal "score"
+    t.decimal "rank"
+    t.decimal "points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "bridge_bbo_type_id"
+  end
 
   create_table "bridge_players", force: :cascade do |t|
     t.string "name"
