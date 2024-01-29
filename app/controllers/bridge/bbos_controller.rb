@@ -16,7 +16,7 @@ class Bridge::BbosController < ApplicationController
 				@typename = type.btype
 			end
 		end
-		@games = BridgeBbo.where("bridge_bbo_type_id = ?", @type).order('date')
+		@games = BridgeBbo.where("bridge_bbo_type_id = ?", @type).order('date DESC')
 		@results = Hash.new
 		@results['points'] = 0
 		@results['score'] = 0
@@ -29,7 +29,9 @@ class Bridge::BbosController < ApplicationController
 				@results['points'] += game.points
 			end
 			@results['score'] += game.score
-			@ranks[game.rank] += 1
+			if game.rank
+				@ranks[game.rank] += 1
+			end
 		end
 		@results['score'] /= @games.count
 	end
