@@ -44,6 +44,8 @@
 <th>Score</th>
 <th>Rank</th>
 <th>Points</th>
+<th>Number<br/>of<br/>Tables</th>
+<th>Rating</th>
 <th>Edit</th>
 <th>Remove</th>
 </tr>
@@ -57,6 +59,8 @@
 	<td class='numeric'><%= number_with_precision(game.score, precision: 2) %>%</td>
 	<td class='numeric'><%= number_with_precision(game.rank, precision: 0) %></td>
 	<td class='numeric'><%= number_with_precision(game.points, precision: 2) %></td>
+	<td class='numeric'><%= number_with_precision(game.no_players, precision: 0) %></td>
+	<td class='numeric'><%= number_with_precision((1 - (game.rank / game.no_players))*100, precision: 2) %></td>
 	<td><%= link_to 'Edit' , edit_bridge_bbo_path(id: game.id, type: @type) %></td>
 	<td><%= link_to 'Remove' , bridge_bbo_path(id: game.id, type: @type), method: :delete, data: {Confirm: "Remove #{game.date}"} %></td>
 	</tr>
@@ -129,14 +133,14 @@
 		var data, options, chart;
 
 		data = google.visualization.arrayToDataTable([
-			[ 'Date', 'Score', ],
+			[ 'Date', 'Score', 'Rating' ],
 			<% @games.each do |game| %>
-				[ new Date('<%= game.date.strftime("%Y-%m-%d") %>'), <%= game.score %> ],
+				[ new Date('<%= game.date.strftime("%Y-%m-%d") %>'), <%= game.score %>, <%= (1 - (game.rank / game.no_players)) * 100 %>], 
 			<% end %>
 		]);
 
 		options = {
-			title: 'Date vs Score',
+			title: 'Date vs Score & Rating',
 			curveType: 'function',
 			legend: {position: 'right' }
 		};

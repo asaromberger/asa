@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_24_213125) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_24_213125) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "bridge_bbo_type_id"
+    t.integer "no_players"
   end
 
   create_table "bridge_players", force: :cascade do |t|

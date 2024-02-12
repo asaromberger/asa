@@ -32,6 +32,10 @@
 
 	<div class='clearfix'><p>&nbsp;</p></div>
 
+	<%= form.label 'Number of Tables', class: 'col-md-2' %>
+	<%= form.number_field :no_players, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
 	<%= form.submit type, class: 'btn btn-primary col-md-3' %>
 
 <% end %>

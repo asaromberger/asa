@@ -21,16 +21,19 @@ class Bridge::BbosController < ApplicationController
 		@results['points'] = 0
 		@results['score'] = 0
 		@ranks = []
-		(1..6).each do |rank|
-		@ranks[rank] = 0
-		end
 		@games.each do |game|
 			if game.points
 				@results['points'] += game.points
 			end
-			@results['score'] += game.score
+			if game.score
+				@results['score'] += game.score
+			end
 			if game.rank
-				@ranks[game.rank] += 1
+				if @ranks[game.rank]
+					@ranks[game.rank] += 1
+				else
+					@ranks[game.rank] = 1
+				end
 			end
 		end
 		@results['score'] /= @games.count
@@ -87,7 +90,7 @@ private
 	end
 
 	def bbo_params
-		params.require(:bridge_bbo).permit(:date, :bridge_bbo_type_id, :bbo_id, :score, :rank, :points)
+		params.require(:bridge_bbo).permit(:date, :bridge_bbo_type_id, :bbo_id, :score, :rank, :points, :no_players)
 	end
 
 end
