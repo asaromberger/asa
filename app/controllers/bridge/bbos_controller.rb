@@ -20,23 +20,66 @@ class Bridge::BbosController < ApplicationController
 		@results = Hash.new
 		@results['points'] = 0
 		@results['score'] = 0
-		@ranks = []
+		scoremax = 0
+		scoremin = 1000
+		ratingmax = 0
+		ratingmin = 1000
+		pointsmax = 0
+		pointsmin = 1000
 		@games.each do |game|
 			if game.points
 				@results['points'] += game.points
+				if game.points > pointsmax
+					pointsmax = game.points
+				end
+				if game.points < pointsmin
+					pointsmin = game.points
+				end
 			end
 			if game.score
 				@results['score'] += game.score
+				if game.score > scoremax
+					scoremax = game.score
+				end
+				if game.score < scoremin
+					scoremin = game.score
+				end
 			end
-			if game.rank
-				if @ranks[game.rank]
-					@ranks[game.rank] += 1
-				else
-					@ranks[game.rank] = 1
+			if game.rank && game.rank > 0
+				rating = (1 - (game.rank / game.no_players)) * 100
+				if rating > ratingmax
+					ratingmax = rating
+				end
+				if rating < ratingmin
+					ratingmin = rating
 				end
 			end
 		end
 		@results['score'] /= @games.count
+		scoredelta = (scoremax - scoremin) / 5.0
+		@scorecoding = [
+			[scoremin, 'bbo_color_1'],
+			[scoremin + scoredelta, 'bbo_color_2'],
+			[scoremin + 2 * scoredelta, 'bbo_color_3'],
+			[scoremin + 3 * scoredelta, 'bbo_color_4'],
+			[scoremin + 4 * scoredelta, 'bbo_color_5']
+		]
+		ratingdelta = (ratingmax - ratingmin) / 5.0
+		@ratingcoding = [
+			[ratingmin, 'bbo_color_1'],
+			[ratingmin + ratingdelta, 'bbo_color_2'],
+			[ratingmin + 2 * ratingdelta, 'bbo_color_3'],
+			[ratingmin + 3 * ratingdelta, 'bbo_color_4'],
+			[ratingmin + 4 * ratingdelta, 'bbo_color_5']
+		]
+		pointsdelta = (pointsmax - pointsmin) / 5.0
+		@pointscoding = [
+			[pointsmin, 'bbo_color_1'],
+			[pointsmin + pointsdelta, 'bbo_color_2'],
+			[pointsmin + 2 * pointsdelta, 'bbo_color_3'],
+			[pointsmin + 3 * pointsdelta, 'bbo_color_4'],
+			[pointsmin + 4 * pointsdelta, 'bbo_color_5']
+		]
 	end
 
 	# create a game
