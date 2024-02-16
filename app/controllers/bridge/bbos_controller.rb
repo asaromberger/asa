@@ -45,7 +45,7 @@ class Bridge::BbosController < ApplicationController
 					scoremin = game.score
 				end
 			end
-			if game.rank && game.rank > 0
+			if game.rank && game.rank > 0 && game.no_players && game.no_players > 0
 				rating = (1 - (game.rank / game.no_players)) * 100
 				if rating > ratingmax
 					ratingmax = rating
