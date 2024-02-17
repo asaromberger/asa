@@ -50,13 +50,17 @@
 	<td><%= game.date %></td>
 	<td><%= game.bbo_id %></td>
 	<% cl = 'hilite' %>
-	<% [4,3,2,1,0].each do |ind| %>
-		<% if game.score >= @scorecoding[ind][0].to_f %>
-			<% cl = @scorecoding[ind][1] %>
-			<% break %>
+	<% if game.score %>
+		<% [4,3,2,1,0].each do |ind| %>
+			<% if game.score >= @scorecoding[ind][0].to_f %>
+				<% cl = @scorecoding[ind][1] %>
+				<% break %>
+			<% end %>
 		<% end %>
+		<td class="numeric <%= cl %>"><%= number_with_precision(game.score, precision: 2) %>%</td>
+	<% else %>
+		<td class="numeric hilite-alert">BLANK</td>
 	<% end %>
-	<td class="numeric <%= cl %>"><%= number_with_precision(game.score, precision: 2) %>%</td>
 	<td class='numeric'><%= number_with_precision(game.rank, precision: 0) %></td>
 	<td class='numeric'><%= number_with_precision(game.no_players, precision: 0) %></td>
 	<% if game.no_players && game.no_players > 1 %>
