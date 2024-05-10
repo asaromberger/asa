@@ -13,6 +13,7 @@
 <th>Funds</th>
 <th>Edit</th>
 <th>Delete</th>
+<th>Plot</th>
 </tr>
 </thead>
 
@@ -28,14 +29,12 @@
 	<td><%= link_to 'Funds', finance_investments_investments_path(account_id: account.id, status: @status) %></td>
 	<td><%= link_to 'Edit', edit_finance_investments_account_path(account.id, status: @status) %></td>
 	<td><%= link_to 'Delete', finance_investments_account_path(account.id, status: @status), method: :delete, data: {confirm: "Delete #{account.name}?"} %></td>
+	<td><%= link_to 'Plot', finance_investments_account_path(account.id, status: @status), target: "_blank"  %></td>
 	</tr>
 <% end %>
 <tr>
 <td class='total'>Total</td>
 <td class='total'><%= number_with_precision(@total, precision: 2) %></td>
-<td class='total'></td>
-<td class='total'></td>
-<td class='total'></td>
 </tr>
 </tbody>
 

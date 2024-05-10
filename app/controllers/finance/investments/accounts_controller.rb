@@ -89,6 +89,45 @@ class Finance::Investments::AccountsController < ApplicationController
 		end
 	end
 
+	def show
+		@status = params[:status]
+		@account = FinanceInvestmentsAccount.find(params[:id])
+		@title = @account.name
+		fund_ids = []
+		@names = Hash.new
+		FinanceInvestmentsFund.where("finance_investments_account_id = ?", @account.id).each do |fund|
+			fund_ids.push(fund.id)
+			@names[fund.id] = fund.fund
+		end
+		@funds = Hash.new
+		list = Hash.new
+		FinanceInvestmentsInvestment.where("finance_investments_fund_id IN (?)", fund_ids).order('date').each do |investment|
+			y = investment.date.year
+			m = investment.date.month
+			if m < 10
+				m = "0#{m}"
+			end
+			ym = "#{y}-#{m}"
+			@year = investment.date.year
+			@month = investment.date.month
+			if ! @funds[investment.finance_investments_fund_id]
+				@funds[investment.finance_investments_fund_id] = Hash.new
+			end
+			@funds[investment.finance_investments_fund_id][ym] = investment.value
+			list[ym] = 1
+		end
+		list = list.sort_by { |ym| ym }
+		@summary = Hash.new
+		list.each do |ym, value|
+			@summary[ym] = 0
+			@funds.each do |fund_id, values|
+				if values[ym]
+					@summary[ym] += values[ym]
+				end
+			end
+		end
+	end
+
 private
 	
 	def account_params

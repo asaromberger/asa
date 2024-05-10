@@ -18,6 +18,7 @@
 <th>Edit</th>
 <th>Delete</th>
 <th>Close</th>
+<th>Plot</th>
 </tr>
 </thead>
 
@@ -41,6 +42,7 @@
 	<% else %>
 		<td><%= link_to 'Close', finance_investments_funds_close_path(id: id, status: @status, account_id: @account.id), method: :get, data: {confirm: "Close #{values['fund']}?"} %></td>
 	<% end %>
+	<td><%= link_to 'Plot', finance_investments_fund_path(id: id, status: @status, account_id: @account.id), target: "_blank", method: :get  %></td>
 	</tr>
 <% end %>
 <tr>
