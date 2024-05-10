@@ -53,12 +53,29 @@ class Finance::Investments::FundsController < ApplicationController
 		end
 	end
 
+	def show
+		@status = params[:status]
+		@fund = FinanceInvestmentsFund.find(params[:id])
+		@title = @fund.fund
+		@summary = Hash.new
+		FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).order('date').each do |investment|
+			y = investment.date.year
+			m = investment.date.month
+			if m < 10
+				m = "0#{m}"
+			end
+			ym = "#{y}-#{m}"
+			@year = investment.date.year
+			@month = investment.date.month
+			@summary[ym] = investment.value
+		end
+	end
+
 	def destroy
 		@status = params[:status]
 		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		@fund = FinanceInvestmentsFund.find(params[:id])
 		FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", @fund.id).delete_all
-		FinanceInvestmentMap.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		FinanceInvestmentsRebalance.where("finance_investments_fund_id = ?", @fund.id).delete_all
 		@fund.delete
 		redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), notice: "Fund #{@fund.fund} Deleted"

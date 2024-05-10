@@ -1,0 +1,48 @@
+<h1><%= @title %></h1>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data, options, chart;
+
+		data = google.visualization.arrayToDataTable([
+			[
+				'Date',
+				'Total',
+				<% if @funds.count > 1 %>
+					<% @funds.each do |fund, values| %>
+						"<%= @names[fund] %>",
+					<% end %>
+				<% end %>
+			],
+			<% @summary.each do |ym, value| %>
+				[
+					new Date('<%= ym %>-28'),
+					<%= value %>,
+					<% if @funds.count > 1 %>
+						<% @funds.each do |fund, values| %>
+							<% if values[ym] %>
+								<%= values[ym] %>,
+							<% else %>
+								,
+							<% end %>
+						<% end %>
+					<% end %>
+				],
+			<% end %>
+		]);
+		options = {
+			title: 'Value',
+			curveType: 'function',
+			legend: {position: 'right' }
+		};
+		chart = new google.visualization.LineChart(document.getElementById('chart'));
+		chart.draw(data, options);
+	}
+</script>
+<div id='chart' style='width: 1100px; height: 600px'></div>
+

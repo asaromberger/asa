@@ -73,6 +73,7 @@ Rails.application.routes.draw do
 	match '/finance/investments/funds/close', to: 'finance/investments/funds#close', via: 'get', as: 'finance_investments_funds_close'
 	match '/finance/investments/funds/reopen', to: 'finance/investments/funds#reopen', via: 'get', as: 'finance_investments_funds_reopen'
 	match '/finance/investments/rebalance/showupdate', to: 'finance/investments/rebalance#showupdate', via: 'get', as: 'finance_investments_rebalance_showupdate'
+	match '/finance/investments/investments/plot', to: 'finance/investments/investments#plot', via: 'get', as: 'finance_investments_investments_plot'
 
 	# OLD ?
 	match '/finance/investments/summary_management/showupdate', to: 'finance/investments/summary_management#showupdate', via: 'put', as: 'finance_investments_summary_management_showupdate'
