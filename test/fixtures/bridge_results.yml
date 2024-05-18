@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2024-05-13
+  board: 1
+  contract: MyString
+  by: MyString
+  result: 1
+  ns: 1
+  nsscore: 1
+  nspoints: 1
+  ew: 1
+  ewscore: 1
+  ewpoints: 1
+
+two:
+  date: 2024-05-13
+  board: 1
+  contract: MyString
+  by: MyString
+  result: 1
+  ns: 1
+  nsscore: 1
+  nspoints: 1
+  ew: 1
+  ewscore: 1
+  ewpoints: 1

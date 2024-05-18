@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_13_204257) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -39,6 +39,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "bridge_results", force: :cascade do |t|
+    t.date "date"
+    t.integer "board"
+    t.string "contract"
+    t.string "by"
+    t.integer "result"
+    t.integer "ns"
+    t.integer "nsscore"
+    t.integer "nspoints"
+    t.integer "ew"
+    t.integer "ewscore"
+    t.integer "ewpoints"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bridge_scores", force: :cascade do |t|
     t.date "date"
     t.integer "bridge_player_id"
@@ -46,6 +62,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pair"
+  end
+
+  create_table "bridge_tables", force: :cascade do |t|
+    t.string "stype"
+    t.integer "stable"
+    t.integer "round"
+    t.integer "ns"
+    t.integer "ew"
+    t.integer "board"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "finance_expenses_accountmaps", force: :cascade do |t|

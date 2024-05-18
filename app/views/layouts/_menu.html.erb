@@ -35,8 +35,16 @@
 			<% end %>
 
 			<%# BRIDGE %>
+			<% if signed_in? && current_user.application == 'bridge' && current_user_role('bridge_admin') %>
+				<%= render 'layouts/menu_bridge_admin' %>
+			<% end %>
+
 			<% if signed_in? && current_user.application == 'bridge' && current_user_role('bridge_bbo') %>
 				<%= render 'layouts/menu_bridge_bbo' %>
+			<% end %>
+
+			<% if signed_in? && current_user.application == 'bridge' && current_user_role('bridge_scoring') %>
+				<%= render 'layouts/menu_bridge_scoring' %>
 			<% end %>
 
 			<% if signed_in? && current_user.application == 'bridge' && current_user_role('bridge') %>

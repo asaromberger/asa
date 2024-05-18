@@ -1,0 +1,72 @@
+<h1><%= @title %></h1>
+
+<%= form_tag bridge_results_path, method: :get do %>
+
+	<%= label_tag :stype, "Type", class: 'col-md-1' %>
+	<%= select_tag :stype, options_for_select(@stypes), class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= label_tag :date, "Date", class: 'col-md-1' %>
+	<%= select_date @date, {prefix: :date}, {class: 'date_select col-md-1'} %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= label_tag :board, "Board", class: 'col-md-1' %>
+	<%= number_field_tag :board, @board, class: 'col-md-1' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= submit_tag "Select", class: 'col-md-1 btn btn-primary' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<% if @stype %>
+
+	<%= form_tag bridge_results_path, method: :post do %>
+
+		<%= hidden_field_tag :date, @date %>
+		<%= hidden_field_tag :stype, @stype %>
+		<%= hidden_field_tag :board, @board %>
+
+		<table class='table-bordered' %>
+
+		<thead>
+		<tr>
+		<th>Contract</th>
+		<th>By</th>
+		<th>Result</th>
+		<th>N/S Pair</th>
+		<th>N/S Score</th>
+		<th>E/W Score</th>
+		<th>E/W Pair</th>
+		</tr>
+		</thead>
+
+		<tbody>
+			<% @results.each do |id, result| %>
+				<tr>
+				<td><%= text_field_tag "contract[#{result.id}]", result.contract %></td>
+				<td><%= text_field_tag "by[#{result.id}]", result.by %></td>
+				<td><%= text_field_tag "result[#{result.id}]", sprintf("%+d", result.result) %></td>
+				<%= hidden_field_tag "ns[#{result.id}]", result.ns %>
+				<td><%= result.ns %></td>
+				<td><%= text_field_tag "nsscore[#{result.id}]", result.nsscore %></td>
+				<td><%= text_field_tag "ewscore[#{result.id}]", result.ewscore %></td>
+				<%= hidden_field_tag "ew[#{result.id}]", result.ew %>
+				<td><%= result.ew %></td>
+				<tr>
+			<% end %>
+		</tbody>
+
+		</table>
+
+		<%= submit_tag :submit, class: "btn btn-primary col-md-1" %>
+
+	<% end %>
+
+
+<% end %>
