@@ -8,7 +8,7 @@ class Bridge::TablesController < ApplicationController
 		@title = "Bridge Tables"
 		@tables = Hash.new
 		# tables[stype][table][round]
-		BridgeTable.all.order('stype, stable, round').each do |xtable|
+		BridgeTable.all.order('stype, stable, round, board').each do |xtable|
 			if ! @tables[xtable.stype]
 				@tables[xtable.stype] = Hash.new
 			end

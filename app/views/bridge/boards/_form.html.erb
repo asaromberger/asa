@@ -1,0 +1,22 @@
+<%= form_for @board, url: url, html: {method: method} do |board| %>
+
+	<%= board.label :board, "Board", class: 'col-xs-2', autofocus: true %>
+	<%= board.number_field :board, class: 'col-xs-1' %>
+
+	<div class='clearfix'></div>
+
+	<%= board.label :nsvul, "N/S Vulnerable", class: 'col-xs-2' %>
+	<%= board.check_box :nsvul, class: 'col-xs-1' %>
+
+	<div class='clearfix'></div>
+
+	<%= board.label :ewvul, "E/W Vulnerable", class: 'col-xs-2' %>
+	<%= board.check_box :ewvul, class: 'col-xs-1' %>
+
+	<div class='clearfix'></div>
+
+	<%= board.submit 'Update Type', class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>

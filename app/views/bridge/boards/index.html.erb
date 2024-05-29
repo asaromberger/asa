@@ -1,0 +1,29 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'New Board', new_bridge_board_path, class: 'btn btn-xs btn-primary' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Board</th>
+<th>N/S Vulnerable</th>
+<th>E/W Vulnerable</th>
+<th>Edit</th>
+</tr>
+</thead>
+
+<tbody>
+<% @boards.each do |board| %>
+	<tr>
+	<td><%= board.board %></td>
+	<td><%= yes_no(board.nsvul) %></td>
+	<td><%= yes_no(board.ewvul) %></td>
+	<td><%= link_to 'Edit', edit_bridge_board_path(board.id) %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

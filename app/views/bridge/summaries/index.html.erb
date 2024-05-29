@@ -1,0 +1,73 @@
+<h1><%= @title %></h1>
+
+<div class='dropdown'>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Date (<%= @date %>) <b class="caret"></b></a>
+	<ul class='dropdown-menu'>
+		<% @dates.each do |date| %>
+			<li><%= link_to date, bridge_summaries_path(date: date) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table>
+
+<thead>
+<tr>
+<th></th>
+<th>Team</th>
+<th>Score</th>
+<th>Percent</th>
+</tr>
+<thead>
+
+<tbody>
+<% @pairs.each do |pair, data| %>
+	<tr>
+	<td>Team <%= pair %></td>
+	<td><%= data['pair'] %></td>
+	<td><%= @totals[pair] %></td>
+	<td class='center'><%= number_with_precision(@percent[pair] * 100, precision: 0) %>%</td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>
+
+<table>
+
+<thead>
+<tr>
+<th></th>
+<% (1..@pairs.count).each do |pair| %>
+	<th><%= @pairs[pair]['pair'] %></th>
+<% end %>
+</tr>
+<thead>
+
+<tbody>
+<% (1..@boardscores.count).each do |board| %>
+	<tr>
+	<td><%= board %></td>
+	<% (1..@pairs.count).each do |pair| %>
+		<td class='center'><%= @boardscores[board][pair] %></td>
+	<% end %>
+	</tr>
+<% end %>
+<tr>
+<td class='bold'>Total</td>
+<% (1..@pairs.count).each do |pair| %>
+	<td class='bold center'><%= @totals[pair] %></td>
+<% end %>
+</tr>
+<tr>
+<td class='bold'>Percent</td>
+<% (1..@pairs.count).each do |pair| %>
+	<td class='bold center'><%= number_with_precision(@percent[pair] * 100, precision: 0) %>%</td>
+<% end %>
+</tr>
+</tbody>
+
+</table>
+

@@ -110,4 +110,14 @@ module ApplicationHelper
 		return data
 	end
 
+	def yes_no(param)
+		if param == true
+			return 'Yes'
+		elsif param == false
+			return 'No'
+		else
+			return ''
+		end
+	end
+
 end

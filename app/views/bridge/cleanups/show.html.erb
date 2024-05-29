@@ -1,0 +1,43 @@
+<h1><%= @title %></h1>
+
+<%= link_to 'Back', bridge_cleanups_path, class: 'btn btn-primary btn-xs' %>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Board</th>
+<th>Contract</th>
+<th>By</th>
+<th>Result</th>
+<th>N/S Pair</th>
+<th>N/S Points</th>
+<th>N/S Score</th>
+<th>E/W Score</th>
+<th>E/W Pair</th>
+<th>E/W Points</th>
+</tr>
+</thead>
+
+<tbody>
+<% @results.each do |result| %>
+	<tr>
+	<td><%= result.date %></td>
+	<td><%= result.board %></td>
+	<td><%= result.contract %></td>
+	<td><%= result.by %></td>
+	<td><%= result.result %></td>
+	<td><%= result.ns %></td>
+	<td><%= result.nspoints %></td>
+	<td><%= result.nsscore %></td>
+	<td><%= result.ewscore %></td>
+	<td><%= result.ew %></td>
+	<td><%= result.ewpoints %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

@@ -1,0 +1,35 @@
+<h1><%= @title %></h1>
+
+<p><%= link_to "Return", bridge_results_path(date: @date, stype: @stype), class: 'btn btn-primary btn-xs' %></p>
+
+<%= form_tag bridge_pairs_path, method: :post do %>
+
+	<%= hidden_field_tag :date, @date %>
+	<%= hidden_field_tag :stype, @stype %>
+
+	<table>
+
+	<thead>
+	<tr>
+	<th>Pair Number</th>
+	<th>Player 1</th>
+	<th>Player 2</th>
+	</tr>
+	</thead>
+
+	<tbody>
+		<% (1..@npairs).each do |pair| %>
+			<tr>
+			<td><%= pair %></td>
+			<td><%= select_tag "table[#{pair}][0]", options_from_collection_for_select(@players, :id, :name, @pairs[pair][0]), { include_blank: true } %></td>
+			<td><%= select_tag "table[#{pair}][1]", options_from_collection_for_select(@players, :id, :name, @pairs[pair][1]), { include_blank: true } %></td>
+			</tr>
+		<% end %>
+	</tbody>
+
+	</table>
+
+	<%= submit_tag "Submit", class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
