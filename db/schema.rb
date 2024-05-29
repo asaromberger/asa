@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_25_223811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -33,10 +33,44 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
     t.integer "no_players"
   end
 
+  create_table "bridge_boards", force: :cascade do |t|
+    t.integer "board"
+    t.boolean "nsvul"
+    t.boolean "ewvul"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "bridge_pairs", force: :cascade do |t|
+    t.date "date"
+    t.integer "pair"
+    t.integer "player1_id"
+    t.integer "player2_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bridge_players", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "bridge_results", force: :cascade do |t|
+    t.date "date"
+    t.integer "board"
+    t.string "contract"
+    t.string "by"
+    t.integer "result"
+    t.integer "ns"
+    t.integer "nsscore"
+    t.decimal "nspoints"
+    t.integer "ew"
+    t.integer "ewscore"
+    t.decimal "ewpoints"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "stype"
   end
 
   create_table "bridge_scores", force: :cascade do |t|
@@ -46,6 +80,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_232704) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pair"
+  end
+
+  create_table "bridge_tables", force: :cascade do |t|
+    t.string "stype"
+    t.integer "stable"
+    t.integer "round"
+    t.integer "ns"
+    t.integer "ew"
+    t.integer "board"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "finance_expenses_accountmaps", force: :cascade do |t|

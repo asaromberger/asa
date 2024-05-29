@@ -1,0 +1,2 @@
+class BridgeResult < ApplicationRecord
+end

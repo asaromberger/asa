@@ -103,7 +103,7 @@ class Bridge::BbosController < ApplicationController
 
 	# edit a game
 	def edit
-		@title = 'New Score'
+		@title = 'Edit Score'
 		@score = BridgeBbo.find(params[:id])
 		@type = params[:type]
 		@types = BridgeBboType.all.order('btype')

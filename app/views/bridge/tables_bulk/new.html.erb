@@ -1,0 +1,27 @@
+<h1><%= @title %></h1>
+
+<p>File contains a series of lines with the following tab separated columns:</p>
+<ul>
+<li>Table</li>
+<li>Round</li>
+<li>N/S</li>
+<li>E/W</li>
+<li>Board</li>
+</ul>
+
+<div class='clearfix'><p>&nbsp;</p></div>
+
+<%= form_tag bridge_tables_bulk_index_path, method: :post, multipart: true do %>
+
+	<%= label_tag :stype, "Type", class: 'col-xs-1' %>
+	<%= text_field_tag :stype, nil, class: 'col-xs-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= file_field_tag :document %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= submit_tag 'Submit', class: 'btn btn-primary col-md-1' %>
+
+<% end %>

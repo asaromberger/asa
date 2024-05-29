@@ -1,0 +1,2 @@
+class BridgeTable < ApplicationRecord
+end

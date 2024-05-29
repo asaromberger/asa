@@ -1,0 +1,2 @@
+class BridgePair < ApplicationRecord
+end

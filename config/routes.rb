@@ -32,6 +32,13 @@ Rails.application.routes.draw do
 		resources :players
 		resources :scores
 		resources :pairs_scores
+		resources :boards
+		resources :tables
+		resources :tables_bulk
+		resources :pairs
+		resources :results
+		resources :summaries
+		resources :cleanups
 		resources :bbo_types
 		resources :bbos
 	end

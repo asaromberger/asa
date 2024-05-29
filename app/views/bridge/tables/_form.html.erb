@@ -1,0 +1,35 @@
+<%= form_for(@what, url: url, html: {method: method}) do |form| %>
+
+	<%= form.label "Type", class: 'col-md-2' %>
+	<%= form.text_field :stype, class: 'col-md-2', autofocus: true %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label "Table", class: 'col-md-2' %>
+	<%= form.number_field :stable, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label :round, class: 'col-md-2' %>
+	<%= form.number_field :round, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label "N/S", class: 'col-md-2' %>
+	<%= form.number_field :ns, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label "E/W", class: 'col-md-2' %>
+	<%= form.number_field :ew, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.label :board, class: 'col-md-2' %>
+	<%= form.number_field :board, class: 'col-md-2' %>
+
+	<div class='clearfix'><p>&nbsp;</p></div>
+
+	<%= form.submit "Update", class: 'btn btn-primary col-md-3' %>
+
+<% end %>
