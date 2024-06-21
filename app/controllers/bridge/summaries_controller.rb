@@ -29,9 +29,8 @@ class Bridge::SummariesController < ApplicationController
 			@pairs[pair.pair]['pair'] = "#{player1}/#{player2}"
 		end
 		@boardscores = Hash.new	# boardscores[board][team]
-		@totals = Hash.new
-		(1..@pairs.count).each do |pair|
-			@totals[pair] = 0
+		@pairs.each do |pair, data|
+			data['total'] = 0
 		end
 		BridgeResult.where("date = ?", @date).each do |result|
 			if ! @boardscores[result.board]
@@ -40,12 +39,12 @@ class Bridge::SummariesController < ApplicationController
 			@boardscores[result.board][result.ns] = result.nspoints
 			@boardscores[result.board][result.ew] = result.ewpoints
 			if result.nspoints
-				@totals[result.ns] += result.nspoints
+				@pairs[result.ns]['total'] += result.nspoints
 			else
 				@errors += 1
 			end
 			if result.ewpoints
-				@totals[result.ew] += result.ewpoints
+				@pairs[result.ew]['total'] += result.ewpoints
 			else
 				@errors += 1
 			end
@@ -55,10 +54,10 @@ class Bridge::SummariesController < ApplicationController
 			best += values
 		end
 		best = (best / @boardscores[1].count) * 2 * (@boardscores.count)
-		@percent = Hash.new
-		(1..@pairs.count).each do |pair|
-			@percent[pair] = @totals[pair] / best
+		@pairs.each do |pair, data|
+			data['percent'] = @pairs[pair]['total'] / best
 		end
+		@pairs = @pairs.sort_by { |pair, data| -data['total']}
 	end
 
 private

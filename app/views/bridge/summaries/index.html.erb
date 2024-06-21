@@ -27,8 +27,8 @@
 	<tr>
 	<td>Team <%= pair %></td>
 	<td><%= data['pair'] %></td>
-	<td><%= @totals[pair] %></td>
-	<td class='center'><%= number_with_precision(@percent[pair] * 100, precision: 0) %>%</td>
+	<td><%= data['total'] %></td>
+	<td class='center'><%= number_with_precision(data['percent'] * 100, precision: 0) %>%</td>
 	</tr>
 <% end %>
 </tbody>
@@ -40,8 +40,8 @@
 <thead>
 <tr>
 <th></th>
-<% (1..@pairs.count).each do |pair| %>
-	<th><%= @pairs[pair]['pair'] %></th>
+<% @pairs.each do |pair, data| %>
+	<th><%= data['pair'] %></th>
 <% end %>
 </tr>
 <thead>
@@ -57,14 +57,14 @@
 <% end %>
 <tr>
 <td class='bold'>Total</td>
-<% (1..@pairs.count).each do |pair| %>
-	<td class='bold center'><%= @totals[pair] %></td>
+<% @pairs.each do |pair, data| %>
+	<td class='bold center'><%= data['total'] %></td>
 <% end %>
 </tr>
 <tr>
 <td class='bold'>Percent</td>
-<% (1..@pairs.count).each do |pair| %>
-	<td class='bold center'><%= number_with_precision(@percent[pair] * 100, precision: 0) %>%</td>
+<% @pairs.each do |pair, data| %>
+	<td class='bold center'><%= number_with_precision(data['percent'] * 100, precision: 0) %>%</td>
 <% end %>
 </tr>
 </tbody>

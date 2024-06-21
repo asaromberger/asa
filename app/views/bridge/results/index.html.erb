@@ -1,9 +1,14 @@
 <h1><%= @title %></h1>
 
-<% if @notices.count > 0 %>
-	<% @notices.each do |notice| %>
-		<div class='bold'><%= notice %><br/></div>
+<% if @dates.count > 0 %>
+	<div class='dropdown indented'>
+	<a href='#' data-toggle='dropdown' class='dropdown-toggle'>Edit Existing Date (<%= @date %>) <b class='caret'></b></a>
+	<ul class='dropdown-menu'>
+	<% @dates.each do |date| %>
+		<li><%= link_to date, bridge_results_path(date: date, stype: @stype, board: @board) %></li>
 	<% end %>
+	</ul>
+	</div>
 <% end %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
@@ -34,11 +39,34 @@
 
 <p><%= link_to "Set up Pairs", bridge_pairs_path(stype: @stype, date: @date), class: 'btn btn-primary' %>
 
-<div class='clearfix'><p>&nbsp;</p></div>
-
 <% if @stype %>
 
+	<% if @notices.count > 0 %>
+		<% @notices.each do |notice| %>
+			<div class='bold'><%= notice %><br/></div>
+		<% end %>
+		<div class='clearfix'><p>&nbsp;</p></div>
+	<% end %>
+
 	<%= form_tag bridge_results_path, method: :post do %>
+
+		<% if @notices.count > 0 %>
+			<%= submit_tag :correct, class: "btn btn-primary col-md-1" %>
+		<% end %>
+
+		<div class='clearfix'><p>&nbsp;</p></div>
+
+		<p class='bold center'>Type: <%= @stype %> Date: <%= @date %> Board: <%= @board %></p>
+		<p class='bold center'>
+		<% if @vulnerable.nsvul %>
+			N/S Vulnerable
+		<% end %>
+		<% if @vulnerable.ewvul %>
+			E/W Vulnerable
+		<% end %>
+		</p>
+
+		<div class='clearfix'><p>&nbsp;</p></div>
 
 		<%= hidden_field_tag :date, @date %>
 		<%= hidden_field_tag :stype, @stype %>
@@ -61,9 +89,15 @@
 		</thead>
 
 		<tbody>
+			<% tag = true %>
 			<% @results.each do |id, result| %>
 				<tr>
-				<td><%= text_field_tag "contract[#{result.id}]", result.contract %></td>
+				<% if tag %>
+					<td><%= text_field_tag "contract[#{result.id}]", result.contract, autofocus: true %></td>
+					<% tag = false %>
+				<% else %>
+					<td><%= text_field_tag "contract[#{result.id}]", result.contract %></td>
+				<% end %>
 				<td><%= text_field_tag "by[#{result.id}]", result.by %></td>
 				<% if result.result %>
 					<td><%= text_field_tag "result[#{result.id}]", sprintf("%+d", result.result) %></td>
