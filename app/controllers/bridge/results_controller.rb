@@ -17,6 +17,7 @@ class Bridge::ResultsController < ApplicationController
 		else
 			@date = params[:date].to_date
 		end
+		@dates = BridgeResult.all.pluck("DISTINCT date")
 		@stype = params[:stype]
 		t = BridgeResult.where("date = ?", @date).first
 		if t
@@ -27,6 +28,7 @@ class Bridge::ResultsController < ApplicationController
 		else
 			@board = 1
 		end
+		@vulnerable = BridgeBoard.where('board = ?', @board).first
 		if @stype
 			@results = Hash.new
 			BridgeTable.where("stype = ? AND board = ?", @stype, @board).order('round').each do |table|
@@ -59,6 +61,7 @@ class Bridge::ResultsController < ApplicationController
 			result.ewscore = params[:ewscore][id]
 			result.save
 		end
+		correct = params[:commit] == 'correct'
 		# collect results
 		results = Hash.new
 		BridgeResult.where("date = ? AND board = ?", date, board).each do |result|
@@ -87,27 +90,47 @@ class Bridge::ResultsController < ApplicationController
 		#	contract + results => score and column
 		results.each do |id, values|
 			# check column
-			vulnerable = BridgeBoard.where('board = ?', board).first
+			@vulnerable = BridgeBoard.where('board = ?', board).first
 			if values['by'].match(/[NS]/)
-				vulnerable  = vulnerable.nsvul
+				vulnerable  = @vulnerable.nsvul
 				if values['result'] > 0
 					if ! values['nsscore'] || values['nsscore'] <= 0
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						if correct
+							values['nsscore'] = - values['nsscore']
+							values['ewscore'] = - values['ewscore']
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						end
 					end
 				else
 					if ! values['ewscore'] || values['ewscore'] <= 0
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						if correct
+							values['nsscore'] = - values['nsscore']
+							values['ewscore'] = - values['ewscore']
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						end
 					end
 				end
 			elsif values['by'].match(/[EW]/)
-				vulnerable  = vulnerable.ewvul
+				vulnerable  = @vulnerable.ewvul
 				if values['result'] > 0
 					if ! values['ewscore'] || values['ewscore'] <= 0
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						if correct
+							values['nsscore'] = - values['nsscore']
+							values['ewscore'] = - values['ewscore']
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						end
 					end
 				else
 					if ! values['nsscore'] || values['nsscore'] <= 0
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						if correct
+							values['nsscore'] = - values['nsscore']
+							values['ewscore'] = - values['ewscore']
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Score in wrong column")
+						end
 					end
 				end
 			elsif values['contract'].match('PASS')
@@ -141,17 +164,37 @@ class Bridge::ResultsController < ApplicationController
 			end
 			if suit && suit != ""
 				if values['result'] > 0
+					# overtricks for double/redouble
 					if suit == 'M'
-						base = values['result'] * 30
 						if redouble
-							base *= 4
+							# bid * 30 * 4
+							# over nonvul * 200
+							# over vul + 400
+							# insult 100
+							base = level * 30 * 4
+							if vulnerable
+								base += (values['result'] - level) * 400
+							else
+								base += (values['result'] - level) * 200
+							end
 							base += 100
 							game = 1
 						elsif double
-							base *= 2
+							# bid * 30 * 2
+							# over nonvul * 100
+							# over vul + 200
+							# insult 50
+							base = level * 30 * 2
+							if vulnerable
+								base += (values['result'] - level) * 200
+							else
+								base += (values['result'] - level) * 100
+							end
 							base += 50
 							game = 2
 						else
+							# tricks are 30
+							base = values['result'] * 30
 							game = 4
 						end
 						if level >= game
@@ -164,16 +207,35 @@ class Bridge::ResultsController < ApplicationController
 							base += 50
 						end
 					elsif suit == 'm'
-						base = values['result'] * 20
 						if redouble
-							base *= 4
+							# bid * 20 * 4
+							# over nonvul * 200
+							# over vul + 400
+							# insult 100
+							base = level * 20 * 4
+							if vulnerable
+								base += (values['result'] - level) * 400
+							else
+								base += (values['result'] - level) * 200
+							end
 							base += 100
 							game = 2
 						elsif double
-							base *= 2
+							# bid * 20 * 2
+							# over nonvul * 100
+							# over vul + 200
+							# insult 50
+							base = level * 20 * 2
+							if vulnerable
+								base += (values['result'] - level) * 200
+							else
+								base += (values['result'] - level) * 100
+							end
 							base += 50
 							game = 3
 						else
+							# tricks are 20
+							base = values['result'] * 20
 							game = 5
 						end
 						if level >= game
@@ -186,16 +248,35 @@ class Bridge::ResultsController < ApplicationController
 							base += 50
 						end
 					else
-						base = values['result'] * 30 + 10
 						if redouble
-							base *= 4
+							# (bid * 30 + 10) * 4
+							# over nonvul * 200
+							# over vul + 400
+							# insult 100
+							base = (level * 30 + 10) * 4
+							if vulnerable
+								base += (values['result'] - level) * 400
+							else
+								base += (values['result'] - level) * 200
+							end
 							base += 100
 							game = 1
 						elsif double
-							base *= 2
+							# (bid * 30 + 10) * 2
+							# over nonvul * 100
+							# over vul + 200
+							# insult 50
+							base = (level * 30 + 10) * 2
+							if vulnerable
+								base += (values['result'] - level) * 200
+							else
+								base += (values['result'] - level) * 100
+							end
 							base += 50
 							game = 2
 						else
+							# tricks are 30 + 10 for first
+							base = values['result'] * 30 + 10
 							game = 3
 						end
 						if level >= game
@@ -222,7 +303,15 @@ class Bridge::ResultsController < ApplicationController
 						end
 					end
 					if base != score
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Bad Score")
+						if correct
+							if values['nsscore'] > 0
+								values['nsscore'] = base
+							else
+								values['ewscore'] = base
+							end
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Bad Score, expected #{base}")
+						end
 						next
 					end
 				elsif values['result'] < 0
@@ -256,7 +345,15 @@ class Bridge::ResultsController < ApplicationController
 						end
 					end
 					if base != score
-						@notices.push("Pairs #{values['ns']}/#{values['ew']}: Bad Score")
+						if correct
+							if values['nsscore'] > 0
+								values['nsscore'] = base
+							else
+								values['ewscore'] = base
+							end
+						else
+							@notices.push("Pairs #{values['ns']}/#{values['ew']}: Bad Score, expected #{base}")
+						end
 						next
 					end
 				end
@@ -281,6 +378,14 @@ class Bridge::ResultsController < ApplicationController
 				end
 			end
 			result = BridgeResult.find(id)
+			if values['nsscore'] > 0
+				result.nsscore = values['nsscore']
+				result.ewscore = nil
+			end
+			if values['ewscore'] > 0
+				result.ewscore = values['ewscore']
+				result.nsscore = nil
+			end
 			result.nspoints = values['nspoints']
 			result.ewpoints = values['ewpoints']
 			result.save
