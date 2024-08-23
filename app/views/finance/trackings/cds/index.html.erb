@@ -20,9 +20,14 @@
 </thead>
 
 <tbody>
+<% today = Time.now.to_date %>
 <% @cds.each do |cd| %>
 	<tr>
-	<td><%= cd.date %></td>
+	<% if cd.date < today %>
+		<td style='background-color:#ffff00;'><%= cd.date %></td>
+	<% else %>
+		<td><%= cd.date %></td>
+	<% end %>
 	<td><%= cd.what %></td>
 	<td><%= number_with_precision(cd.amount, precision: 2) %></td>
 	<td><%= number_with_precision(cd.rate, precision: 2) %></td>

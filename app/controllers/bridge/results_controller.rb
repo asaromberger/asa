@@ -140,7 +140,7 @@ class Bridge::ResultsController < ApplicationController
 			end
 			# check value
 			level = values['contract'][0]
-			if ! level.match(/[1-7]/)
+			if ! level || ! level.match(/[1-7]/)
 				@notices.push("Pairs #{values['ns']}/#{values['ew']}: Bad Contract")
 				next
 			end
