@@ -10,6 +10,11 @@
 
 	<div class='clearfix'></div>
 
+	<%= player.label :email, "Email", class: 'col-xs-2' %>
+	<%= player.text_field :email, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
 	<%= player.submit 'Update Player', class: 'btn btn-primary btn-xs col-xs-2' %>
 
 <% end %>

@@ -21,6 +21,7 @@ class Bridge::PlayersController < ApplicationController
 	def create
 		start_end_date()
 		name = params[:bridge_player][:name]
+		email = params[:bridge_player][:email]
 		@player = BridgePlayer.where("name = ?", name)
 		@times = params[:times]
 		if @player.count > 0
@@ -28,6 +29,7 @@ class Bridge::PlayersController < ApplicationController
 		else
 			@player = BridgePlayer.new
 			@player.name = name
+			@player.email = email
 			@player.save
 				redirect_to new_bridge_score_path(date: params[:date], back: 'back', start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Added"
 		end
@@ -43,9 +45,11 @@ class Bridge::PlayersController < ApplicationController
 	def update
 		start_end_date()
 		name = params[:bridge_player][:name]
+		email = params[:bridge_player][:email]
 		@player = BridgePlayer.find(params[:id])
 		@times = params[:times]
 		@player.name = name
+		@player.email = email
 		@player.save
 		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Updated"
 	end

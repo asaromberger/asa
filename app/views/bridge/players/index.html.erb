@@ -7,6 +7,7 @@
 <thead>
 <tr>
 <th>Player</th>
+<th>Email</th>
 <th>Edit</th>
 </tr>
 </thead>
@@ -15,6 +16,7 @@
 <% @players.each do |player| %>
 	<tr>
 	<td><%= player.name %></td>
+	<td><%= player.email %></td>
 	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id, start_date: @start_date, end_date: @end_date, times: @times) %></td>
 	</tr>
 <% end %>

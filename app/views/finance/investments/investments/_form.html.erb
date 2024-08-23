@@ -7,7 +7,7 @@
 	<%= hidden_field_tag :status, @status %>
 
 	<%= form.label :date, class: 'col-md-2' %>
-	<%= form.date_select :date, {value: @investment.date}, class: 'col-md-2' %>
+	<%= form.date_select :date, {value: @investment.date, start_year: 1988, end_year: Time.now.to_date.year}, class: 'col-md-2' %>
 
 	<div class='clearfix'></div>
 
