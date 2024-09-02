@@ -31,7 +31,11 @@
 	<td><%= cd.what %></td>
 	<td><%= number_with_precision(cd.amount, precision: 2) %></td>
 	<td><%= number_with_precision(cd.rate, precision: 2) %></td>
-	<td><%= cd.to %></td>
+	<% if cd.finance_investments_account_id && cd.finance_investments_account_id > 0 %>
+		<td><%= cd.finance_investments_account.name %></td>
+	<% else %>
+		<td></td>
+	<% end %>
 	<td><%= cd.note %></td>
 	<td><%= link_to 'Edit', edit_finance_trackings_cd_path(id: cd.id) %></td>
 	<td><%= link_to 'Delete', finance_trackings_cd_path(id: cd.id), method: :delete, data: {confirm: "Delete #{cd.what}" } %></td>

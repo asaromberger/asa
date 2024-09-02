@@ -1,0 +1,12 @@
+<h1><%= @title %></h1>
+
+<%= form_tag finance_trackings_tracking_path(id: @tracking.id), method: :delete do %>
+
+	<%= label_tag :value, "Interest", class: 'col-md-1' %>
+	<%= number_field_tag :value, '', step: 0.01, class: 'col-md-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= submit_tag "Complete CD", class: 'btn btn-primary col-md-2' %>
+<% end %>
+
