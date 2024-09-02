@@ -46,8 +46,29 @@ class Finance::Trackings::TrackingsController < ApplicationController
 			@tracking.save
 			redirect_to finance_trackings_trackings_path, notice: "#{@tracking.what} Updated"
 		elsif @tracking.ptype == 'cd'
-			@tracking.delete
-			redirect_to finance_trackings_trackings_path, notice: "#{@tracking.what} Removed"
+			if ! params[:value]
+				redirect_to edit_finance_trackings_tracking_path(params[:id])
+			else
+				date = Time.now.in_time_zone('Pacific Time (US & Canada)').to_date
+				# add final value to fund
+				@investment = FinanceInvestmentsInvestment.new
+				@investment.finance_investments_fund_id = @tracking.finance_investments_fund_id
+				@investment.date = date
+				@investment.value = @tracking.amount + params[:value].to_f
+				@investment.save
+				# set value to zero
+				@investment = FinanceInvestmentsInvestment.new
+				@investment.finance_investments_fund_id = @tracking.finance_investments_fund_id
+				@investment.date = date + 1.day
+				@investment.value = 0
+				@investment.save
+				# mark cd closed
+				@fund = FinanceInvestmentsFund.find(@tracking.finance_investments_fund_id)
+				@fund.closed = true
+				@fund.save
+				@tracking.delete
+				redirect_to finance_trackings_trackings_path, notice: "#{@tracking.what} Removed"
+			end
 		elsif @tracking.ptype == 'transfer'
 			@tracking.date += (@tracking.inc).month
 			@tracking.remaining -= @tracking.amount
@@ -61,6 +82,11 @@ class Finance::Trackings::TrackingsController < ApplicationController
 		else
 			fail
 		end
+	end
+
+	def edit
+		@title = "Closing CD Value"
+		@tracking = FinanceTracking.find(params[:id])
 	end
 
 private
