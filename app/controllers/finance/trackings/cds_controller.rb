@@ -45,6 +45,9 @@ class Finance::Trackings::CdsController < ApplicationController
 		@title = 'Edit CD'
 		@cd = FinanceTracking.find(params[:id])
 		@accounts = FinanceInvestmentsAccount.all.order('name')
+		if ! @cd.finance_investments_fund_id
+			@funds = FinanceInvestmentsFund.where("finance_investments_account_id = ?", @cd.finance_investments_account_id).order('fund')
+		end
 	end
 
 	def update
@@ -66,7 +69,7 @@ class Finance::Trackings::CdsController < ApplicationController
 private
 	
 	def cd_params
-		params.require(:finance_tracking).permit(:ptype, :date, :what, :amount, :rate, :to, :finance_investments_account_id, :note)
+		params.require(:finance_tracking).permit(:ptype, :date, :what, :amount, :rate, :to, :finance_investments_account_id, :finance_investments_fund_id, :note)
 	end
 
 	def require_trackings
