@@ -24,6 +24,7 @@ class Finance::Trackings::CdsController < ApplicationController
 			redirect_to finance_trackings_cds_path, notice: 'CD Added'
 		else
 			redirect_to finance_trackings_cds_path, alert: 'Failed to create CD'
+			return
 		end
 		# add cd to fund
 		@fund = FinanceInvestmentsFund.new
