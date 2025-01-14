@@ -34,6 +34,7 @@
 </thead>
 
 <tbody>
+<% last = 0 %>
 <% @investments.each do |id, values| %>
 	<tr>
 	<td><%= values['date'] %></td>
@@ -41,6 +42,13 @@
 	<% @headers.each do |header| %>
 		<% if header == 'Shares' %>
 			<td align='right'><%= number_with_precision(values[header], precision: 3) %></td>
+		<% elsif header == 'Yearly' %>
+			<% if last != 0 && last != values[header] %>
+				<td align='right' class='hilite-background-warning'><%= number_with_precision(values[header], precision: 2) %></td>
+			<% else %>
+				<td align='right'><%= number_with_precision(values[header], precision: 2) %></td>
+			<% end %>
+			<% last = values[header] %>
 		<% else %>
 			<td align='right'><%= number_with_precision(values[header], precision: 2) %></td>
 		<% end %>
