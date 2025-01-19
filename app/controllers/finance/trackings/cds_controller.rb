@@ -19,6 +19,10 @@ class Finance::Trackings::CdsController < ApplicationController
 
 	def create
 		@cd = FinanceTracking.new(cd_params)
+		if ! @cd.finance_investments_account
+			redirect_to finance_trackings_cds_path, alert: 'No Account specified'
+			return
+		end
 		@cd.to = @cd.finance_investments_account.name
 		if @cd.save
 			redirect_to finance_trackings_cds_path, notice: 'CD Added'
