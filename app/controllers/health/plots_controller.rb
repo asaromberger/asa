@@ -199,7 +199,7 @@ class Health::PlotsController < ApplicationController
 				imiles += 1
 			end
 		end
-		['Aerobic Calories', 'Active Calories', 'Resting Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
+		['Total Calories', 'Aerobic Calories', 'Active Calories', 'Resting Calories', 'Weight', 'Steps', 'Flights', 'Miles'].each do |type|
 			if @charts['Daily'][type]['dates'].count == 0
 				@charts['Daily'].delete(type)
 			end

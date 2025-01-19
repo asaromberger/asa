@@ -23,7 +23,7 @@
 	<div class='clearfix'></div>
 
 	<%= form.label "Which Account", class: 'col-md-2' %>
-	<%= form.select :finance_investments_account_id, @accounts.collect { |account| [account.name, account.id] }, {}, class: 'col-md-4' %>
+	<%= form.select :finance_investments_account_id, @accounts.collect { |account| [account.name, account.id] }, { include_blank: true}, class: 'col-md-4' %>
 
 	<div class='clearfix'><p>&nbsp;</p></div>
 
