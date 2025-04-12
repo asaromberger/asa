@@ -4,6 +4,9 @@
 	<%= hidden_field_tag :start_date, @start_date %>
 	<%= hidden_field_tag :end_date, @end_date %>
 	<%= hidden_field_tag :times, @times %>
+	<% if @playertag %>
+		<%= hidden_field_tag :player, true %>
+	<% end %>
 
 	<%= player.label :name, "Name", class: 'col-xs-2' %>
 	<%= player.text_field :name, class: 'col-xs-2' %>
