@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<%= link_to "New Player", new_bridge_player_path(start_date: @start_date, end_date: @end_date, times: @times), class: 'btn btn-xs btn-primary' %>
+<%= link_to "New Player", new_bridge_player_path(start_date: @start_date, end_date: @end_date, times: @times, player: true), class: 'btn btn-xs btn-primary' %>
 
 <table>
 
@@ -9,6 +9,7 @@
 <th>Player</th>
 <th>Email</th>
 <th>Edit</th>
+<th>Delete</th>
 </tr>
 </thead>
 
@@ -17,7 +18,8 @@
 	<tr>
 	<td><%= player.name %></td>
 	<td><%= player.email %></td>
-	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id, start_date: @start_date, end_date: @end_date, times: @times) %></td>
+	<td><%= link_to 'Edit', edit_bridge_player_path(id: player.id, start_date: @start_date, end_date: @end_date, times: @times, player: true) %></td>
+	<td><%= link_to 'Delete', bridge_player_path(id: player.id, start_date: @start_date, end_date: @end_date, times: @times, player: true), method: :delete, data: {confirm: "Delete #{player.name}?"} %></td>
 	</tr>
 <% end %>
 </tbody>

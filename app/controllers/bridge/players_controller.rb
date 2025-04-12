@@ -16,6 +16,9 @@ class Bridge::PlayersController < ApplicationController
 		@times = params[:times]
 		@date = params[:date]
 		start_end_date()
+		if (params[:player])
+			@playertag = true
+		end
 	end
 
 	def create
@@ -25,13 +28,21 @@ class Bridge::PlayersController < ApplicationController
 		@player = BridgePlayer.where("name = ?", name)
 		@times = params[:times]
 		if @player.count > 0
-			redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), alert: "Player #{name} Already Exists"
+			if params[:player]
+				redirect_to bridge_players_path(start_date: @start_date, end_date: @end_date, times: @times), alert: "Player #{name} Already Exists"
+			else
+				redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), alert: "Player #{name} Already Exists"
+			end
 		else
 			@player = BridgePlayer.new
 			@player.name = name
 			@player.email = email
 			@player.save
+			if params[:playertag]
+				redirect_to bridge_players_path(date: params[:date], back: 'back', start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Added"
+			else
 				redirect_to new_bridge_score_path(date: params[:date], back: 'back', start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Added"
+			end
 		end
 	end
 
@@ -51,7 +62,17 @@ class Bridge::PlayersController < ApplicationController
 		@player.name = name
 		@player.email = email
 		@player.save
-		redirect_to bridge_scores_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Updated"
+		redirect_to bridge_players_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{name} Updated"
+	end
+
+	def destroy
+		@player = BridgePlayer.find(params[:id])
+		if BridgeScore.where("bridge_player_id = ?", @player.id).count > 0
+			redirect_to bridge_players_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{@player.name} is in use"
+		else
+			@player.delete
+			redirect_to bridge_players_path(start_date: @start_date, end_date: @end_date, times: @times), notice: "Player #{@player.name} deleted"
+		end
 	end
 
 private

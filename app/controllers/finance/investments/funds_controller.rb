@@ -17,7 +17,7 @@ class Finance::Investments::FundsController < ApplicationController
 		@status = params[:status]
 		@account = FinanceInvestmentsAccount.find(params[:account_id])
 		if FinanceInvestmentsFund.where("fund = ? AND finance_investments_account_id = ?", params[:finance_investments_fund][:fund], params[:finance_investments_fund][:finance_investments_account_id].to_i).count > 0
-				redirect_to finance_investments_investments_path(status: @status), alert: 'Fund already exists'
+				redirect_to finance_investments_investments_path(status: @status, account_id: @account.id), alert: 'Fund already exists'
 		else
 			@fund = FinanceInvestmentsFund.new(fund_params)
 			if @fund.save
