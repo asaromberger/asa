@@ -92,6 +92,7 @@ Rails.application.routes.draw do
 			resources :categories
 			resources :donations
 			resources :items
+			resources :property_management
 			resources :rent
 			resources :rentalcosts
 			resources :runningbudget

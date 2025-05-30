@@ -14,6 +14,7 @@
 <th>Rate</th>
 <th>In Account</th>
 <th>Note</th>
+<th>Estimated Return</th>
 <th>Edit</th>
 <th>Delete</th>
 </tr>
@@ -37,6 +38,15 @@
 		<td></td>
 	<% end %>
 	<td><%= cd.note %></td>
+	<% if cd.finance_investments_fund_id && cd.finance_investments_fund_id > 0 %>
+		<% investment = FinanceInvestmentsInvestment.where("finance_investments_fund_id = ?", cd.finance_investments_fund_id).order("date DESC").first %>
+		<% months = (cd.date - investment.date) / 365.0 * 12.0 %>
+		<% expected = ((1.0 + (cd.rate / 100.0 / 12.0)) ** months) * investment.value - investment.value %>
+		
+		<td><%= number_with_precision(expected, precision: 2) %></td>
+	<% else %>
+		<td></td>
+	<% end %>
 	<td><%= link_to 'Edit', edit_finance_trackings_cd_path(id: cd.id) %></td>
 	<td><%= link_to 'Delete', finance_trackings_cd_path(id: cd.id), method: :delete, data: {confirm: "Delete #{cd.what}" } %></td>
 	</tr>
