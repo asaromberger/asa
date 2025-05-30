@@ -1,0 +1,37 @@
+<h1><%= @title %></h1>
+
+<% if @unknowns.count > 0 %>
+	<h4>Unknown</h4>
+	<ul>
+	<% @unknowns.each do |unknown| %>
+		<li><%= unknown %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+	<tr>
+	<th>Date</th>
+	<th align='right'>Income</th>
+	<th align='right'>Expense</th>
+	<th align='right'>Distribution</th>
+	<th align='right'>Balance</th>
+	</tr>
+</thead>
+
+<tbody>
+	<% balance = 0 %>
+	<% @months.each do |month, values| %>
+		<tr>
+		<td><%= month %></td>
+		<td align='right'><%= number_with_precision(values['income'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['expense'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['distribution'], precision:2) %></td>
+		<% balance += values['income'] - values['expense'] - values['distribution'] %></td>
+		<td align='right'><%= number_with_precision(balance, precision:2) %></td>
+		</tr>
+	<% end %>
+</tbody>
+</table>

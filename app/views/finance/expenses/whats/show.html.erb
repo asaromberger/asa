@@ -16,10 +16,10 @@
 <tbody>
 <% @items.each do |item| %>
 	<tr>
-	<th><%= item.date %></th>
-	<th><%= item.pm %></th>
-	<th><%= item.checkno %></th>
-	<th><%= number_with_precision(item.amount, precision: 2) %></th>
+	<td><%= item.date %></td>
+	<td><%= item.pm %></td>
+	<td><%= item.checkno %></td>
+	<td><%= number_with_precision(item.amount, precision: 2) %></td>
 	</tr>
 <% end %>
 </tbody>
