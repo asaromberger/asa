@@ -84,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: asa_production
+  database: asa
   username: asa
-  password: <%= ENV["ASA_DATABASE_PASSWORD"] %>
+  password: P@ssw0rd

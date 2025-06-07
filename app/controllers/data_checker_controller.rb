@@ -25,12 +25,18 @@ class DataCheckerController < ApplicationController
 				col = column.name
 				if col.match('_id$')
 					xrefname = col.gsub(/_id$/, '')
+					if xrefname == 'bbo'
+						next
+					end
 					## PATCHES FOR ALTERNATE REFERENCES
 					if xrefname == 'genealogy_husband'
 						xrefname = 'genealogy_individual'
 					end
 					if xrefname == 'genealogy_wife'
 						xrefname = 'genealogy_individual'
+					end
+					if xrefname == 'player1' || xrefname == 'player2'
+						xrefname = 'bridge_player'
 					end
 					## END PATCHES
 					xref = xrefname.classify.constantize

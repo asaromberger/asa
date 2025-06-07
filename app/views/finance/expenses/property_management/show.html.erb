@@ -13,24 +13,32 @@
 
 <thead>
 	<tr>
-	<th>Date</th>
-	<th align='right'>Income</th>
-	<th align='right'>Expense</th>
-	<th align='right'>Distribution</th>
-	<th align='right'>Balance</th>
+	<th rowspan=2>Date</th>
+	<th align='center' colspan=2=>Income</th>
+	<th align='center'colspan=3>Expense</th>
+	<th align='right' rowspan=2>Distribution</th>
+	<th align='right' rowspan=2>Balance</th>
+	</tr>
+	<tr>
+	<th align='right'>Payment</th>
+	<th align='right'>Rent</th>
+	<th align='right'>Fee</th>
+	<th align='right'>Percent</th>
+	<th align='right'>OnBoard</th>
 	</tr>
 </thead>
 
 <tbody>
-	<% balance = 0 %>
 	<% @months.each do |month, values| %>
 		<tr>
 		<td><%= month %></td>
-		<td align='right'><%= number_with_precision(values['income'], precision:2) %></td>
-		<td align='right'><%= number_with_precision(values['expense'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['payment'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['rent'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['fee'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['percent'], precision:2) %>%</td>
+		<td align='right'><%= number_with_precision(values['onboard'], precision:2) %></td>
 		<td align='right'><%= number_with_precision(values['distribution'], precision:2) %></td>
-		<% balance += values['income'] - values['expense'] - values['distribution'] %></td>
-		<td align='right'><%= number_with_precision(balance, precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['balance'], precision:2) %></td>
 		</tr>
 	<% end %>
 </tbody>
