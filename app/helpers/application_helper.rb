@@ -90,7 +90,7 @@ module ApplicationHelper
 
 	def sort(data)
 		if ! @sort.blank?
-			return data.sort_by { |id, values| values[@sort].downcase }
+			return data.sort_by { |id, values| values[@sort].to_s.downcase }
 		else
 			return data
 		end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_01_232057) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_12_210934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -322,6 +322,42 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_01_232057) do
     t.integer "user_id"
     t.string "pkey"
     t.hstore "pvalue"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trumps_boards", force: :cascade do |t|
+    t.integer "trumps_game_id"
+    t.integer "round"
+    t.integer "trummps_numberofcards"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trumps_games", force: :cascade do |t|
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trumps_names", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trumps_players", force: :cascade do |t|
+    t.integer "trumps_game_id"
+    t.integer "trumps_name_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trumps_scores", force: :cascade do |t|
+    t.integer "trumps_board_id"
+    t.integer "trumps_player_id"
+    t.integer "bid"
+    t.integer "made"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

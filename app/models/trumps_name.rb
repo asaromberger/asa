@@ -1,0 +1,2 @@
+class TrumpsName < ApplicationRecord
+end

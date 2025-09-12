@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trumps_game_id: 1
+  round: 1
+  trummps_numberofcards: 1
+
+two:
+  trumps_game_id: 1
+  round: 1
+  trummps_numberofcards: 1
