@@ -1,0 +1,2 @@
+class TrumpsBoard < ApplicationRecord
+end

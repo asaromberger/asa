@@ -1,0 +1,2 @@
+class TrumpsScore < ApplicationRecord
+end

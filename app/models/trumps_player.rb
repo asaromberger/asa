@@ -1,0 +1,2 @@
+class TrumpsPlayer < ApplicationRecord
+end
