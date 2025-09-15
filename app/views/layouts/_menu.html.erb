@@ -51,6 +51,11 @@
 				<%= render 'layouts/menu_bridge' %>
 			<% end %>
 
+			<%# TRUMPS %>
+			<% if signed_in? && current_user.application == 'trumps' && current_user_role('trumps') %>
+				<%= render 'layouts/menu_trumps' %>
+			<% end %>
+
 			<%# MUSIC %>
 			<% if signed_in? && current_user.application == 'music' %>
 				<%= render 'layouts/menu_music' %>
