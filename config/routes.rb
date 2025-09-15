@@ -125,5 +125,10 @@ Rails.application.routes.draw do
 		end
 	end
 
+	namespace :trumps do
+		resources :scores
+		resources :names
+	end
+
 
 end

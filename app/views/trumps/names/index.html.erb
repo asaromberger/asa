@@ -1,0 +1,25 @@
+<h1><%= @title %></h1>
+
+<%= link_to "New Name", new_trumps_name_path(start_date: @start_date, end_date: @end_date, times: @times, nametag: true), class: 'btn btn-xs btn-primary' %>
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+<% @names.each do |name| %>
+	<tr>
+	<td><%= name.name %></td>
+	<td><%= link_to 'Edit', edit_trumps_name_path(id: name.id, start_date: @start_date, end_date: @end_date, times: @times, nametag: true) %></td>
+	<td><%= link_to 'Delete', trumps_name_path(id: name.id, start_date: @start_date, end_date: @end_date, times: @times, nametag: true), method: :delete, data: {confirm: "Delete #{name.name}?"} %></td>
+	</tr>
+<% end %>
+</tbody>
+
+</table>

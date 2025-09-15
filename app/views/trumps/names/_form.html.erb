@@ -1,0 +1,19 @@
+<%= form_for @name do |name| %>
+
+	<%= hidden_field_tag :date, @date %>
+	<%= hidden_field_tag :start_date, @start_date %>
+	<%= hidden_field_tag :end_date, @end_date %>
+	<% if @nametag %>
+		<%= hidden_field_tag :nametag, true %>
+	<% end %>
+
+	<%= name.label :name, "Name", class: 'col-xs-2' %>
+	<%= name.text_field :name, class: 'col-xs-2' %>
+
+	<div class='clearfix'></div>
+
+	<%= name.submit 'Update Name', class: 'btn btn-primary btn-xs col-xs-2' %>
+
+<% end %>
+
+<div class='clearfix'><p>&nbsp;</p></div>

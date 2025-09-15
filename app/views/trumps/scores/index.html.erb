@@ -1,0 +1,49 @@
+<h1><%= @title %></h1>
+<style>
+.on-top {
+	z-index: 99999 !important;
+}
+</style>
+
+<ul>
+<li>Click on a game to get a detailed report for that date</li>
+<li>Click on a player to get a detailed report for that player</li>
+</ul>
+
+<p><%= link_to "Add a Game", new_bridge_score_path(start_date: @start_date, end_date: @end_date), class: 'btn btn-primary btn-xs' %></p>
+
+<div class="dropdown col-sx-2 on-top">
+	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Start (<%= @start_date %>) <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<% @date_list.each do |date| %>
+			<li><%= link_to date, bridge_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<div class="dropdown col-sx-2 on-top">
+	<a href="#" data-toggle="dropdown" class="dropdown-toggle">End (<%= @end_date %>) <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<% @date_list.each do |date| %>
+			<li><%= link_to date, bridge_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
+		<% end %>
+	</ul>
+</div>
+
+<table class='table-bordered table-striped fixed-header'>
+
+<thead>
+<tr>
+<th class='fixed-column'>Player</th>
+<% @games.each do |id, value| %>
+	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
+<% end %>
+<th>Percent</th>
+<th>Rank</th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+
+</table>

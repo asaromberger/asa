@@ -14,6 +14,9 @@ class UsersController < ApplicationController
 			if @user.application == 'bridge'
 				redirect_to bridge_scores_path
 			end
+			if @user.application == 'trumps'
+				redirect_to trumps_scores_path
+			end
 			if @user.application == 'music'
 				redirect_to new_music_search_path
 			end

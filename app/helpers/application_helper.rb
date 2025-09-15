@@ -64,6 +64,7 @@ module ApplicationHelper
 			['health', 'health'],
 			['bridge', 'bridge'],
 			['bridge_bbo', 'bridge'],
+			['trumps', 'trumps'],
 			['music', 'music'],
 			['genealogy', 'genealogy'],
 			['genealogy_admin', 'genealogy'],
