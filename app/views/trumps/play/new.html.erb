@@ -1,0 +1,29 @@
+<h1><%= @title %></h1>
+
+<%= form_tag trumps_play_index_path, method: :post do %>
+
+	<%= hidden_field_tag :game, @gameid %>
+
+	<table>
+	<thead>
+	<tr>
+	<th>Player</th>
+	<th>Bid</th>
+	<th>Made</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<% @names.each do |id, name| %>
+		<tr>
+		<td><%= name %></td>
+		<td><%= number_field_tag "bid#{id}" %></td>
+		<td><%= number_field_tag "made#{id}" %></td>
+		</tr>
+	<% end %>
+	</tbody>
+	</table>
+
+	<%= submit_tag "Save", class: 'col-md-2 btn btn-primary' %>
+
+<% end %>

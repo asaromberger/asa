@@ -125,9 +125,13 @@ Rails.application.routes.draw do
 		end
 	end
 
+	match '/trumps/score/name', to: 'trumps/scores#name', via: 'get', as: 'trumps_score_name'
+
 	namespace :trumps do
 		resources :scores
 		resources :names
+		resources :games
+		resources :play
 	end
 
 

@@ -10,13 +10,11 @@
 <li>Click on a player to get a detailed report for that player</li>
 </ul>
 
-<p><%= link_to "Add a Game", new_bridge_score_path(start_date: @start_date, end_date: @end_date), class: 'btn btn-primary btn-xs' %></p>
-
 <div class="dropdown col-sx-2 on-top">
 	<a href="#" data-toggle="dropdown" class="dropdown-toggle">Start (<%= @start_date %>) <b class="caret"></b></a>
 	<ul class="dropdown-menu">
 		<% @date_list.each do |date| %>
-			<li><%= link_to date, bridge_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
+			<li><%= link_to date, trumps_scores_path(id: 0, start_date: date, end_date: @end_date) %></li>
 		<% end %>
 	</ul>
 </div>
@@ -25,7 +23,7 @@
 	<a href="#" data-toggle="dropdown" class="dropdown-toggle">End (<%= @end_date %>) <b class="caret"></b></a>
 	<ul class="dropdown-menu">
 		<% @date_list.each do |date| %>
-			<li><%= link_to date, bridge_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
+			<li><%= link_to date, trumps_scores_path(id: 0, start_date: @start_date, end_date: date) %></li>
 		<% end %>
 	</ul>
 </div>
@@ -36,14 +34,36 @@
 <tr>
 <th class='fixed-column'>Player</th>
 <% @games.each do |id, value| %>
-	<th colspan=2 class='boldrightborder'><%= link_to date, bridge_score_date_path(date: date, start_date: @start_date, end_date: @end_date) %></th>
+	<th colspan=2 class='boldrightborder'><%= link_to "#{id}: #{value}", trumps_play_index_path(game: id, start_date: @start_date, end_date: @end_date) %></th>
 <% end %>
-<th>Percent</th>
-<th>Rank</th>
+<th>Avg Rank</th>
+</tr>
+<tr>
+<th></th>
+<% @games.each do |id, value| %>
+	<th>Score</th>
+	<th>Rank</th>
+<% end %>
+<th></th>
 </tr>
 </thead>
 
 <tbody>
+<% @names.each do |nid, nvalues| %>
+	<tr>
+	<td><%= link_to nvalues['name'], trumps_score_name_path(id: nid, start_date: @start_date, end_date: @end_date) %></td>
+	<% @games.each do |gid, gvalues| %>
+		<% if nvalues['games'][gid.to_i] %>
+			<td><%= nvalues['games'][gid.to_i]['score'] %></td>
+			<td><%= nvalues['games'][gid.to_i]['rank'] %></td>
+		<% else %>
+			<td>X</td>
+			<td>X</td>
+		<% end %>
+	<% end %>
+	<td><%= @avgrank[nid] %></td>
+	</tr>
+<% end %>
 </tbody>
 
 </table>

@@ -1,0 +1,13 @@
+<h1><%= @title %></h1>
+
+<%= form_tag trumps_games_path, method: :post do %>
+
+	<ul>
+		<% @names.each do |name| %>
+			<li><%= check_box_tag "player#{name.id}", nil, checked = false %> <%= name.name %></li>
+		<% end %>
+	</ul>
+
+	<%= submit_tag 'Submit', class: 'btn btn-primary col-xs-2' %>
+
+<% end %>
