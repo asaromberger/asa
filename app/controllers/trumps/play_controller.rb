@@ -50,6 +50,16 @@ class Trumps::PlayController < ApplicationController
 				@scores[round][id]['score'] = tscores[id]
 			end
 		end
+		@alerts = Hash.new
+		@scores.each do |round, values|
+			made = 0
+			@names.each do |nid, name|
+				made += values[nid]['made']
+			end
+			if made != number_of_cards(@names.count, round)
+				@alerts[round] = true
+			end
+		end
 		@names = @names.sort_by { |pid, name| name }
 	end
 
@@ -89,6 +99,7 @@ class Trumps::PlayController < ApplicationController
 		board.round = round
 		board.numberofcards = number_of_cards(nplayers, round)
 		board.save
+		made = 0
 		TrumpsPlayer.where("trumps_game_id = ?", @gameid).each do |player|
 			score = TrumpsScore.new
 			score.trumps_game_id = @gameid
@@ -96,9 +107,14 @@ class Trumps::PlayController < ApplicationController
 			score.trumps_player_id = player.id
 			score.bid = params["bid#{player.id}"]
 			score.made = params["made#{player.id}"]
+			made += score.made
 			score.save
 		end
-		redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Added"
+		if made != number_of_cards(nplayers, round)
+			redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Has wrong number of tricks made"
+		else
+			redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Added"
+		end
 	end
 
 	def edit
@@ -123,8 +139,10 @@ class Trumps::PlayController < ApplicationController
 
 	def update
 		@gameid = params[:game].to_i
-		@round = params[:round].to_i
-		board = TrumpsBoard.where("trumps_game_id = ? AND round = ?", @gameid, @round).first
+		round = params[:round].to_i
+		board = TrumpsBoard.where("trumps_game_id = ? AND round = ?", @gameid, round).first
+		made = 0
+		nplayers = 0
 		TrumpsPlayer.where("trumps_game_id = ?", @gameid).each do |player|
 			score = TrumpsScore.new
 			score.trumps_game_id = @gameid
@@ -132,9 +150,15 @@ class Trumps::PlayController < ApplicationController
 			score.trumps_player_id = player.id
 			score.bid = params["bid#{player.id}"]
 			score.made = params["made#{player.id}"]
+			made += score.made
+			nplayers += 1
 			score.save
 		end
-		redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Added"
+		if made != number_of_cards(nplayers, round)
+			redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Has wrong number of tricks made"
+		else
+			redirect_to trumps_play_index_path(game: @gameid), notice: "Board #{board.round} Updated"
+		end
 	end
 
 private
@@ -146,8 +170,12 @@ private
 	end
 
 	def number_of_cards(nplayers, round)
-		if nplayers == 4
+		if nplayers == 3 || nplayers == 4
 			return([0, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12][round])
+		elsif nplayers == 5
+			return([0, 10, 9, 8, 7, 6, 5, 4, 3, 3, 4, 5, 6, 7, 8, 9, 10][round])
+		elsif nplayers == 6
+			return([0, 8, 7, 6, 5, 4, 3, 3, 4, 5, 6, 7, 8][round])
 		else
 			redirect_to trunps_play_index_path(game: @game_id), alert: "Cannot handle #{nplayers} Players"
 		end
