@@ -9,7 +9,7 @@ class Trumps::PlayController < ApplicationController
 		@title = "#{@date} Game #{@gameid}"
 		@names = Hash.new
 		tscores = Hash.new
-		TrumpsPlayer.where("trumps_game_id = ?", @gameid).each do |player|
+		TrumpsPlayer.where("trumps_game_id = ?", @gameid).order('porder').each do |player|
 			name = TrumpsName.find(player.trumps_name_id)
 			@names[player.id] = name.name
 			tscores[player.id] = 0
@@ -29,6 +29,11 @@ class Trumps::PlayController < ApplicationController
 			round = TrumpsBoard.find(score.trumps_board_id).round
 			@scores[round][score.trumps_player_id]['bid'] = score.bid
 			@scores[round][score.trumps_player_id]['made'] = score.made
+			if score.bid == score.made
+				@scores[round][score.trumps_player_id]['delta'] = nil
+			else
+				@scores[round][score.trumps_player_id]['delta'] = score.bid - score.made
+			end
 		end
 		@scores.each do |round, values|
 			@names.each do |id, name|
@@ -60,13 +65,12 @@ class Trumps::PlayController < ApplicationController
 				@alerts[round] = true
 			end
 		end
-		@names = @names.sort_by { |pid, name| name }
 	end
 
 	def new
 		@gameid = params[:game].to_i
 		@names = Hash.new
-		TrumpsPlayer.where("trumps_game_id = ?", @gameid).each do |player|
+		TrumpsPlayer.where("trumps_game_id = ?", @gameid).order('porder').each do |player|
 			name = TrumpsName.find(player.trumps_name_id)
 			@names[player.id] = name.name
 		end
@@ -82,7 +86,6 @@ class Trumps::PlayController < ApplicationController
 			return
 		end
 		@title = "Round: #{round}, #{@cards} Cards"
-		@names = @names.sort_by { |pid, name| name }
 	end
 
 	def create
@@ -120,7 +123,7 @@ class Trumps::PlayController < ApplicationController
 	def edit
 		@gameid = params[:game].to_i
 		@names = Hash.new
-		TrumpsPlayer.where("trumps_game_id = ?", @gameid).each do |player|
+		TrumpsPlayer.where("trumps_game_id = ?", @gameid).order('porder').each do |player|
 			name = TrumpsName.find(player.trumps_name_id)
 			@names[player.id] = name.name
 		end
@@ -134,7 +137,6 @@ class Trumps::PlayController < ApplicationController
 			@bid[score.trumps_player_id] = score.bid
 			@made[score.trumps_player_id] = score.made
 		end
-		@names = @names.sort_by { |pid, name| name }
 	end
 
 	def update

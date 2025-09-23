@@ -45,7 +45,9 @@ class Trumps::ScoresController < ApplicationController
 		@games.each do |gid, gvalues|
 			t = Hash.new
 			@names.each do |nid, nvalues|
-				t[nid] = nvalues['games'][gid]['score']
+				if nvalues['games'][gid]
+					t[nid] = nvalues['games'][gid]['score']
+				end
 			end
 			r = @names.count
 			t.sort_by { |nid, score| score}.each do |nid, score|
