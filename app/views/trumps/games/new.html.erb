@@ -2,11 +2,22 @@
 
 <%= form_tag trumps_games_path, method: :post do %>
 
-	<ul>
-		<% @names.each do |name| %>
-			<li><%= check_box_tag "player#{name.id}", nil, checked = false %> <%= name.name %></li>
-		<% end %>
-	</ul>
+	<table>
+	<thead>
+	<tr>
+	<th>Order</th>
+	<th>Player</th>
+	</tr>
+	</thead>
+	<tbody>
+	<% @players.each do |index, value| %>
+		<tr>
+		<td><%= index %></td>
+		<td><%= select_tag "players[#{index}]", options_from_collection_for_select(@names, :id, :name, value), {include_blank: true} %></td>
+		</tr>
+	<% end %>
+	</tbody>
+	</table>
 
 	<%= submit_tag 'Submit', class: 'btn btn-primary col-xs-2' %>
 

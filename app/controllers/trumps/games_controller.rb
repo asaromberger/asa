@@ -9,6 +9,13 @@ class Trumps::GamesController < ApplicationController
 		@title = "New Game"
 		@game = TrumpsGame.new
 		@names = TrumpsName.all.order('name')
+		@players = Hash.new
+		@players[1] = 0
+		@players[2] = 0
+		@players[3] = 0
+		@players[4] = 0
+		@players[5] = 0
+		@players[6] = 0
 	end
 
 	def create
@@ -17,11 +24,15 @@ class Trumps::GamesController < ApplicationController
 		if ! @game.save
 			redirect_to trumps_play_index_path alert: "Game failed to create"
 		end
-		TrumpsName.all.each do |name|
-			if params["player#{name.id.to_s}"]
+		params['players'].each do |order, id|
+			order = order.to_i
+			id = id.to_i
+			if id > 0
+				name = TrumpsName.find(id)
 				player = TrumpsPlayer.new
 				player.trumps_game_id = @game.id
 				player.trumps_name_id = name.id
+				player.porder = order
 				player.save
 			end
 		end

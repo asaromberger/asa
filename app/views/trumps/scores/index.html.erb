@@ -32,17 +32,17 @@
 
 <thead>
 <tr>
-<th class='fixed-column'>Player</th>
+<th class='fixed-column boldrightborder'>Player</th>
 <% @games.each do |id, value| %>
 	<th colspan=2 class='boldrightborder'><%= link_to "#{id}: #{value}", trumps_play_index_path(game: id, start_date: @start_date, end_date: @end_date) %></th>
 <% end %>
 <th>Avg Rank</th>
 </tr>
 <tr>
-<th></th>
+<th class='boldrightborder'></th>
 <% @games.each do |id, value| %>
 	<th>Score</th>
-	<th>Rank</th>
+	<th class='boldrightborder'>Rank</th>
 <% end %>
 <th></th>
 </tr>
@@ -51,14 +51,14 @@
 <tbody>
 <% @names.each do |nid, nvalues| %>
 	<tr>
-	<td><%= link_to nvalues['name'], trumps_score_name_path(id: nid, start_date: @start_date, end_date: @end_date) %></td>
+	<td class='boldrightborder'><%= link_to nvalues['name'], trumps_score_name_path(id: nid, start_date: @start_date, end_date: @end_date) %></td>
 	<% @games.each do |gid, gvalues| %>
 		<% if nvalues['games'][gid.to_i] %>
 			<td><%= nvalues['games'][gid.to_i]['score'] %></td>
-			<td><%= nvalues['games'][gid.to_i]['rank'] %></td>
+			<td class='boldrightborder'><%= nvalues['games'][gid.to_i]['rank'] %></td>
 		<% else %>
 			<td>X</td>
-			<td>X</td>
+			<td class='boldrightborder'>X</td>
 		<% end %>
 	<% end %>
 	<td><%= @avgrank[nid] %></td>

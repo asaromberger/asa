@@ -8,19 +8,25 @@
 	<thead>
 	<tr>
 	<th>Player</th>
-	<th>Bid</th>
-	<th>Made</th>
+	<% @names.each do |id, name| %>
+		<th><%= name %></th>
+	<% end %>
 	</tr>
 	</thead>
 
 	<tbody>
+	<tr>
+	<th>Bid</th>
 	<% @names.each do |id, name| %>
-		<tr>
-		<td><%= name %></td>
 		<td><%= number_field_tag "bid#{id}" %></td>
-		<td><%= number_field_tag "made#{id}" %></td>
-		</tr>
 	<% end %>
+	</tr>
+	<tr>
+	<th>Made</th>
+	<% @names.each do |id, name| %>
+		<td><%= number_field_tag "made#{id}" %></td>
+	<% end %>
+	</tr>
 	</tbody>
 	</table>
 

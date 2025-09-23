@@ -13,7 +13,7 @@
 <th>Round</th>
 <th>Cards</th>
 <% @names.each do |id, name| %>
-	<th colspan=3 class='center'><%= name %></th>
+	<th colspan=4 class='center'><%= name %></th>
 <% end %>
 <th>Edit</th>
 </tr>
@@ -23,6 +23,7 @@
 <% @names.each do |id, name| %>
 	<th>Bid</th>
 	<th>Made</th>
+	<th>Delta</th>
 	<th>Score</th>
 <% end %>
 <th></th>
@@ -41,6 +42,7 @@
 	<% @names.each do |id, name| %>
 		<td><%= values[id]['bid'] %></td>
 		<td><%= values[id]['made'] %></td>
+		<td><%= values[id]['delta'] %></td>
 		<td class='boldrightborder'><%= values[id]['score'] %></td>
 	<% end %>
 	<td><%= link_to 'Edit', edit_trumps_play_path(game: @gameid, id: round) %></td>

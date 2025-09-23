@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_18_001437) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_23_202406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -351,6 +351,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_18_001437) do
     t.integer "trumps_name_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "porder"
   end
 
   create_table "trumps_scores", force: :cascade do |t|
