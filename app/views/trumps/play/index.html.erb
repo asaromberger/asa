@@ -45,7 +45,7 @@
 		<td><%= values[id]['delta'] %></td>
 		<td class='boldrightborder'><%= values[id]['score'] %></td>
 	<% end %>
-	<td><%= link_to 'Edit', edit_trumps_play_path(game: @gameid, id: round) %></td>
+	<td><%= link_to 'Edit', edit_trumps_play_path(id: 0, game: @gameid, round: round) %></td>
 	</tr>
 <% end %>
 </tbody>

@@ -1,5 +1,9 @@
 <h1><%= @title %></h1>
 
+<% if @alert %>
+	<p class='alert-danger'><%= @alert %></p>
+<% end %>
+
 <%= form_tag trumps_play_path, method: :put do %>
 
 	<%= hidden_field_tag :game, @gameid %>
