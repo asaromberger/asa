@@ -62,7 +62,7 @@ class Trumps::ScoresController < ApplicationController
 			end
 		end
 		@names.each do |nid, nvalues|
-			@avgrank[nid] /= ngames[nid]
+			@avgrank[nid] = @avgrank[nid] * 100 / ngames[nid] / 100.00
 		end
 	end
 
