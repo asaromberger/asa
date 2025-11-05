@@ -15,7 +15,7 @@
 	<tr>
 	<th rowspan=2>Date</th>
 	<th align='center' colspan=2=>Income</th>
-	<th align='center'colspan=3>Expense</th>
+	<th align='center'colspan=4>Expense</th>
 	<th align='right' rowspan=2>Distribution</th>
 	<th align='right' rowspan=2>Balance</th>
 	</tr>
@@ -25,6 +25,7 @@
 	<th align='right'>Fee</th>
 	<th align='right'>Percent</th>
 	<th align='right'>OnBoard</th>
+	<th align='right'>Upkeep</th>
 	</tr>
 </thead>
 
@@ -37,6 +38,7 @@
 		<td align='right'><%= number_with_precision(values['fee'], precision:2) %></td>
 		<td align='right'><%= number_with_precision(values['percent'], precision:2) %>%</td>
 		<td align='right'><%= number_with_precision(values['onboard'], precision:2) %></td>
+		<td align='right'><%= number_with_precision(values['upkeep'], precision:2) %></td>
 		<td align='right'><%= number_with_precision(values['distribution'], precision:2) %></td>
 		<td align='right'><%= number_with_precision(values['balance'], precision:2) %></td>
 		</tr>

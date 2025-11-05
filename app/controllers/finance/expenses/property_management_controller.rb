@@ -38,6 +38,7 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 				@months[date]['onboard'] = 0
 				@months[date]['percent'] = 0
 				@months[date]['distribution'] = 0
+				@months[date]['upkeep'] = 0
 				@months[date]['balance'] = 0
 			end
 			if subcat.match("^Property Management Deposit$")
@@ -50,6 +51,8 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 				@months[date]['onboard'] += item.amount
 			elsif subcat.match("^Property Management Transfer$")
 				@months[date]['distribution'] += item.amount
+			elsif subcat.match("^Property Management Upkeep$")
+				@months[date]['upkeep'] += item.amount
 			else
 				@unknowns.push("#{item.date} #{item.finance_expenses_what.what}")
 			end
@@ -61,7 +64,7 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 			else
 				values['percent'] = 0
 			end
-			balance = balance + values['payment'] + values['rent'] - values['fee'] - values['onboard'] - values['distribution']
+			balance = balance + values['payment'] + values['rent'] - values['fee'] - values['onboard'] - values['distribution'] - values['upkeep']
 			values['balance'] = balance
 		end
 	end
