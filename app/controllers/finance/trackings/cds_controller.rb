@@ -41,7 +41,7 @@ class Finance::Trackings::CdsController < ApplicationController
 		@cd.save
 		@investment = FinanceInvestmentsInvestment.new
 		@investment.finance_investments_fund_id = @fund.id
-		@investment.date = Time.now.in_time_zone('Pacific Time (US & Canada)').to_date
+		@investment.date = now()
 		@investment.value = @cd.amount
 		@investment.save
 	end

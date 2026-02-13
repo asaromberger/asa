@@ -20,7 +20,7 @@ class Trumps::GamesController < ApplicationController
 
 	def create
 		@game = TrumpsGame.new
-		@game.date = Time.now.in_time_zone('Pacific Time (US & Canada)').to_date
+		@game.date = now()
 		if ! @game.save
 			redirect_to trumps_play_index_path alert: "Game failed to create"
 		end

@@ -26,8 +26,10 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 		end
 		@months = Hash.new
 		@unknowns = []
+		@totals = Hash.new
 		FinanceExpensesItem.where("finance_expenses_what_id IN (?)", what_ids).order('date').each do |item|
 			date = "#{item.date.year}-#{item.date.month}"
+			year = date[0..3]
 			subcat = whattosubcat[item.finance_expenses_what_id]
 			balance = 0
 			if ! @months[date]
@@ -41,18 +43,35 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 				@months[date]['upkeep'] = 0
 				@months[date]['balance'] = 0
 			end
+			if ! @totals[year]
+				@totals[year] = Hash.new
+				@totals[year]['payment'] = 0
+				@totals[year]['rent'] = 0
+				@totals[year]['fee'] = 0
+				@totals[year]['onboard'] = 0
+				@totals[year]['percent'] = 0
+				@totals[year]['distribution'] = 0
+				@totals[year]['upkeep'] = 0
+				@totals[year]['balance'] = 0
+			end
 			if subcat.match("^Property Management Deposit$")
 				@months[date]['payment'] += item.amount
+				@totals[year]['payment'] += item.amount
 			elsif subcat.match("^Rent - Property Management$")
 				@months[date]['rent'] += item.amount
+				@totals[year]['rent'] += item.amount
 			elsif subcat.match("^Property Management Fee$")
 				@months[date]['fee'] += item.amount
+				@totals[year]['fee'] += item.amount
 			elsif subcat.match("^Property Management Onboard$")
 				@months[date]['onboard'] += item.amount
+				@totals[year]['onboard'] += item.amount
 			elsif subcat.match("^Property Management Transfer$")
 				@months[date]['distribution'] += item.amount
+				@totals[year]['distribution'] += item.amount
 			elsif subcat.match("^Property Management Upkeep$")
 				@months[date]['upkeep'] += item.amount
+				@totals[year]['upkeep'] += item.amount
 			else
 				@unknowns.push("#{item.date} #{item.finance_expenses_what.what}")
 			end
@@ -66,6 +85,13 @@ class Finance::Expenses::PropertyManagementController < ApplicationController
 			end
 			balance = balance + values['payment'] + values['rent'] - values['fee'] - values['onboard'] - values['distribution'] - values['upkeep']
 			values['balance'] = balance
+		end
+		@totals.each do |year, values|
+			if values['rent'] > 0
+				values['percent'] = values['fee'] / values['rent'] * 100
+			else
+				values['percent'] = 0
+			end
 		end
 	end
 

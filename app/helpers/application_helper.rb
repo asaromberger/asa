@@ -59,6 +59,10 @@ module ApplicationHelper
 		end
 	end
 
+	def now()
+		return(Time.now.in_time_zone('Pacific Time (US & Canada)').to_date)
+	end
+
 	def valid_applications
 		return([
 			['health', 'health'],

@@ -5,7 +5,7 @@ class Trumps::PlayController < ApplicationController
 
 	def index
 		@gameid = params[:game].to_i
-		@date = Time.now.in_time_zone('Pacific Time (US & Canada)').to_date
+		@date = now()
 		@title = "#{@date} Game #{@gameid}"
 		@names = Hash.new
 		tscores = Hash.new
