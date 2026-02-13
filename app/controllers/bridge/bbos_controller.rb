@@ -88,7 +88,7 @@ class Bridge::BbosController < ApplicationController
 		@type = params[:type]
 		@score = BridgeBbo.new
 		@score.bridge_bbo_type_id = @type
-		@score.date = Time.now.in_time_zone('Pacific Time (US & Canada)').to_date
+		@score.date = now()
 		@types = BridgeBboType.all.order('btype')
 	end
 

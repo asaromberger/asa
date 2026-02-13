@@ -30,7 +30,22 @@
 </thead>
 
 <tbody>
+	<% lastyear = "" %>
 	<% @months.each do |month, values| %>
+		<% year = month[0..3] %>
+		<% if lastyear != '' && year != lastyear %>
+			<tr>
+			<td class='center bold'><%= lastyear %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['payment'], precision:2) %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['rent'], precision:2) %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['fee'], precision:2) %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['percent'], precision:2) %>%</td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['onboard'], precision:2) %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['upkeep'], precision:2) %></td>
+			<td class='bold' align='right'><%= number_with_precision(@totals[lastyear]['distribution'], precision:2) %></td>
+			<td></td>
+			</tr>
+		<% end %>
 		<tr>
 		<td><%= month %></td>
 		<td align='right'><%= number_with_precision(values['payment'], precision:2) %></td>
@@ -42,6 +57,7 @@
 		<td align='right'><%= number_with_precision(values['distribution'], precision:2) %></td>
 		<td align='right'><%= number_with_precision(values['balance'], precision:2) %></td>
 		</tr>
+		<% lastyear = year %>
 	<% end %>
 </tbody>
 </table>
