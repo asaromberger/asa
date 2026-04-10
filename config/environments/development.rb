@@ -68,7 +68,7 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  # use gmail for email delivery
+  # use earthlink for email delivery
   config.action_mailer.default_url_options = { :host => '192.168.1.66:3000' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
@@ -81,7 +81,7 @@ Rails.application.configure do
     authentication: "plain",
     enable_starttls_auto: true,
     user_name: "asa.romberger@earthlink.net",
-    password: "h984k3i7B@"
+    password: "cbE6%Nb8naw+"
   }
 
 end
