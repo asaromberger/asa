@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 	resources :schema
 	resources :sessions
 	resources :users
+	resources :autosave
 
 	namespace :health do
 		resources :data

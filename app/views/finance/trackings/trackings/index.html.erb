@@ -7,6 +7,7 @@
 <th>Date</th>
 <th>Type</th>
 <th>What</th>
+<th>Inc</th>
 <th>Amount</th>
 <th>Remaining</th>
 <th>Account</th>
@@ -28,6 +29,7 @@
 	<td class="<%= hilite %>"><%= tracking.date %></td>
 	<td><%= tracking.ptype %></td>
 	<td><%= link_to tracking.what, finance_trackings_tracking_path(id: tracking.id) %></td>
+	<td><%= tracking.inc %></td>
 	<% if tracking.ptype == 'transfer' && tracking.remaining < tracking.amount %>
 		<td><%= number_with_precision(tracking.remaining, precision: 2) %></td>
 	<% else %>
