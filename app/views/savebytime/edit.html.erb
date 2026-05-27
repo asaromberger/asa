@@ -1,0 +1,13 @@
+<h1><%= @title %></h1>
+
+<%= render 'layouts/savebytime', formname: "edit_permission_#{@savebytime.id}", pageurl: edit_savebytime_path(id: 0), posturl: savebytime_path(id: 0) %>
+
+<%= form_for [:permission, @savebytime], url: savebytime_path(0), html: {method: :put} do |form| %>
+	<%= form.fields_for :pvalue, @savebytime.pvalue do |result| %>
+		<% [:field1, :field2, :field3, :field4].each do |field| %>
+			<%= result.label field, field %>
+			<%= result.text_area field, value: @savebytime.pvalue[field.to_s].presence || '' %>
+		<% end %>
+	<% end %>
+	<%= form.submit "Save", class: 'btn btn-primary col-xs-2' %>
+<% end %>

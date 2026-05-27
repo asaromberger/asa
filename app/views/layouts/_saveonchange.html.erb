@@ -1,0 +1,11 @@
+
+<%# render 'layouts/saveonchange', formname: FORMNAME, pageurl: PAGEURL, posturl: POSTURL %>
+<script>
+	/* input gives you an update on every character */
+	/* change gives you an update only if you change fields */
+	document.getElementById("<%= formname %>").addEventListener("input", () => {
+		saveonchange("#<%= formname %>", "<%= pageurl %>", "<%= posturl %>");
+	});
+</script>
+
+<div class='savebox'><span id='savebox'></span></div>

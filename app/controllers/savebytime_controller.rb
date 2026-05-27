@@ -1,31 +1,30 @@
-class AutosaveController < ApplicationController
+class SavebytimeController < ApplicationController
 	before_action :require_signed_in
 	before_action :require_siteadmin
 
 	def edit
-		@title = "Autosave"
-		@autosave = Permission.where("pkey = 'autosave'").first
-		if ! @autosave
-			@autosave = Permission.new
-			@autosave.user_id = current_user.id
-			@autosave.pkey = 'autosave';
-			@autosave.pvalue = {key0: "0"}
+		@title = "SaveByTime"
+		@savebytime = Permission.where("pkey = 'savebytime'").first
+		if ! @savebytime
+			@savebytime = Permission.new
+			@savebytime.user_id = current_user.id
+			@savebytime.pkey = 'savebytime';
+			@savebytime.pvalue = {key0: "0"}
+			@savebytime.save
 		end
 	end
 
 	def update
-		@autosave = Permission.where("pkey = 'autosave'").first
-		@autosave.update(autosave_params)
-		@autosave.save
+		@savebytime = Permission.where("pkey = 'savebytime'").first
+		@savebytime.update(savebytime_params)
+		@savebytime.save
 		time = Time.now.strftime("%H:%M:%S")
 		respond_to do |format|
 			format.html {
-				redirect_to edit_autosave_path(0), notice: "Saved"
-				puts("XXXXXX HTML")
+				redirect_to edit_savebytime_path(0), notice: "Saved"
 			}
 			format.js {
 				render json: {"message": "Saved: #{time}"}, status: :accepted
-				puts("XXXXXX JSON")
 			}
 		end
 	end
@@ -38,7 +37,7 @@ class AutosaveController < ApplicationController
 		end
 	end
 
-	def autosave_params
+	def savebytime_params
 		params.require(:permission).permit(pvalue: params[:permission][:pvalue].try(:keys))
 	end
 

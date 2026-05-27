@@ -1,0 +1,10 @@
+
+<%# render 'layouts/savebytime', formname: FORMNAME, pageurl: PAGEURL, posturl: POSTURL %>
+<script>
+	setTimeout(function() {
+		savebytime("#<%= formname %>", "<%= pageurl %>", "<%= posturl %>");
+	}, 30000);
+</script>
+
+<div class='savebox'><span id='savebox'></span></div>
+<p class='hilite-alert-md'><b>Note: </b>This form saves every 30 seconds</p>

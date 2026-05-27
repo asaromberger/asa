@@ -21,14 +21,14 @@ function toggle_checkboxes(value) {
 }
 
 /*
-	autosave is used to periodically save a form
+	savebytime is used to periodically save a form
 		formname - the name of the form
 		pageurl - the page URL
 		posturl - the post URL for sending the ajax request
 	it needs the following support in the view:
 		<%= render
 */
-function autosave(formname, pageurl, posturl) {
+function savebytime(formname, pageurl, posturl) {
 	var data = $(formname).serialize();
 	if (window.location.pathname === pageurl) {
 		$.ajax({
@@ -38,19 +38,50 @@ function autosave(formname, pageurl, posturl) {
 			 data: data,
 			 dataType: "json",
 			 success: function(reply) {
-			 	$('#autosavebox').css('background-color', 'green');
-				$('#autosavebox').css('color', 'white');
-				$('#autosavebox').text(reply["message"])
+			 	$('#savebox').css('background-color', 'green');
+				$('#savebox').css('color', 'white');
+				$('#savebox').text(reply["message"])
 			 },
 			 error: function(jqxdr, reply, status) {
-			 	$('#autosavebox').css('background-color', 'red');
-				$('#autosavebox').css('color', 'white');
-				$('#autosavebox').text("Failed autosave")
+			 	$('#savebox').css('background-color', 'red');
+				$('#savebox').css('color', 'white');
+				$('#savebox').text("Failed save by time")
 			 }
 		});
 		setTimeout(function() {
-			autosave(formname, pageurl, posturl);
+			savebytime(formname, pageurl, posturl);
 		}, 30000);
+	}
+}
+
+/*
+	saveonchange is used to save a form on change
+		formname - the name of the form
+		pageurl - the page URL
+		posturl - the post URL for sending the ajax request
+	it needs the following support in the view:
+		<%= render
+*/
+function saveonchange(formname, pageurl, posturl) {
+	var data = $(formname).serialize();
+	if (window.location.pathname === pageurl) {
+		$.ajax({
+			beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			type:"PUT",
+			 url: posturl,
+			 data: data,
+			 dataType: "json",
+			 success: function(reply) {
+			 	$('#savebox').css('background-color', 'green');
+				$('#savebox').css('color', 'white');
+				$('#savebox').text(reply["message"])
+			 },
+			 error: function(jqxdr, reply, status) {
+			 	$('#savebox').css('background-color', 'red');
+				$('#savebox').css('color', 'white');
+				$('#savebox').text("Failed save by time")
+			 }
+		});
 	}
 }
 

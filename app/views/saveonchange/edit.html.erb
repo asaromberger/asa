@@ -1,0 +1,14 @@
+<h1><%= @title %></h1>
+
+<%= form_for [:permission, @saveonchange], url: saveonchange_path(0), html: {method: :put} do |form| %>
+	<%= form.fields_for :pvalue, @saveonchange.pvalue do |result| %>
+		<% [:field1, :field2, :field3, :field4].each do |field| %>
+			<%= result.label field, field %>
+			<%= result.text_area field, value: @saveonchange.pvalue[field.to_s].presence || '' %>
+		<% end %>
+	<% end %>
+	<%= form.submit "Save", class: 'btn btn-primary col-xs-2' %>
+<% end %>
+
+<%= render 'layouts/saveonchange', formname: "edit_permission_#{@saveonchange.id}", pageurl: edit_saveonchange_path(id: 0), posturl: saveonchange_path(id: 0) %>
+
