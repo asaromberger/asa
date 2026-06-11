@@ -149,10 +149,18 @@ class Finance::Expenses::BankInputController < ApplicationController
 					end
 					amount = fields[amountfield].gsub(/^"*\s*/, '').gsub(/\s*"*$/, '')
 					if amount[0] == '-'
-						pm = '-'
+						if @account == 'creditcard:'
+							pm = '+'
+						else
+							pm = '-'
+						end
 						amount = amount.gsub(/-/, '')
 					else
-						pm = '+'
+						if @account == 'creditcard:'
+							pm = '-'
+						else
+							pm = '+'
+						end
 					end
 					date = fields[datefield]
 					datesep = date.split("/")

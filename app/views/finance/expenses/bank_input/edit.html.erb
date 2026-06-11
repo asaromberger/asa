@@ -14,11 +14,13 @@
 
 <%= form_tag finance_expenses_bank_input_index_path, method: :post, multipart: true do %>
 
+<%= label_tag "Account", "Account", class: 'col-xs-1' %>
 <%= select_tag :account, options_for_select(@accounts), class: 'col-xs-2' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
-<%= file_field_tag :document %>
+<%= label_tag "File", "File", class: 'col-xs-1' %>
+<%= file_field_tag :document, class: 'col-xs-3' %>
 
 <div class='clearfix'><p>&nbsp;</p></div>
 
