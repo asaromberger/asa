@@ -57,6 +57,10 @@ class Finance::Investments::SummaryController < ApplicationController
 				end
 			end
 		end
+		@growth = Hash.new
+		@summaries.each do |id, years|
+			@growth[id] = (years[@years.last] - years[@years.first]) / years[@years.first]
+		end
 	end
 
 	def show
