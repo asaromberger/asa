@@ -28,6 +28,7 @@
 <% @years.each do |year| %>
 	<th><%= year %></th>
 <% end %>
+<th>Growth</th>
 </tr>
 </thead>
 
@@ -43,6 +44,7 @@
 	<% @years.each do |year| %>
 		<td><%= link_to number_with_precision(summary[year], precision: 2), finance_investments_summary_path(id: id, fromyear: year, toyear: year) %></td>
 	<% end %>
+	<td><%= number_with_precision(@growth[id] * 100, precision: 2) %></td>
 	</tr>
 <% end %>
 </tbody>
